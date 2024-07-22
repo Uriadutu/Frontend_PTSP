@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.btn-add {
+    @apply px-3 py-2 mb-0 bg-blue-500 text-white font-semibold text-sm rounded-md shadow-md hover:bg-blue-600 transition duration-300;
+}
+.btn-back {
+    @apply px-3 py-2 mb-0 bg-gray-100 border border-gray-200 text-gray-600 font-semibold text-sm rounded-md hover:bg-gray-50 transition duration-300;
+}
+
+.contain {
+    @apply p-6 px-0 min-h-screen w-full;
+}
+
+.judul {
+    @apply text-2xl font-bold mb-6;
+}
+
+.btn-batal {
+    @apply px-3 py-2 mb-0 bg-white border border-gray-300 text-black text-sm rounded-md hover:bg-gray-100 transition duration-300;
+}
+
+.input {
+    @apply p-2 border border-gray-200 rounded-md text-sm;
+}
+
+.label-input {
+    @apply text-black mb-2 mt-1 font-semibold;
+}
+
+.btn-simpan {
+    @apply px-3 py-2 mb-0 bg-blue-500 text-white font-semibold text-sm rounded-md hover:bg-blue-600 transition duration-300;
+}
+
+.z-top {
+    @apply z-[10000]
+}
+
+.detail {
+    @apply p-2 bg-blue-600 hover:bg-blue-500 border border-gray-100 rounded
+}
+.edit {
+    @apply p-2 bg-[#FFE500] hover:bg-[#FFED47] border border-gray-100  rounded
+}
+
+.delete {
+    @apply p-2 bg-[#EB0000] hover:bg-[#FF3535] border border-gray-100  rounded
+}
+
+.inp-fokus {
+  outline: none;
+  border: none;
+}
+
+.btn-search {
+  cursor: pointer;
+}
