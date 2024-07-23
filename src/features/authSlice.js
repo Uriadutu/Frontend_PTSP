@@ -33,7 +33,20 @@ export const loginUser = createAsyncThunk(
 export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
   try {
     const response = await axios.get("http://localhost:5000/me");
-    return response.data;
+    const user = response.data;
+
+    // Cek hak akses hanya untuk Pegawai
+    if (user.role === "Pegawai") {
+      const hakAksesResponse = await axios.get(
+        `http://localhost:5000/hakakses/pegawai/${user.id}`
+      );
+      if (!hakAksesResponse.data) {
+        return thunkAPI.rejectWithValue("User tidak memiliki akses");
+      }
+      user.hakAkses = hakAksesResponse.data;
+    }
+
+    return user;
   } catch (error) {
     if (error.response) {
       const message = error.response.data.msg;

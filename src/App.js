@@ -34,6 +34,7 @@ import DetailSiswaPage from "./pages/PantaiDisaPage/sekolahPage/DetailSiswaPage.
 import DetailMasjidPage from "./pages/SariaPage/DetialMasjidPage.jsx";
 import DetailLembagaKeagamaanPage from "./pages/SariaPage/DetailLembagaKeagamaanPage.jsx";
 import DataSekolahKristenPage from "./pages/PaludiPage/DataSekolahKristenPage.jsx";
+import HakAksesPage from "./pages/HakAksesPage.jsx";
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/dashboard" element={<Home />} />
+          <Route path="/manajemen-akun" element={<HakAksesPage />} />
           {/* Lapasi */}
           <Route
             path="/:sub/data-satuan-kerja"
@@ -95,7 +97,10 @@ function App() {
           {/* Saria */}
           <Route path="/:sub/data-umat" element={<DataUmatPage />} />
           <Route path="/:sub/data-masjid" element={<MasjidPage />} />
-          <Route path="/:sub/masjid/detail/:id" element={<DetailMasjidPage />} />
+          <Route
+            path="/:sub/masjid/detail/:id"
+            element={<DetailMasjidPage />}
+          />
           <Route
             path="/:sub/data-majelis-ta'lim"
             element={<MajelisTalimPage />}
@@ -115,7 +120,10 @@ function App() {
           <Route path="/:sub/data-kua" element={<KuaPage />} />
 
           {/* Paludi*/}
-          <Route path="/:sub/data-sekolah-paludi" element={<DataSekolahKristenPage />} />
+          <Route
+            path="/:sub/data-sekolah-paludi"
+            element={<DataSekolahKristenPage />}
+          />
 
           {/* Sahu */}
 

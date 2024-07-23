@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import Layout from "./Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Welcome from "../component/Welcome.jsx";
 import { getMe } from "../features/authSlice.js";
+import HakAkses from "../component/HakAkses.jsx";
 
-const Home = () => {
+const HakAksesPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError, user } = useSelector((state) => state.auth);
+  const { isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
@@ -17,16 +17,13 @@ const Home = () => {
   useEffect(() => {
     if (isError) {
       navigate("/");
-    } else if (user && user.role === "Pegawai" && !user.hakAkses) {
-      navigate("/dashboard");
     }
-  }, [isError, user, navigate]);
-
+  }, [isError, navigate]);
   return (
     <Layout>
-      <Welcome />
+      <HakAkses />
     </Layout>
   );
 };
 
-export default Home;
+export default HakAksesPage;
