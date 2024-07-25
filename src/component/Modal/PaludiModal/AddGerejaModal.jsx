@@ -4,10 +4,10 @@ import axios from "axios";
 const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
   const [namaGereja, setNamaGereja] = useState("");
   const [noLapor, setNoLapor] = useState("");
-  const [statusIjin, setStatusIjin] = useState("IMB");
+  const [statusIjin, setStatusIjin] = useState("");
   const [nomorIbm, setNomorIbm] = useState("");
-  const [statusGedung, setStatusGedung] = useState("Permanen (Milik Sendiri)");
-  const [statusTanah, setStatusTanah] = useState("Sertifikat");
+  const [statusGedung, setStatusGedung] = useState("");
+  const [statusTanah, setStatusTanah] = useState("");
   const [luasBangunan, setLuasBangunan] = useState("");
   const [luasTanah, setLuasTanah] = useState("");
   const [tahunBerdiri, setTahunBerdiri] = useState("");
@@ -108,8 +108,8 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
                   value={statusIjin}
                   onChange={(e) => setStatusIjin(e.target.value)}
                 >
+                  <option value="" disabled hidden>Pilih Status Izin</option>
                   <option value="IMB">IMB</option>
-                  <option value="" >Pilih Status Izin</option>
                   <option value="Belum IMB">Belum IMB</option>
                 </select>
               </div>
@@ -135,8 +135,8 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
                   value={statusGedung}
                   onChange={(e) => setStatusGedung(e.target.value)}
                 >
-                  <option value=" " >
-                    Permanen (Milik Sendiri)
+                  <option value="" disabled hidden>
+                    Pilih Status Gedung
                   </option>
                   <option value="Semi permanen">Semi permanen</option>
                   <option value="Darurat">Darurat</option>
@@ -153,7 +153,7 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
                   value={statusTanah}
                   onChange={(e) => setStatusTanah(e.target.value)}
                 >
-                  <option value=" " >Pilih Status Tanah</option>
+                  <option value="" disabled hidden >Pilih Status Tanah</option>
                   <option value="Sertifikat">Sertifikat</option>
                   <option value="Belum Sertifikat">Belum Sertifikat</option>
                 </select>

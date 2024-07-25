@@ -24,7 +24,7 @@ const DataSekolahKristen = () => {
   };
 
   const navigateToSekolah = (jenjang, type) => {
-    navigate(`/pantai-disa/data-sekolah/${jenjang}/${type}`);
+    navigate(`/paludi/data-sekolah-paludi/${jenjang}/${type}`);
   };
 
   const dataSekolah = [

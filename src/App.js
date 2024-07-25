@@ -38,6 +38,8 @@ import HakAksesPage from "./pages/HakAksesPage.jsx";
 import DataUmatKristenPage from "./pages/PaludiPage/DataUmatKristenPage.jsx";
 import DetailUmatKristenPage from "./pages/PaludiPage/DetailUmatKristenPage.jsx";
 import DataGerejaPage from "./pages/PaludiPage/DataGerejaPage.jsx";
+import DetailGerejaPage from "./pages/PaludiPage/DetailGerejaPage.jsx";
+import DataGuruPakPage from "./pages/PaludiPage/DataGuruPakPage.jsx";
 
 
 function App() {
@@ -128,6 +130,10 @@ function App() {
             element={<DataSekolahKristenPage />}
           />
           <Route
+            path="/:sub/data-sekolah-paludi/:jenjang/:status"
+            element={<DataGuruPakPage />}
+          />
+          <Route
             path="/:sub/data-umat-kristen"
             element={<DataUmatKristenPage />}
           />
@@ -138,6 +144,10 @@ function App() {
           <Route
             path="/paludi/data-gereja/"
             element={<DataGerejaPage />}
+          />
+          <Route
+            path="/paludi/data-gereja/detail/:id"
+            element={<DetailGerejaPage />}
           />
 
           {/* Sahu */}

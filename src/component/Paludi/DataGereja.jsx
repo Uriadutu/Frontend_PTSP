@@ -32,7 +32,7 @@ const DataGereja = () => {
           getGereja={getGereja}
         />
       )}
-      <h1 className="judul">Data Umat Kristen</h1>
+      <h1 className="judul">Data Gereja</h1>
       <button onClick={() => setOpenModalAdd(true)} className="btn-add">
         Tambah Gereja
       </button>
@@ -42,10 +42,10 @@ const DataGereja = () => {
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
               <th className="py-3 px-6 text-left">Nama Gereja</th>
-              <th className="py-3 px-6 text-left">Nama Pimpinan Gereja</th>
-              <th className="py-3 px-6 text-left">Denominasi </th>
-              <th className="py-3 px-6 text-left">Jumlah Umat</th>
-              <th className="py-3 px-6 text-left">Alamat</th>
+              <th className="py-3 px-6 text-left">No Tanda Lapor</th>
+              <th className="py-3 px-6 text-left">Status Ijin </th>
+              <th className="py-3 px-6 text-left">Status Gedung</th>
+              <th className="py-3 px-6 text-left">Tahun Berdiri</th>
               <th className="py-3 px-6 text-left">Aksi</th>
             </tr>
           </thead>
@@ -60,20 +60,20 @@ const DataGereja = () => {
                   {item && item.nama_gereja}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.nama_pimpinan}
+                  {item && item.no_lapor}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.demonisasi}
+                  {item && item.status_ijin}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.jumlah_umat}
+                  {item && item.status_gedung}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.kecamatan} - {item && item.nama_desa}
+                  {item && item.tahun_berdiri}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/paludi/data-umat-kristen/detail/${item.id}`}
+                    to={`/paludi/data-gereja/detail/${item.id}`}
                     className="detail"
                     title="Lihat"
                   >
