@@ -8,7 +8,7 @@ import HakAkses from "../component/HakAkses.jsx";
 const HakAksesPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { isError, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
@@ -18,7 +18,15 @@ const HakAksesPage = () => {
     if (isError) {
       navigate("/");
     }
-  }, [isError, navigate]);
+    if (user) {
+      if (user.role !== "Admin") {
+        navigate("/dashboard");
+      }
+      if (user.UUID === "lita") {
+        navigate("/dashboard");
+      }
+    }
+  }, [isError, navigate, user]);
   return (
     <Layout>
       <HakAkses />

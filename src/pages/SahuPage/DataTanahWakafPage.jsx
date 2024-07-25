@@ -1,26 +1,25 @@
 import React, { useEffect } from "react";
-import Layout from "../Layout"
+import Layout from "../Layout";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../../features/authSlice";
 import DataTanahWakaf from "../../component/Sahu/DataTanahWakaf";
 
-const DataTanahWakafPage
- = () => {
+const DataTanahWakafPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { user, isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
+    if (isError || user?.hakAkses?.sahu === false) {
+      navigate("/dashboard");
     }
-  }, [isError, navigate]);
+  }, [isError, user, navigate]);
   return (
     <Layout>
       <DataTanahWakaf />
@@ -28,5 +27,4 @@ const DataTanahWakafPage
   );
 };
 
-export default DataTanahWakafPage
-;
+export default DataTanahWakafPage;

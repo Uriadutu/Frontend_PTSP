@@ -9,17 +9,17 @@ import DataSekolah from "../../component/PantaiDisa/DataSekolah";
 const DataSekolahPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { user, isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
+    if (isError || user?.hakAkses?.pantai_disa === false) {
+      navigate("/dashboard");
     }
-  }, [isError, navigate]);
+  }, [isError, user, navigate]);
   return (
     <Layout>
       <DataSekolah />

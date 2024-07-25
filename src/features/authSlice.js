@@ -36,14 +36,15 @@ export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
     const user = response.data;
 
     // Cek hak akses hanya untuk Pegawai
-    if (user.role === "Pegawai") {
+    if (user.UUID === "UUID") {
       const hakAksesResponse = await axios.get(
         `http://localhost:5000/hakakses/pegawai/${user.id}`
       );
-      if (!hakAksesResponse.data) {
-        return thunkAPI.rejectWithValue("User tidak memiliki akses");
-      }
-      user.hakAkses = hakAksesResponse.data;
+      const hakAkses = hakAksesResponse.data;
+
+      // console.log(user);
+      return { ...user, hakAkses };
+
     }
 
     return user;
@@ -55,13 +56,6 @@ export const getMe = createAsyncThunk("user/getMe", async (_, thunkAPI) => {
   }
 });
 
-// Action async untuk logout
-export const LogOut = createAsyncThunk("user/LogOut", async () => {
-  await axios.delete("http://localhost:5000/logout");
-  return null;
-});
-
-// Membuat slice Redux untuk autentikasi
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -69,36 +63,40 @@ export const authSlice = createSlice({
     reset: (state) => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(loginUser.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.user = action.payload;
-    });
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload;
-    });
-
-    builder.addCase(getMe.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getMe.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.user = action.payload;
-    });
-    builder.addCase(getMe.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload;
-    });
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getMe.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getMe.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(getMe.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      });
   },
 });
 
-// Ekspor action dan reducer
+export const LogOut = createAsyncThunk("user/LogOut", async () => {
+  await axios.delete("http://localhost:5000/logout");
+  return null;
+});
+
 export const { reset } = authSlice.actions;
 export default authSlice.reducer;

@@ -4,9 +4,9 @@ import Layout from "../Layout"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../../features/authSlice";
-import DataSekolahKristen from "../../component/Paludi/DataSekolahKristen";
+import DetailDataUmatKristen from "../../component/Paludi/DetailDataUmatKristen";
 
-const DataSekolahKristenPage = () => {
+const DetailUmatKristenPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isError } = useSelector((state) => state.auth);
@@ -23,9 +23,9 @@ const DataSekolahKristenPage = () => {
 
   return (
     <Layout>
-      <DataSekolahKristen />
+      <DetailDataUmatKristen />
     </Layout>
   );
 };
 
-export default DataSekolahKristenPage;
+export default DetailUmatKristenPage;

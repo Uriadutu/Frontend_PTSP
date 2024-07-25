@@ -8,19 +8,20 @@ import { getMe } from "../../features/authSlice";
 import DetailPegawai from "../../component/Lapasi/DetailPegawai";
 
 const DetailPegawaiPage = () => {
-  const dispatch = useDispatch();
+ const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { user, isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
+    if (isError || user?.hakAkses?.lapasi === false) {
+      navigate("/dashboard");
     }
-  }, [isError, navigate]);
+  }, [isError, user, navigate]);
+
   return (
     <Layout>
       <DetailPegawai />

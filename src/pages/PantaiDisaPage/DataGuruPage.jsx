@@ -7,19 +7,19 @@ import { getMe } from "../../features/authSlice";
 import DataGuru from "../../component/PantaiDisa/DataGuru";
 
 const DataGuruPage = () => {
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { user, isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
+    if (isError || user?.hakAkses?.pantai_disa === false) {
+      navigate("/dashboard");
     }
-  }, [isError, navigate]);
+  }, [isError, user, navigate]);
   return (
     <Layout>
       <DataGuru />

@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
 const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
   const [jabatanOption, setJabatanOption] = useState([])
@@ -21,8 +20,6 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
   const [TanggalLahir, setTanggalLahir] = useState("");
   const [Agama, setAgama] = useState("");
   const [SatuanKerja, setSatuanKerja] = useState("");
-
-  const { sub } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -384,7 +381,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
                     Pilih Satuan Kerja
                   </option>
                   {satker.map((satker) => (
-                    <option key={satker.id} value={satker.id}>
+                    <option key={satker.id} value={satker.nama_satker}>
                       {satker.nama_satker}
                     </option>
                   ))}

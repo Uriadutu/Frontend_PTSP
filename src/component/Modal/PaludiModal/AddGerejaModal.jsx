@@ -4,10 +4,10 @@ import axios from "axios";
 const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
   const [namaGereja, setNamaGereja] = useState("");
   const [noLapor, setNoLapor] = useState("");
-  const [statusIjin, setStatusIjin] = useState("");
+  const [statusIjin, setStatusIjin] = useState("IMB");
   const [nomorIbm, setNomorIbm] = useState("");
-  const [statusGedung, setStatusGedung] = useState("");
-  const [statusTanah, setStatusTanah] = useState("");
+  const [statusGedung, setStatusGedung] = useState("Permanen (Milik Sendiri)");
+  const [statusTanah, setStatusTanah] = useState("Sertifikat");
   const [luasBangunan, setLuasBangunan] = useState("");
   const [luasTanah, setLuasTanah] = useState("");
   const [tahunBerdiri, setTahunBerdiri] = useState("");
@@ -102,13 +102,16 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
                 <label htmlFor="statusIjin" className="label-input">
                   Status Ijin
                 </label>
-                <input
+                <select
                   id="statusIjin"
                   className="w-full input"
                   value={statusIjin}
                   onChange={(e) => setStatusIjin(e.target.value)}
-                  type="text"
-                />
+                >
+                  <option value="IMB">IMB</option>
+                  <option value="" >Pilih Status Izin</option>
+                  <option value="Belum IMB">Belum IMB</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="nomorIbm" className="label-input">
@@ -126,25 +129,34 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
                 <label htmlFor="statusGedung" className="label-input">
                   Status Gedung
                 </label>
-                <input
+                <select
                   id="statusGedung"
                   className="w-full input"
                   value={statusGedung}
                   onChange={(e) => setStatusGedung(e.target.value)}
-                  type="text"
-                />
+                >
+                  <option value=" " >
+                    Permanen (Milik Sendiri)
+                  </option>
+                  <option value="Semi permanen">Semi permanen</option>
+                  <option value="Darurat">Darurat</option>
+                  <option value="Sewa">Sewa</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="statusTanah" className="label-input">
                   Status Tanah
                 </label>
-                <input
+                <select
                   id="statusTanah"
                   className="w-full input"
                   value={statusTanah}
                   onChange={(e) => setStatusTanah(e.target.value)}
-                  type="text"
-                />
+                >
+                  <option value=" " >Pilih Status Tanah</option>
+                  <option value="Sertifikat">Sertifikat</option>
+                  <option value="Belum Sertifikat">Belum Sertifikat</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="luasBangunan" className="label-input">

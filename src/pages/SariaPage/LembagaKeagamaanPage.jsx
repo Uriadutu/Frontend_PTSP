@@ -8,17 +8,17 @@ import LembagaKeagamaan from "../../component/Saria/LembagaKeagamaan";
 const LembagaKeagamaanPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { user, isError } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
+    if (isError || user?.hakAkses?.saria === false) {
+      navigate("/dashboard");
     }
-  }, [isError, navigate]);
+  }, [isError, user, navigate]);
   return (
     <Layout>
       <LembagaKeagamaan />

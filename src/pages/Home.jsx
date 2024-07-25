@@ -17,9 +17,7 @@ const Home = () => {
   useEffect(() => {
     if (isError) {
       navigate("/");
-    } else if (user && user.role === "Pegawai" && !user.hakAkses) {
-      navigate("/dashboard");
-    }
+    } 
   }, [isError, user, navigate]);
 
   return (
