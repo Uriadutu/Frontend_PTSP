@@ -19,10 +19,6 @@ const HakAkses = () => {
     fetchPegawai();
   }, []);
 
-  useEffect(() => {
-    filterAndPaginatePegawai();
-  }, [pegawaiList, searchText, currentPage, filterAndPaginatePegawai]); // Include filterAndPaginatePegawai here
-
   const fetchPegawai = async () => {
     try {
       const response = await axios.get("http://localhost:5000/pegawai");
@@ -68,6 +64,10 @@ const HakAkses = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  useEffect(() => {
+    filterAndPaginatePegawai();
+  }, [pegawaiList, searchText, currentPage, filterAndPaginatePegawai]); // Include filterAndPaginatePegawai here
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(pegawaiList.length / pegawaiPerPage); i++) {
