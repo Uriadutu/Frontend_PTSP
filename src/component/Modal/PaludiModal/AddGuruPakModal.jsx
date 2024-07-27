@@ -1,51 +1,63 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-const AddGuruPakModal = ({ setIsOpenModalAdd, getGuruPak }) => {
-  const [idSekolah, setIdSekolah] = useState("");
+const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
   const [statusPegawai, setStatusPegawai] = useState("");
   const [kategoriGuru, setKategoriGuru] = useState("");
   const [jenisGuru, setJenisGuru] = useState("");
   const [namaGuru, setNamaGuru] = useState("");
-  const [nipGuru, setNipGuru] = useState("");
-  const [pangkatGol, setPangkatGol] = useState("");
+  const [nip, setNip] = useState("");
+  const [pangkatGolongan, setPangkatGolongan] = useState("");
   const [jabatan, setJabatan] = useState("");
-  const [tglMulaiKerja, setTglMulaiKerja] = useState("");
+  const [tanggalMulaiKerja, setTanggalMulaiKerja] = useState("");
   const [tempatLahir, setTempatLahir] = useState("");
   const [tanggalLahir, setTanggalLahir] = useState("");
   const [jenisKelamin, setJenisKelamin] = useState("");
   const [pendidikanTerakhir, setPendidikanTerakhir] = useState("");
   const [jurusan, setJurusan] = useState("");
   const [tahunLulus, setTahunLulus] = useState("");
-  const [noTelp, setNoTelp] = useState("");
+  const [nomorTelepon, setNomorTelepon] = useState("");
   const [email, setEmail] = useState("");
+  const { idsekolah } = useParams();
+
+
+  const handleStatusPegawaiChange = (e) => {
+    setStatusPegawai(e.target.value);
+    if (e.target.value === "PNS" || e.target.value === "PPPK") {
+      // Fetch NIP and Pangkat/Golongan data if needed
+    } else {
+      setNip("-");
+      setPangkatGolongan("-");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await axios.post("http://localhost:5000/gurupak", {
-        id_sekolah: idSekolah,
+        id_sekolah: idsekolah,
         status_pegawai: statusPegawai,
         kategori_guru: kategoriGuru,
         jenis_guru: jenisGuru,
         nama_guru: namaGuru,
-        nip_guru: nipGuru,
-        pangkat_gol: pangkatGol,
+        nip_guru: nip,
+        pangkat_gol: pangkatGolongan,
         jabatan: jabatan,
-        tgl_mulai_kerja: tglMulaiKerja,
+        tgl_mulai_kerja: tanggalMulaiKerja,
         tempat_lahir: tempatLahir,
         tanggal_lahir: tanggalLahir,
         jenis_kelamin: jenisKelamin,
         pendidikan_terakhir: pendidikanTerakhir,
         jurusan: jurusan,
         tahun_lulus: tahunLulus,
-        no_telp: noTelp,
+        no_telp: nomorTelepon,
         email: email,
       });
 
       setIsOpenModalAdd(false);
-      getGuruPak();
+      getGuru(idsekolah);
     } catch (error) {
       console.log(error);
     }
@@ -53,257 +65,298 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuruPak }) => {
 
   return (
     <div
-      id="defaultModal"
+      id="default-modal"
       tabIndex="-1"
       aria-hidden="true"
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
+      className="fixed inset-0 flex items-center justify-center bg-gray-500 z-top bg-opacity-30"
     >
-      <form
-        onSubmit={handleSubmit}
-        className="relative w-full h-full max-w-2xl md:h-auto"
-      >
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Tambah Guru PAK
+      <form onSubmit={handleSubmit} className="h-[90%]">
+        <div className="w-full bg-white rounded-lg shadow-lg h-full inline-block">
+          <div className="flex items-center justify-between p-4 border-b rounded-t">
+            <h3 className="text-xl font-semibold text-gray-900">
+              Tambah Data Guru PAK
             </h3>
             <button
-              type="button"
               onClick={() => setIsOpenModalAdd(false)}
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              type="button"
+              className="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto"
+              data-modal-hide="default-modal"
             >
               <svg
+                className="w-3 h-3"
                 aria-hidden="true"
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                ></path>
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
               </svg>
+              <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <div className="p-6 space-y-6">
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="idSekolah" className="label-input">
-                ID Sekolah
-              </label>
-              <input
-                id="idSekolah"
-                className="w-full input"
-                value={idSekolah}
-                onChange={(e) => setIdSekolah(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="statusPegawai" className="label-input">
-                Status Pegawai
-              </label>
-              <input
-                id="statusPegawai"
-                className="w-full input"
-                value={statusPegawai}
-                onChange={(e) => setStatusPegawai(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="kategoriGuru" className="label-input">
-                Kategori Guru
-              </label>
-              <input
-                id="kategoriGuru"
-                className="w-full input"
-                value={kategoriGuru}
-                onChange={(e) => setKategoriGuru(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="jenisGuru" className="label-input">
-                Jenis Guru
-              </label>
-              <input
-                id="jenisGuru"
-                className="w-full input"
-                value={jenisGuru}
-                onChange={(e) => setJenisGuru(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="namaGuru" className="label-input">
-                Nama Guru
-              </label>
-              <input
-                id="namaGuru"
-                className="w-full input"
-                value={namaGuru}
-                onChange={(e) => setNamaGuru(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="nipGuru" className="label-input">
-                NIP Guru
-              </label>
-              <input
-                id="nipGuru"
-                className="w-full input"
-                value={nipGuru}
-                onChange={(e) => setNipGuru(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="pangkatGol" className="label-input">
-                Pangkat Gol
-              </label>
-              <input
-                id="pangkatGol"
-                className="w-full input"
-                value={pangkatGol}
-                onChange={(e) => setPangkatGol(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="jabatan" className="label-input">
-                Jabatan
-              </label>
-              <input
-                id="jabatan"
-                className="w-full input"
-                value={jabatan}
-                onChange={(e) => setJabatan(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="tglMulaiKerja" className="label-input">
-                Tanggal Mulai Kerja
-              </label>
-              <input
-                id="tglMulaiKerja"
-                className="w-full input"
-                value={tglMulaiKerja}
-                onChange={(e) => setTglMulaiKerja(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="tempatLahir" className="label-input">
-                Tempat Lahir
-              </label>
-              <input
-                id="tempatLahir"
-                className="w-full input"
-                value={tempatLahir}
-                onChange={(e) => setTempatLahir(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="tanggalLahir" className="label-input">
-                Tanggal Lahir
-              </label>
-              <input
-                id="tanggalLahir"
-                className="w-full input"
-                value={tanggalLahir}
-                onChange={(e) => setTanggalLahir(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="jenisKelamin" className="label-input">
-                Jenis Kelamin
-              </label>
-              <input
-                id="jenisKelamin"
-                className="w-full input"
-                value={jenisKelamin}
-                onChange={(e) => setJenisKelamin(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="pendidikanTerakhir" className="label-input">
-                Pendidikan Terakhir
-              </label>
-              <input
-                id="pendidikanTerakhir"
-                className="w-full input"
-                value={pendidikanTerakhir}
-                onChange={(e) => setPendidikanTerakhir(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="jurusan" className="label-input">
-                Jurusan
-              </label>
-              <input
-                id="jurusan"
-                className="w-full input"
-                value={jurusan}
-                onChange={(e) => setJurusan(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="tahunLulus" className="label-input">
-                Tahun Lulus
-              </label>
-              <input
-                id="tahunLulus"
-                className="w-full input"
-                value={tahunLulus}
-                onChange={(e) => setTahunLulus(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="noTelp" className="label-input">
-                No. Telp
-              </label>
-              <input
-                id="noTelp"
-                className="w-full input"
-                value={noTelp}
-                onChange={(e) => setNoTelp(e.target.value)}
-                type="text"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-5 mb-2">
-              <label htmlFor="email" className="label-input">
-                Email
-              </label>
-              <input
-                id="email"
-                className="w-full input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-              />
+          <div className="p-4 space-y-4 inline-block h-[75%] overflow-y-scroll">
+            <div className="mb-6">
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="statusPegawai" className="label-input">
+                  Status Pegawai
+                </label>
+                <select
+                  id="statusPegawai"
+                  className="input py-0"
+                  value={statusPegawai}
+                  onChange={handleStatusPegawaiChange}
+                >
+                  <option value="" disabled>
+                    Pilih Status
+                  </option>
+                  <option value="PNS">PNS</option>
+                  <option value="PPPK">PPPK</option>
+                  <option value="Honorer">Honorer</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="kategoriGuru" className="label-input">
+                  Kategori Guru
+                </label>
+                <select
+                  id="kategoriGuru"
+                  className="input py-0"
+                  value={kategoriGuru}
+                  onChange={(e) => setKategoriGuru(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Pilih Kategori
+                  </option>
+                  <option value="Guru Pemda">Guru Pemda</option>
+                  <option value="Guru Kemenag">Guru Kemenag</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="jenisGuru" className="label-input">
+                  Jenis Guru
+                </label>
+                <select
+                  id="jenisGuru"
+                  className="input py-0"
+                  value={jenisGuru}
+                  onChange={(e) => setJenisGuru(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Pilih Jenis
+                  </option>
+                  <option value="Sertifikasi">Sertifikasi</option>
+                  <option value="Non Sertifikasi">Non Sertifikasi</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="namaGuru" className="label-input">
+                  Nama Guru
+                </label>
+                <input
+                  id="namaGuru"
+                  className="w-full input"
+                  value={namaGuru}
+                  onChange={(e) => setNamaGuru(e.target.value)}
+                  type="text"
+                />
+              </div>
+              {statusPegawai === "PNS" || statusPegawai === "PPPK" ? (
+                <>
+                  <div className="grid grid-cols-2 gap-5 mb-2">
+                    <label htmlFor="nip" className="label-input">
+                      NIP
+                    </label>
+                    <input
+                      id="nip"
+                      className="w-full input"
+                      value={nip}
+                      onChange={(e) => setNip(e.target.value)}
+                      type="text"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-5 mb-2">
+                    <label htmlFor="pangkatGolongan" className="label-input">
+                      Pangkat/Golongan
+                    </label>
+                    <select
+                      id="pangkatGolongan"
+                      className="input py-0"
+                      value={pangkatGolongan}
+                      onChange={(e) => setPangkatGolongan(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Pilih Pangkat/Golongan
+                      </option>
+                      <option value="Penata Muda, IX">Penata Muda, IX</option>
+                      <option value="Penata Muda, III/a">
+                        Penata Muda, III/a
+                      </option>
+                      <option value="Penata Muda Tingkat I, III/b">
+                        Penata Muda Tingkat I, III/b
+                      </option>
+                      <option value="Penata, III/c">Penata, III/c</option>
+                      <option value="Penata Tingkat I, III/d">
+                        Penata Tingkat I, III/d
+                      </option>
+                      <option value="Pembina, IV/a">Pembina, IV/a</option>
+                      <option value="Pembina Tingkat I, IV/b">
+                        Pembina Tingkat I, IV/b
+                      </option>
+                      <option value="Pembina Utama Muda, IV/c">
+                        Pembina Utama Muda, IV/c
+                      </option>
+                      <option value="Pembina Utama Madya, IV/d">
+                        Pembina Utama Madya, IV/d
+                      </option>
+                      <option value="Pembina Utama, IV/e">
+                        Pembina Utama, IV/e
+                      </option>
+                    </select>
+                  </div>
+                </>
+              ) : null}
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="jabatan" className="label-input">
+                  Jabatan
+                </label>
+                <input
+                  id="jabatan"
+                  className="w-full input"
+                  value={jabatan}
+                  onChange={(e) => setJabatan(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="tanggalMulaiKerja" className="label-input">
+                  Tanggal Mulai Kerja
+                </label>
+                <input
+                  id="tanggalMulaiKerja"
+                  className="w-full input"
+                  value={tanggalMulaiKerja}
+                  onChange={(e) => setTanggalMulaiKerja(e.target.value)}
+                  type="date"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="tempatLahir" className="label-input">
+                  Tempat Lahir
+                </label>
+                <input
+                  id="tempatLahir"
+                  className="w-full input"
+                  value={tempatLahir}
+                  onChange={(e) => setTempatLahir(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="tanggalLahir" className="label-input">
+                  Tanggal Lahir
+                </label>
+                <input
+                  id="tanggalLahir"
+                  className="w-full input"
+                  value={tanggalLahir}
+                  onChange={(e) => setTanggalLahir(e.target.value)}
+                  type="date"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="jenisKelamin" className="label-input">
+                  Jenis Kelamin
+                </label>
+                <select
+                  id="jenisKelamin"
+                  className="input py-0"
+                  value={jenisKelamin}
+                  onChange={(e) => setJenisKelamin(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Pilih Jenis Kelamin
+                  </option>
+                  <option value="Laki-Laki">Laki-Laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="pendidikanTerakhir" className="label-input">
+                  Pendidikan Terakhir
+                </label>
+                <input
+                  id="pendidikanTerakhir"
+                  className="w-full input"
+                  value={pendidikanTerakhir}
+                  onChange={(e) => setPendidikanTerakhir(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="jurusan" className="label-input">
+                  Jurusan
+                </label>
+                <input
+                  id="jurusan"
+                  className="w-full input"
+                  value={jurusan}
+                  onChange={(e) => setJurusan(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="tahunLulus" className="label-input">
+                  Tahun Lulus
+                </label>
+                <input
+                  id="tahunLulus"
+                  className="w-full input"
+                  value={tahunLulus}
+                  onChange={(e) => setTahunLulus(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="nomorTelepon" className="label-input">
+                  Nomor Telepon
+                </label>
+                <input
+                  id="nomorTelepon"
+                  className="w-full input"
+                  value={nomorTelepon}
+                  onChange={(e) => setNomorTelepon(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="email" className="label-input">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  className="w-full input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                />
+              </div>
             </div>
           </div>
-          <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
+          <div className="flex items-center justify-end p-4 space-x-3 border-t border-gray-200 rounded-b">
+            <button type="submit" className="btn btn-simpan">
               Simpan
             </button>
             <button
-              type="button"
               onClick={() => setIsOpenModalAdd(false)}
-              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600"
+              type="button"
+              className="btn-batal"
             >
               Batal
             </button>
@@ -312,7 +365,6 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuruPak }) => {
       </form>
     </div>
   );
-}
+};
 
 export default AddGuruPakModal;
-

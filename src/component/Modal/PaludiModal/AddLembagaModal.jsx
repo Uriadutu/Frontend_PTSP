@@ -156,7 +156,7 @@ const AddLembagaModal = ({ setIsOpenModalAdd, getLembaga }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-end p-4 space-x-3 border-t border-gray-200 rounded-b">
+         <div className="flex items-center justify-end p-4 space-x-3 border-t border-gray-200 rounded-b">
             <button type="submit" className="btn btn-simpan">
               Simpan
             </button>

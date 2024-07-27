@@ -7,13 +7,21 @@ import InfoHakAksesModal from "./Modal/InfoHakAksesModal";
 
 const HakAkses = () => {
   const [pegawaiList, setPegawaiList] = useState([]);
+  const [filteredPegawai, setFilteredPegawai] = useState([]);
   const [selectedPegawai, setSelectedPegawai] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openModalInfo, setOpenModalInfo] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pegawaiPerPage] = useState(10);
 
   useEffect(() => {
     fetchPegawai();
   }, []);
+
+  useEffect(() => {
+    filterAndPaginatePegawai();
+  }, [pegawaiList, searchText, currentPage, filterAndPaginatePegawai]); // Include filterAndPaginatePegawai here
 
   const fetchPegawai = async () => {
     try {
@@ -24,15 +32,47 @@ const HakAkses = () => {
     }
   };
 
+  const filterAndPaginatePegawai = () => {
+    const lowerCaseSearchText = searchText.toLowerCase();
+    const filtered = pegawaiList.filter(
+      (pegawai) =>
+        pegawai.nama_pegawai.toLowerCase().includes(lowerCaseSearchText) ||
+        pegawai.NIP.toLowerCase().includes(lowerCaseSearchText)
+    );
+
+    const indexOfLastPegawai = currentPage * pegawaiPerPage;
+    const indexOfFirstPegawai = indexOfLastPegawai - pegawaiPerPage;
+    const currentPegawai = filtered.slice(
+      indexOfFirstPegawai,
+      indexOfLastPegawai
+    );
+
+    setFilteredPegawai(currentPegawai);
+  };
+
   const handleEditClick = (pegawai) => {
     setSelectedPegawai(pegawai);
     setOpenModal(true);
   };
-  
+
   const handleOpenInfo = (pegawai) => {
     setSelectedPegawai(pegawai);
     setOpenModalInfo(true);
   };
+
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(pegawaiList.length / pegawaiPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="contain">
@@ -50,6 +90,15 @@ const HakAkses = () => {
         />
       )}
       <h1 className="text-2xl font-bold mb-4">Hak Akses Pegawai</h1>
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          className="input"
+          placeholder="Cari Nama / NIP"
+          value={searchText}
+          onChange={handleSearchChange}
+        />
+      </div>
       <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg mb-6">
         <thead>
           <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -58,30 +107,34 @@ const HakAkses = () => {
             <th className="py-3 px-6 text-left">Nama Pegawai</th>
             <th className="py-3 px-6 text-left">Jenis Pegawai</th>
             <th className="py-3 px-6 text-left">Satuan Kerja</th>
-            <th className="py-3 px-6 text-center">Actions</th>
+            <th className="py-3 px-6 text-center">Aksi</th>
           </tr>
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
-          {pegawaiList.map((pegawai, index) => (
+          {filteredPegawai.map((pegawai, index) => (
             <tr
               key={pegawai.id}
               className="border-b border-gray-200 hover:bg-gray-100"
             >
-              <td className="py-3 px-6 text-left">{index + 1}</td>
+              <td className="py-3 px-6 text-left">
+                {(currentPage - 1) * pegawaiPerPage + index + 1}
+              </td>
               <td className="py-3 px-6 text-left">{pegawai.NIP}</td>
               <td className="py-3 px-6 text-left">{pegawai.nama_pegawai}</td>
               <td className="py-3 px-6 text-left">{pegawai.jenis_pegawai}</td>
               <td className="py-3 px-6 text-left">{pegawai.satuan_kerja}</td>
               <td className="py-3 px-6 text-center">
                 <button
-                  className="detail"
+                  className="p-2 border border-gray-100 rounded bg-gray-600 hover:bg-gray-500"
                   onClick={() => handleOpenInfo(pegawai)}
+                  title="Info"
                 >
                   <BsInfoCircleFill color="white" />
                 </button>
                 <button
-                  className="p-2 border border-gray-100  rounded bg-gray-600 hover:bg-slate-500"
+                  className="p-2 border border-gray-100 rounded bg-gray-600 hover:bg-gray-500 ml-2"
                   onClick={() => handleEditClick(pegawai)}
+                  title="Edit"
                 >
                   <IoSettings color="white" />
                 </button>
@@ -90,6 +143,24 @@ const HakAkses = () => {
           ))}
         </tbody>
       </table>
+      <nav className="flex justify-center mt-4">
+        <ul className="flex space-x-2">
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <button
+                onClick={() => handlePageChange(number)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === number
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {number}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };

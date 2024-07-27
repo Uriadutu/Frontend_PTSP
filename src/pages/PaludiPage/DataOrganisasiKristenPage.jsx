@@ -4,9 +4,9 @@ import Layout from "../Layout"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../../features/authSlice";
-import DataGuruPak from "../../component/Paludi/SekolahPaludi/DataGuruPak";
+import DataOrganisasiKristen from "../../component/Paludi/DataOrganisasiKristen";
 
-const DataGuruPakPage = () => {
+const DataOrganisasiKristenPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isError } = useSelector((state) => state.auth);
@@ -23,9 +23,9 @@ const DataGuruPakPage = () => {
 
   return (
     <Layout>
-      <DataGuruPak />
+      <DataOrganisasiKristen />
     </Layout>
   );
 };
 
-export default DataGuruPakPage;
+export default DataOrganisasiKristenPage;

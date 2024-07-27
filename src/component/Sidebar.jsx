@@ -371,13 +371,14 @@ const Sidebar = () => {
                     Data Penyuluh
                   </NavLink>
                   <NavLink
-                    to="/paludi/data-organisasi-masyarakat"
+                    to="/paludi/data-organisasi-masyarakat/"
                     className={getNavLinkClass}
                   >
                     Data Organisasi Masyarakat
                   </NavLink>
+
                   <NavLink
-                    to="/paludi/data-lembaga-keagamaan"
+                    to="/paludi/data-lembaga-keagamaan/"
                     className={getNavLinkClass}
                   >
                     Data Lembaga Keagamaan

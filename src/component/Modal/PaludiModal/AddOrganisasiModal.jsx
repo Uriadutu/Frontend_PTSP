@@ -13,7 +13,7 @@ const AddOrganisasiModal = ({ setIsOpenModalAdd, getOrganisasi }) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/organisasi", {
+      await axios.post("http://localhost:5000/organisasi/kristen", {
         nama_organisasi: namaOrganisasi,
         alamat: alamat,
         tahun_berdiri: tahunBerdiri,

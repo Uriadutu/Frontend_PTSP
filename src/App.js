@@ -39,7 +39,15 @@ import DataUmatKristenPage from "./pages/PaludiPage/DataUmatKristenPage.jsx";
 import DetailUmatKristenPage from "./pages/PaludiPage/DetailUmatKristenPage.jsx";
 import DataGerejaPage from "./pages/PaludiPage/DataGerejaPage.jsx";
 import DetailGerejaPage from "./pages/PaludiPage/DetailGerejaPage.jsx";
-import DataGuruPakPage from "./pages/PaludiPage/DataGuruPakPage.jsx";
+import DataGuruPakPage from "./pages/PaludiPage/SekolahKristenPage/DataGuruPakPage.jsx";
+import DataOrganisasiKristenPage from "./pages/PaludiPage/DataOrganisasiKristenPage.jsx";
+import DataLembagaKristenPage from "./pages/PaludiPage/DataLembagaKristenPage.jsx";
+import ListSekolahKristenPage from "./pages/PaludiPage/SekolahKristenPage/ListSekolahKristenPage.jsx";
+import DetailSekolahKristenPage from "./pages/PaludiPage/SekolahKristenPage/DetailSekolahKristenPage.jsx";
+import DetailGuruPakPage from "./pages/PaludiPage/SekolahKristenPage/DetailGuruKristenPage.jsx";
+import DataGuruPaludiPage from "./pages/PaludiPage/DataGuruPaludiPage.jsx";
+import DataPenyuluPage from "./pages/PaludiPage/DataPenyuluPage.jsx";
+import DetailPenyuluPage from "./pages/PaludiPage/DetailPenyuluPage.jsx";
 
 
 function App() {
@@ -131,7 +139,23 @@ function App() {
           />
           <Route
             path="/:sub/data-sekolah-paludi/:jenjang/:status"
+            element={<ListSekolahKristenPage />}
+          />
+          <Route
+            path="/paludi/sekolah/kristen/detail/:id"
+            element={<DetailSekolahKristenPage />}
+          />
+          <Route
+            path="/paludi/sekolah/:namasekolah/:jenjang/guru/:idsekolah"
             element={<DataGuruPakPage />}
+          />
+          <Route
+            path="/paludi/data-guru-pak/detail-guru-pak/:id"
+            element={<DetailGuruPakPage />}
+          />
+          <Route
+            path="/paludi/data-guru-pak"
+            element={<DataGuruPaludiPage />}
           />
           <Route
             path="/:sub/data-umat-kristen"
@@ -141,13 +165,20 @@ function App() {
             path="/paludi/data-umat-kristen/detail/:id"
             element={<DetailUmatKristenPage />}
           />
-          <Route
-            path="/paludi/data-gereja/"
-            element={<DataGerejaPage />}
-          />
+          <Route path="/paludi/data-gereja/" element={<DataGerejaPage />} />
+          <Route path="paludi/data-penyuluh" element={<DataPenyuluPage />} />
+          <Route path="paludi/data-penyulu/detail/:id" element={<DetailPenyuluPage />} />
           <Route
             path="/paludi/data-gereja/detail/:id"
             element={<DetailGerejaPage />}
+          />
+          <Route
+            path="/paludi/data-organisasi-masyarakat/"
+            element={<DataOrganisasiKristenPage />}
+          />
+          <Route
+            path="/paludi/data-lembaga-keagamaan/"
+            element={<DataLembagaKristenPage />}
           />
 
           {/* Sahu */}
