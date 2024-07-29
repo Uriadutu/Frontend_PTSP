@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <main className="min-h-screen m-0 w-full ml-[300px]">
+          <main className="min-h-screen m-0 w-full md:ml-[300px] lg:ml-[300px] sm:ml-0">
             <Jejak />
             {children}
           </main>

@@ -66,7 +66,7 @@ const DataSekolahKristen = () => {
   const getJumlahSekolah = async (jenjang, setter) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/sekolah/jumlah/${jenjang}`
+        `http://localhost:5000/sekolah-kristen/jumlah/${jenjang}`
       );
       const data = await response.json();
       setter(data.length);
@@ -77,7 +77,7 @@ const DataSekolahKristen = () => {
 
   const getJumlahSekolahPerStatus = async (status, setter) => {
     const response = await fetch(
-      `http://localhost:5000/sekolah/status/${status}`
+      `http://localhost:5000/sekolah-kristen/status/${status}`
     );
     const data = await response.json();
     setter(data.length);

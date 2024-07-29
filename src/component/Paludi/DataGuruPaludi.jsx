@@ -3,9 +3,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
+import EditGuruPakModal from "../Modal/PaludiModal/EditGuruPakModal";
 
 const DataGuruPaludi = () => {
   const [gurus, setGurus] = useState([]);
+  const [openModalEdit, setOpenModalEdit] = useState(false)
+  const [selectedGuruPak, setselecGuruPak] = useState({})
   const [sortBy, setSortBy] = useState("nama_guru");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,6 +41,11 @@ const DataGuruPaludi = () => {
       }
     }
   };
+
+  const handleEditGuruPak = (item) => {
+    setOpenModalEdit(true)
+    setselecGuruPak(item)
+  }
 
   const filteredAndSortedGurus = gurus
     .filter((guru) => {
@@ -78,6 +86,12 @@ const DataGuruPaludi = () => {
 
   return (
     <div className="contain">
+      {openModalEdit && (
+        <EditGuruPakModal
+        idGuru={selectedGuruPak}
+        getGuru={getGurus}
+        setIsOpenModalEdit={setOpenModalEdit} />
+        )}
       <h1 className="judul mb-4">Data Guru</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-3">
@@ -126,23 +140,23 @@ const DataGuruPaludi = () => {
                 </td>
                 <td className="py-3 px-6 text-left">{guru.NIP}</td>
                 <td className="py-3 px-6 text-left">
-                  {(guru.status_pegawai)}
+                  {(guru.status_pegawai)} 
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {(guru && guru.Sekolah && guru.Sekolah.nama_sekolah)}
+                  {(guru && guru.SekolahKristen && guru.SekolahKristen.nama_sekolah)}
                 </td>
                 <td className="py-3 px-6 text-left">
                   {(guru.kategori_guru)}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/lapasi/data-guru/detail-guru/${guru.id}`}
+                    to={`/paludi/data-guru-pak/detail-guru-pak/${guru.id}`}
                     className="detail"
                     title="Lihat"
                   >
                     <IoEyeSharp color="white" width={100} />
                   </Link>
-                  <button className="edit" title="Edit">
+                  <button className="edit" title="Edit" onClick={()=> handleEditGuruPak(guru)}>
                     <MdModeEdit color="white" />
                   </button>
                   <button

@@ -48,6 +48,7 @@ import DetailGuruPakPage from "./pages/PaludiPage/SekolahKristenPage/DetailGuruK
 import DataGuruPaludiPage from "./pages/PaludiPage/DataGuruPaludiPage.jsx";
 import DataPenyuluPage from "./pages/PaludiPage/DataPenyuluPage.jsx";
 import DetailPenyuluPage from "./pages/PaludiPage/DetailPenyuluPage.jsx";
+import DetailZakatPage from "./pages/SahuPage/DetailZakatPage.jsx";
 
 
 function App() {
@@ -187,6 +188,10 @@ function App() {
           <Route
             path="/:sub/data-penerima-penyaluran-zakat"
             element={<DataPenerimaZakatPage />}
+          />
+          <Route
+            path="/sahu/data-penerima-penyaluran-zakat/detail-zakat/:id"
+            element={<DetailZakatPage />}
           />
           <Route
             path="/:sub/data-tanah-wakaf"

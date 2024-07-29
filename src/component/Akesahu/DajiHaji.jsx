@@ -51,7 +51,6 @@ const DataHaji = () => {
               <th className="py-3 px-6 text-left">Nomor Porsi</th>
               <th className="py-3 px-6 text-left">Nama Jamaah</th>
               <th className="py-3 px-6 text-left">Kecamatan - Desa</th>
-              <th className="py-3 px-6 text-left">Status</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
           </thead>
@@ -71,9 +70,7 @@ const DataHaji = () => {
                 <td className="py-3 px-6 text-left">
                   {item && item.kecamatan} - {item && item.nama_desa}
                 </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.status_keberangkatan}
-                </td>
+                
                 <td className="py-3 px-6 text-center">
                   <button
                     onClick={() =>

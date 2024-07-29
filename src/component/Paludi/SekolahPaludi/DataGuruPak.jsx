@@ -4,12 +4,16 @@ import axios from "axios";
 import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import AddGuruPakModal from "../../Modal/PaludiModal/AddGuruPakModal";
+import EditGuruPakModal from "../../Modal/PaludiModal/EditGuruPakModal";
 
 const DataGuruPak = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [gurus, setGuru] = useState([]);
   const navigate = useNavigate();
   const { idsekolah } = useParams();
+   const [openModalEdit, setOpenModalEdit] = useState(false);
+   const [selectedGuruPak, setselecGuruPak] = useState({});
+ 
 
   useEffect(() => {
     getGuruBySekolah(idsekolah);
@@ -24,6 +28,10 @@ const DataGuruPak = () => {
       console.log(error);
     }
   };
+   const handleEditGuruPak = (item) => {
+     setOpenModalEdit(true);
+     setselecGuruPak(item);
+   };
 
   const hapusGuru = async(id)=> {
     try {
@@ -41,6 +49,13 @@ const DataGuruPak = () => {
           getGuru={getGuruBySekolah}
         />
       )}
+      {openModalEdit && (
+        <EditGuruPakModal
+        idGuru={selectedGuruPak}
+        setIsOpenModalEdit={setOpenModalEdit}
+        getGuru={getGuruBySekolah} />
+        
+        )}
 
       <h1 className="judul">Data Guru</h1>
       <div className="flex gap-3 mt-3 items-center">
@@ -86,7 +101,9 @@ const DataGuruPak = () => {
                   <button
                     onClick={() =>
                       navigate(
-                        `/paludi/data-guru-pak/detail-guru-pak/${item && item.id}`
+                        `/paludi/data-guru-pak/detail-guru-pak/${
+                          item && item.id
+                        }`
                       )
                     }
                     className="detail"
@@ -94,7 +111,11 @@ const DataGuruPak = () => {
                   >
                     <IoEyeSharp color="white" width={100} />
                   </button>
-                  <button className="edit" title="Edit">
+                  <button
+                    className="edit"
+                    title="Edit"
+                    onClick={() => handleEditGuruPak(item)}
+                  >
                     <MdModeEdit color="white" />
                   </button>
                   <button

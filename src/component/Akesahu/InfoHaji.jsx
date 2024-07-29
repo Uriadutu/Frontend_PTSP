@@ -1,160 +1,175 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { IoEyeSharp } from "react-icons/io5";
+import { MdDelete, MdModeEdit } from "react-icons/md";
+import EditStatusModal from "../Modal/AkesahuModal/EditStatusModal";
 
 const InfoHaji = () => {
-  const [nomorPorsi, setNomorPorsi] = useState("");
-  const [hajiData, setHajiData] = useState(null);
-  const [searchDone, setSearchDone] = useState(false);
-  const [statusKeberangkatan, setStatusKeberangkatan] = useState("");
-  const [tahunKeberangkatan, setTahunKeberangkatan] = useState("");
+  const [hajis, setHajis] = useState([]);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [selectedHaji, setSelectedHaji] = useState({});
+  const [sortBy, setSortBy] = useState("nama_jamaah");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hajisPerPage] = useState(10);
 
-  const handleSearch = async () => {
-    setSearchDone(true);
+  useEffect(() => {
+    getHajis();
+  }, []);
+
+  const getHajis = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/haji/porsi/${nomorPorsi}`
-      );
-      setHajiData(response.data);
-    } catch (error) {
-      console.error("Data tidak ditemukan", error);
-      setHajiData(null);
-    }
-  };
-
-  const handleSave = async (event) => {
-    event.preventDefault();
-
-    const updatedTahunKeberangkatan =
-      statusKeberangkatan === "Batal Berangkat" ? "-" : tahunKeberangkatan;
-
-    try {
-      await axios.patch(
-        `http://localhost:5000/haji/berangkat/${hajiData.nomor_porsi}`,
-        {
-          status_keberangkatan: statusKeberangkatan,
-          tgl_berangkat: updatedTahunKeberangkatan,
-        }
-      );
-      alert("Berhasil Di Update");
-      handleSearch();
+      const response = await axios.get("http://localhost:5000/haji");
+      setHajis(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const deleteHaji = async (hajiId) => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data haji ini?")) {
+      try {
+        await axios.delete(`http://localhost:5000/haji/${hajiId}`);
+        getHajis();
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const handleEditHaji = (item) => {
+    setOpenModalEdit(true);
+    setSelectedHaji(item);
+  };
+
+  const filteredAndSortedHajis = hajis.sort((a, b) => {
+    if (sortBy === "nama_jamaah") {
+      return a.nama_jamaah.localeCompare(b.nama_jamaah);
+    } else if (sortBy === "nomor_porsi") {
+      return a.nomor_porsi.localeCompare(b.nomor_porsi);
+    }
+    return 0;
+  });
+
+  const indexOfLastHaji = currentPage * hajisPerPage;
+  const indexOfFirstHaji = indexOfLastHaji - hajisPerPage;
+  const currentHajis = filteredAndSortedHajis.slice(
+    indexOfFirstHaji,
+    indexOfLastHaji
+  );
+
+  const pageNumbers = [];
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredAndSortedHajis.length / hajisPerPage);
+    i++
+  ) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="contain">
-      <h1 className="judul">Info Haji</h1>
-      <div className="input bg-white inline-block">
-        <input
-          type="text"
-          placeholder="Cari Nomor Porsi"
-          value={nomorPorsi}
-          onChange={(e) => setNomorPorsi(e.target.value)}
-          className="inp-fokus outline-none"
+      {openModalEdit && (
+        <EditStatusModal
+        getHaji={getHajis}
+        setIsOpenModalEdit={setOpenModalEdit}
+        hajiData={selectedHaji}
+        
         />
-        <button onClick={handleSearch} className="btn-search">
-          Cari
-        </button>
-      </div>
-      {hajiData ? (
-        <div className="mt-3">
-          <table className="table-auto w-full border-collapse border border-gray-200">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2 text-left">
-                  Nomor Porsi
-                </th>
-                <th className="border border-gray-300 p-2 text-left">Nama</th>
-                <th className="border border-gray-300 p-2 text-left">
-                  Tanggal Daftar
-                </th>
-                <th className="border border-gray-300 p-2 text-left">Alamat</th>
-                <th className="border border-gray-300 p-2 text-left">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-2 ">
-                  {hajiData.nomor_porsi}
-                </td>
-                <td className="border border-gray-300 p-2 ">
-                  {hajiData.nama_jamaah}
-                </td>
-                <td className="border border-gray-300 p-2 ">
-                  {hajiData.tanggal_porsi}
-                </td>
-                <td className="border border-gray-300 p-2 ">
-                  {hajiData.kecamatan} - {hajiData.nama_desa}
-                </td>
-                <td className="border border-gray-300 p-2 ">
-                  {hajiData.status_keberangkatan || "-"}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div className="mt-4 w-1/2">
-            <form onSubmit={handleSave}>
-              <div className="mb-4 grid grid-cols-2 gap-3">
-                <label htmlFor="statusKeberangkatan" className="label-input">
-                  Status Keberangkatan
-                </label>
-                <select
-                  id="statusKeberangkatan"
-                  className="input"
-                  value={statusKeberangkatan}
-                  onChange={(e) => setStatusKeberangkatan(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Status
-                  </option>
-                  <option value="Berangkat">Berangkat</option>
-                  <option value="Batal Berangkat">Batal Berangkat</option>
-                </select>
-              </div>
-
-              {statusKeberangkatan === "Berangkat" && (
-                <div className="mb-4 grid grid-cols-2 gap-3">
-                  <label htmlFor="tahunKeberangkatan" className="label-input">
-                    Tahun Keberangkatan
-                  </label>
-                  <input
-                    type="text"
-                    id="tahunKeberangkatan"
-                    className="input"
-                    value={tahunKeberangkatan}
-                    onChange={(e) => setTahunKeberangkatan(e.target.value)}
-                    required
-                  />
-                </div>
-              )}
-              <button type="submit" className="btn-simpan">
-                Simpan
-              </button>
-            </form>
+      )}
+      <h1 className="judul mb-4">Data Haji</h1>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
+            <label className="text-sm ">Urut Berdasarkan:</label>
+            <select
+              className="input"
+              value={sortBy}
+              onChange={handleSortChange}
+            >
+              <option value="nama_jamaah">Nama</option>
+              <option value="nomor_porsi">Nomor Porsi</option>
+            </select>
           </div>
         </div>
-      ) : searchDone ? (
-        <div className="mt-3">
-          <table className="table-auto w-full border-collapse border border-gray-200">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">Nomor Porsi</th>
-                <th className="border border-gray-300 p-2">Tanggal Daftar</th>
-                <th className="border border-gray-300 p-2">Nama</th>
-                <th className="border border-gray-300 p-2">Alamat</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colSpan={4} className="text-center p-2">
-                  Data Tidak Ditemukan
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+          <thead>
+            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <th className="py-3 px-6 text-left">No</th>
+              <th className="py-3 px-6 text-left">Nama Jamaah</th>
+              <th className="py-3 px-6 text-left">Nomor Porsi</th>
+              <th className="py-3 px-6 text-left">Tanggal Daftar</th>
+              <th className="py-3 px-6 text-left">Status</th>
+              <th className="py-3 px-6 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-600 text-sm font-light">
+            {currentHajis.map((haji, index) => (
+              <tr
+                key={haji.id}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
+                <td className="py-3 px-6 text-left">{index + 1}</td>
+                <td className="py-3 px-6 text-left">{haji.nama_jamaah}</td>
+                <td className="py-3 px-6 text-left">{haji.nomor_porsi}</td>
+                <td className="py-3 px-6 text-left">{haji.tanggal_porsi}</td>
+                <td className="py-3 px-6 text-left">
+                  {haji.status_keberangkatan}
+                </td>
+                <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                  <Link
+                    to={`/detail-haji/${haji.id}`}
+                    className="detail"
+                    title="Lihat"
+                  >
+                    <IoEyeSharp color="white" width={100} />
+                  </Link>
+                  <button
+                    className="edit"
+                    title="Edit"
+                    onClick={() => handleEditHaji(haji)}
+                  >
+                    <MdModeEdit color="white" />
+                  </button>
+                  <button
+                    className="delete"
+                    onClick={() => deleteHaji(haji.id)}
+                    title="Hapus"
+                  >
+                    <MdDelete color="white" />
+                  </button>
                 </td>
               </tr>
-            </tbody>
-          </table>
-        </div>
-      ) : null}
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <nav className="flex justify-center mt-4">
+        <ul className="flex space-x-2">
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <button
+                onClick={() => paginate(number)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === number
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {number}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };

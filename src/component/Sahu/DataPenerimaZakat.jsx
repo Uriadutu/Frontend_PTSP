@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AddZakatModal from "../Modal/SahuModal/AddZakatModal";
 import { MdDelete } from "react-icons/md";
+import { IoEyeSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const DataPenerimaZakat = () => {
   const [openModal, setOpenModal] = useState(false);
   const [zakats, setZakat] = useState([]);
 
+  const navigate = useNavigate();
   // Fetch data zakat
   const getZakat = async () => {
     try {
@@ -63,16 +66,25 @@ const DataPenerimaZakat = () => {
                 <td className="py-3 px-6 text-left">
                   {item && item.Kecamatan && item.Kecamatan.nama_kecamatan}
                 </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.kategori}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.sumber}
-                </td>
+                <td className="py-3 px-6 text-left">{item && item.kategori}</td>
+                <td className="py-3 px-6 text-left">{item && item.sumber}</td>
                 <td className="py-3 px-6 text-left">
                   {item && item.jumlah_sumber}
                 </td>
                 <td className="py-3 px-6 text-center">
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/sahu/data-penerima-penyaluran-zakat/detail-zakat/${
+                          item && item.id
+                        }`
+                      )
+                    }
+                    className="detail"
+                    title="Lihat"
+                  >
+                    <IoEyeSharp color="white" width={100} />
+                  </button>
                   <button
                     className="delete"
                     onClick={() => hapusZakat(item && item.id)}

@@ -60,7 +60,7 @@ const Sidebar = () => {
     `block p-3 pl-10 ${isActive ? "bg-[#DDFFDC]" : "hover:bg-gray-200"}`;
 
   return (
-    <aside className="mt-7 w-[300px] fixed bg-white drop-shadow-xl overflow-y-scroll h-[90%]">
+    <aside className="mt-7 w-[300px] fixed bg-white drop-shadow-xl overflow-y-scroll h-[90%] sm:hidden">
       <div className="mb-4 p-4 bg-gray-50 drop-shadow-xl">
         {user && user.role === "Admin" && (
           <div className="">

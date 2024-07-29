@@ -4,10 +4,13 @@ import axios from "axios";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { IoEyeSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import EditPegawaiModal from "../Modal/LapasiModal/EditPegawaiModal";
 
 const DataPegawai = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
+  const [openModalEdit, setOpenModaEdit] = useState(false);
   const [pegawai, setPegawai] = useState([])
+  const [selectedPegawai, setSelectedPegawai] = useState({});
   const navigate = useNavigate();
 
   const getPegawai = async () => {
@@ -26,6 +29,10 @@ const DataPegawai = () => {
       console.log(error);
     }
   }
+  const handleOpenModalEdit = (id) => {
+    setOpenModaEdit(true)
+    setSelectedPegawai(id)
+  }
 
   useEffect(()=> {
     getPegawai()
@@ -37,6 +44,13 @@ const DataPegawai = () => {
         <AddPegawaiModal
           setIsOpenModalAdd={setOpenModalAdd}
           getPegawai={getPegawai}
+        />
+      )}
+      {openModalEdit && (
+        <EditPegawaiModal
+          setIsOpenModalEdit={setOpenModaEdit}
+          getPegawai={getPegawai}
+          selectedPegawai={selectedPegawai}
         />
       )}
 
@@ -85,7 +99,7 @@ const DataPegawai = () => {
                   >
                     <IoEyeSharp color="white" width={100} />
                   </button>
-                  <button className="edit" title="Edit">
+                  <button className="edit" title="Edit" onClick={()=> handleOpenModalEdit(item)}>
                     <MdModeEdit color="white" />
                   </button>
                   <button
