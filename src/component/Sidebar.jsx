@@ -3,10 +3,11 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut, reset } from "../features/authSlice";
 import axios from "axios";
+import { FaTimes } from "react-icons/fa";
 
-const Sidebar = () => {
+const Sidebar = ({ tutupSidebar }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [satker, setSatker] = useState([])
+  const [satker, setSatker] = useState([]);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,6 +39,10 @@ const Sidebar = () => {
     );
   };
 
+  const tutup = (tf) => {
+    tutupSidebar(tf);
+  };
+
   const logout = () => {
     dispatch(LogOut());
     dispatch(reset());
@@ -45,35 +50,50 @@ const Sidebar = () => {
   };
 
   const satuanKerja = user?.satuan_kerja;
-  const satuan_kerja = satker?.nama_satker
-  const getSatker = async(id) => {
+  const satuan_kerja = satker?.nama_satker;
+  const getSatker = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/satker/${id}`)
-      setSatker(response.data)
+      const response = await axios.get(`http://localhost:5000/satker/${id}`);
+      setSatker(response.data);
     } catch (error) {
       console.log(error);
     }
-  } 
+  };
 
-  useEffect(()=> {getSatker(satuanKerja)},[satuanKerja]);
+  useEffect(() => {
+    getSatker(satuanKerja);
+  }, [satuanKerja]);
   const getNavLinkClass = ({ isActive }) =>
     `block p-3 pl-10 ${isActive ? "bg-[#DDFFDC]" : "hover:bg-gray-200"}`;
 
   return (
-    <aside className="mt-7 w-[300px] fixed bg-white drop-shadow-xl overflow-y-scroll h-[90%] sm:hidden">
-      <div className="mb-4 p-4 bg-gray-50 drop-shadow-xl">
-        {user && user.role === "Admin" && (
-          <div className="">
-            <h1 className="text-xl font-bold">{user && user.name}</h1>
-            <h1 className="text-lg">Admin</h1>
+    <aside className="mt-0 sm:mt-7 w-[300px] fixed bg-white drop-shadow-xl overflow-y-scroll h-[100%] sm:h-[90%] ">
+      <div className="mb-4 px-2 sm:p-4 bg-gray-50 drop-shadow-xl">
+        <div className="flex justify-between px-2">
+          <button onClick={() => tutup(false)}>
+            <FaTimes size={21}/>
+          </button>
+          <div className="mr-2">
+            {user && user.role === "Admin" && (
+              <div className="">
+                <h1 className="text-xl font-bold text-end sm:text-left">
+                  {user && user.name}
+                </h1>
+                <h1 className="text-lg text-end sm:text-left">Admin</h1>
+              </div>
+            )}
+            {user && user.UUID === "UUID" && (
+              <div className="">
+                <h1 className="text-xl font-bold text-end sm:text-left">
+                  {user && user.nama_pegawai}
+                </h1>
+                <h1 className="text-lg text-end sm:text-left">
+                  {satuan_kerja}
+                </h1>
+              </div>
+            )}
           </div>
-        )}
-        {user && user.UUID === "UUID" && (
-          <div className="">
-            <h1 className="text-xl font-bold">{user && user.nama_pegawai}</h1>
-            <h1 className="text-lg">{satuan_kerja}</h1>
-          </div>
-        )}
+        </div>
       </div>
       <div className="mb-4">
         <h1 className="text-lg font-semibold pl-4 mb-0">Menu</h1>
@@ -461,7 +481,7 @@ const Sidebar = () => {
               Manajemen Akun
             </NavLink>
           )}
-          <button className="flex p-4 my-2 w-full" onClick={logout}>
+          <button className="flex pl-4 pb-5 w-full" onClick={logout}>
             Logout
           </button>
         </nav>

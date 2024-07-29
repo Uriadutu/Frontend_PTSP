@@ -395,7 +395,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
             </button>
             <button
               onClick={() => setIsOpenModalAdd(false)}
-              type="button"
+              type="submit"
               className="btn-batal"
             >
               Batal

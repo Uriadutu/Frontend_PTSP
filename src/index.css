@@ -9,7 +9,7 @@
 }
 
 .contain {
-    @apply p-6 px-0 md:px-0 lg:px-0 min-h-screen w-full md:bg-red-500 lg:bg-yellow-500 sm:bg-blue-300;
+    @apply p-6 pt-2 px-2 sm:px-0 md:px-0 lg:px-0 min-h-screen w-full md:bg-red-500 lg:bg-yellow-500 sm:bg-blue-300;
 }
 
 .judul {
@@ -33,7 +33,10 @@
 }
 
 .z-top {
-    @apply z-[10000]
+    @apply z-[1000] p-5
+}
+.z-side {
+    @apply z-[2000]
 }
 
 .detail {

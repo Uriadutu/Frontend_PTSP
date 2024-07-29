@@ -9,15 +9,17 @@ const Layout = ({ children }) => {
     <>
       <Navbar />
       <div className="flex  min-h-screen m-0 bg-white pt-10 ">
-        <Sidebar />
+        <div className="sm:block hidden">
+          <Sidebar />
+        </div>
         <div
-          className="flex p-5 mt-7 w-full"
+          className="flex p-2 pt-5 sm:p-5 mt-7 w-full"
           style={{
             backgroundImage: `url(${BackgroundTop})`,
             backgroundRepeat: "no-repeat",
           }}
         >
-          <main className="min-h-screen m-0 w-full md:ml-[300px] lg:ml-[300px] sm:ml-0">
+          <main className="min-h-screen m-0 w-full sm:ml-[300px] ">
             <Jejak />
             {children}
           </main>

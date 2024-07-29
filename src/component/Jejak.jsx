@@ -24,7 +24,7 @@ const Jejak = () => {
       {pathnames.length > 0 ? (
         <nav>
           {pathnames.map((value, index) => (
-            <span key={index} className="text-gray-800 border-b-2 pb-1">
+            <span key={index} className="text-gray-800 border-b-2 ">
               {index > 0 && " >> "}
               {toTitleCase(value.replace(/-/g, " "))}
             </span>
