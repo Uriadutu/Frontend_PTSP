@@ -2,25 +2,20 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import AddOrganisasiMasyarakatModal from "../Modal/SariaModal/AddOrganisasiModal";
+import * as XLSX from "xlsx";
+import { IoAdd, IoDocument } from "react-icons/io5";
 
 const OrganisasiMasyarakat = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [dataOrganisasi, setDataOrganisasi] = useState([]);
-
-  const hapusOrganisasi = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/organisasi-masyarakat/${id}`);
-      getOrganisasi();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [filteredDataOrganisasi, setFilteredDataOrganisasi] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [organisasiPerPage] = useState(10);
 
   const getOrganisasi = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/organisasi-masyarakat"
-      );
+      const response = await axios.get("http://localhost:5000/organisasi-masyarakat");
       const data = response.data;
       if (Array.isArray(data)) {
         setDataOrganisasi(data);
@@ -37,6 +32,68 @@ const OrganisasiMasyarakat = () => {
     getOrganisasi();
   }, []);
 
+  useEffect(() => {
+    filterAndPaginateOrganisasi();
+  }, [dataOrganisasi, searchText, currentPage]);
+
+  const filterAndPaginateOrganisasi = () => {
+    const lowerCaseSearchText = searchText.toLowerCase();
+    const filtered = dataOrganisasi.filter(
+      (item) =>
+        item.nama_organisasi.toLowerCase().includes(lowerCaseSearchText) ||
+        item.alamat.toLowerCase().includes(lowerCaseSearchText) 
+    );
+
+    const indexOfLastOrganisasi = currentPage * organisasiPerPage;
+    const indexOfFirstOrganisasi = indexOfLastOrganisasi - organisasiPerPage;
+    const currentOrganisasi = filtered.slice(
+      indexOfFirstOrganisasi,
+      indexOfLastOrganisasi
+    );
+
+    setFilteredDataOrganisasi(currentOrganisasi);
+  };
+
+  const hapusOrganisasi = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/organisasi-masyarakat/${id}`);
+      getOrganisasi();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const downloadExcel = () => {
+    const dataToExport = dataOrganisasi.map((item, index) => ({
+      No: index + 1,
+      "Nama Organisasi": item.nama_organisasi,
+      Alamat: item.alamat,
+      "Tahun Berdiri": item.tahun_berdiri,
+      "Nama Pimpinan": item.nama_pimpinan,
+      "Tahun Periode": item.tahun_periode,
+      "Jumlah Anggota": item.jumlah_anggota,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataOrganisasi");
+    XLSX.writeFile(workbook, "DataOrganisasi.xlsx");
+  };
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(dataOrganisasi.length / organisasiPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -46,10 +103,42 @@ const OrganisasiMasyarakat = () => {
         />
       )}
       <h1 className="judul">Data Organisasi Masyarakat</h1>
-      <div className="flex gap-3 mt-3 items-center">
-        <button onClick={() => setOpenModalAdd(true)} className="btn-add">
-          Tambah Organisasi
-        </button>
+      <div className="flex justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setOpenModalAdd(true)}
+            className="btn-add hidden sm:block"
+          >
+            Tambah Organisasi
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="btn-download hidden sm:block"
+          >
+            Export ke Excel
+          </button>
+          <button
+            onClick={() => setOpenModalAdd(true)}
+            className="btn-add sm:hidden block"
+          >
+            <IoAdd color="white" />
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="btn-download sm:hidden block"
+          >
+            <IoDocument color="white" />
+          </button>
+        </div>
+        <div className="flex justify-between items-center">
+          <input
+            type="text"
+            className="input"
+            placeholder="Cari Organisasi / Alamat"
+            value={searchText}
+            onChange={handleSearchChange}
+          />
+        </div>
       </div>
       <div className="overflow-x-auto mt-2">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
@@ -61,12 +150,8 @@ const OrganisasiMasyarakat = () => {
               </th>
               <th className="py-3 px-6 text-left text-[12px]">Alamat</th>
               <th className="py-3 px-6 text-left text-[12px]">Tahun Berdiri</th>
-              <th className="py-3 px-6 text-left text-[12px]">
-                Nama Pimpinan{" "}
-              </th>
-              <th className="py-3 px-6 text-left text-[12px]">
-                Tahun Periode{" "}
-              </th>
+              <th className="py-3 px-6 text-left text-[12px]">Nama Pimpinan</th>
+              <th className="py-3 px-6 text-left text-[12px]">Tahun Periode</th>
               <th className="py-3 px-6 text-left text-[12px]">
                 Jumlah Anggota
               </th>
@@ -74,13 +159,15 @@ const OrganisasiMasyarakat = () => {
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {Array.isArray(dataOrganisasi) && dataOrganisasi.length > 0 ? (
-              dataOrganisasi.map((item, index) => (
+            {filteredDataOrganisasi.length > 0 ? (
+              filteredDataOrganisasi.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="py-3 px-6 text-left">{index + 1}</td>
+                  <td className="py-3 px-6 text-left">
+                    {(currentPage - 1) * organisasiPerPage + index + 1}
+                  </td>
                   <td className="py-3 px-6 text-left">
                     {item.nama_organisasi}
                   </td>
@@ -110,6 +197,24 @@ const OrganisasiMasyarakat = () => {
           </tbody>
         </table>
       </div>
+      <nav className="flex justify-center mt-4">
+        <ul className="flex space-x-2">
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <button
+                onClick={() => handlePageChange(number)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === number
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {number}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };

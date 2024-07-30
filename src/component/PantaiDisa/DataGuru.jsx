@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { IoEyeSharp } from "react-icons/io5";
+import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
+import * as XLSX from "xlsx";
 
 const DataGuru = () => {
   const [gurus, setGurus] = useState([]);
@@ -46,6 +47,35 @@ const DataGuru = () => {
     }
   };
 
+  const downloadExcel = () => {
+    const dataToExport = gurus.map((guru, index) => ({
+      No: index + 1,
+      "Tempat Tugas": guru.Sekolah && guru.Sekolah.nama_sekolah,
+      NIP: guru.NIP,
+      "Nama Guru": guru.nama_guru,
+      "Status Pegawai": guru.status_pegawai,
+      "Kategori Guru": guru.kategori_guru,
+      "Jenis Guru": guru.jenis_guru,
+      Pangkat: guru.pangkat,
+      Jabatan: guru.jabatan,
+      "Tanggal Mulai": guru.tgl_mulai,
+      "Tempat Lahir": guru.tempat_lahir,
+      "Tanggal Lahir": guru.tanggal_lahir,
+      "Jenis Kelamin": guru.jenis_kelamin,
+      Agama: guru.agama,
+      "Pendidikan Terakhir": guru.pendidikan_terakhir,
+      Jurusan: guru.jurusan,
+      "Tahun Lulus": guru.tahun_lulus,
+      "No Telepon": guru.no_telp,
+      Email: guru.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataGuru");
+    XLSX.writeFile(workbook, "DataGuru.xlsx");
+  };
+
   const filteredAndSortedGurus = gurus
     .filter((guru) => {
       const lowerCaseSearchText = searchText.toLowerCase();
@@ -87,9 +117,22 @@ const DataGuru = () => {
     <div className="contain">
       <h1 className="judul mb-4">Data Guru</h1>
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={downloadExcel}
+            className="btn-download hidden sm:block"
+          >
+            Export ke Excel
+          </button>
+          
+          <button
+            onClick={downloadExcel}
+            className="btn-download sm:hidden block"
+          >
+            <IoDocument color="white" />
+          </button>
           <div className="flex items-center space-x-2">
-            <label className="text-sm ">Urut Berdasarkan:</label>
+            <label className="text-sm">Urut Berdasarkan:</label>
             <select
               className="input"
               value={sortBy}
@@ -136,7 +179,7 @@ const DataGuru = () => {
                   {capitalizeWords(guru.status_pegawai)}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru && guru.Sekolah && guru.Sekolah.nama_sekolah)}
+                  {capitalizeWords(guru.Sekolah?.nama_sekolah || "")}
                 </td>
                 <td className="py-3 px-6 text-left">
                   {capitalizeWords(guru.kategori_guru)}

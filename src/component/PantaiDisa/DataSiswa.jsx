@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { IoEyeSharp } from "react-icons/io5";
+import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
+import * as XLSX from "xlsx";
 
 const DataSiswa = () => {
   const [siswas, setSiswas] = useState([]);
@@ -83,11 +84,51 @@ const DataSiswa = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const downloadExcel = () => {
+    const dataToExport = siswas.map((siswa, index) => ({
+      No: index + 1,
+      "Asal Sekolah": siswa.Sekolah && siswa.Sekolah.nama_sekolah,
+      "Tahun Ajaran": siswa.tahun_ajaran,
+      "Jenjang Sekolah": siswa.jenjang_sekolah,
+      "Nomor Induk": siswa.nomor_induk,
+      NISN: siswa.NISN,
+      "Nama Siswa": siswa.nama_siswa,
+      "Jenis Kelamin": siswa.jenis_kelamin,
+      "Tempat Lahir": siswa.tempat_lahir,
+      "Tanggal Lahir": siswa.tanggal_lahir,
+      Agama: siswa.agama,
+      "Nama Ayah": siswa.nama_ayah,
+      "Pendidikan Ayah": siswa.pendidikan_ayah,
+      "Pekerjaan Ayah": siswa.pekerjaan_ayah,
+      "Nama Ibu": siswa.nama_ibu,
+      "Pendidikan Ibu": siswa.pendidikan_ibu,
+      "Pekerjaan Ibu": siswa.pekerjaan_ibu,
+      Alamat: siswa.alamat,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataSiswa");
+    XLSX.writeFile(workbook, "DataSiswa.xlsx");
+  };
+
   return (
     <div className="contain">
       <h1 className="judul mb-4">Data Siswa</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-3">
+          <button
+            onClick={downloadExcel}
+            className="btn-download hidden sm:block"
+          >
+            Export ke Excel
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="btn-download sm:hidden block"
+          >
+            <IoDocument color="white" />
+          </button>
           <div className="flex items-center space-x-2">
             <label className="text-sm">Urut Berdasarkan:</label>
             <select
@@ -132,11 +173,15 @@ const DataSiswa = () => {
                   {capitalizeWords(siswa.nama_siswa)}
                 </td>
                 <td className="py-3 px-6 text-left">{siswa.NISN}</td>
-                <td className="py-3 px-6 text-left">{siswa && siswa.Sekolah && siswa.Sekolah.nama_sekolah}</td>
                 <td className="py-3 px-6 text-left">
-                  {siswa.jenjang_sekolah}
+                  {siswa.Sekolah ? siswa.Sekolah.nama_sekolah : ""}
                 </td>
-                <td className="py-3 px-6 text-left">{capitalizeWords(siswa && siswa.Sekolah && siswa.Sekolah.s_sekolah)}</td>
+                <td className="py-3 px-6 text-left">{siswa.jenjang_sekolah}</td>
+                <td className="py-3 px-6 text-left">
+                  {capitalizeWords(
+                    siswa.Sekolah ? siswa.Sekolah.s_sekolah : ""
+                  )}
+                </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
                     to={`/lapasi/data-siswa/detail-siswa/${siswa.id}`}

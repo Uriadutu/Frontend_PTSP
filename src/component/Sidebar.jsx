@@ -70,7 +70,7 @@ const Sidebar = ({ tutupSidebar }) => {
     <aside className="mt-0 sm:mt-7 w-[300px] fixed bg-white drop-shadow-xl overflow-y-scroll h-[100%] sm:h-[90%] ">
       <div className="mb-4 px-2 sm:p-4 bg-gray-50 drop-shadow-xl">
         <div className="flex justify-between px-2">
-          <button onClick={() => tutup(false)}>
+          <button onClick={() => tutup(false)} className="sm:hidden block">
             <FaTimes size={21}/>
           </button>
           <div className="mr-2">

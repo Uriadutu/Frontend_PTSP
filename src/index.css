@@ -8,8 +8,13 @@
     @apply px-3 py-2 mb-0 bg-gray-100 border border-gray-200 text-gray-600 font-semibold text-sm rounded-md hover:bg-gray-50 transition duration-300;
 }
 
+.btn-download {
+    
+    @apply px-3 py-2 mb-0 bg-green-500 text-white font-semibold text-sm rounded-md shadow-md hover:bg-green-600 transition duration-300;
+}
+
 .contain {
-    @apply p-6 pt-2 px-2 sm:px-0 md:px-0 lg:px-0 min-h-screen w-full md:bg-red-500 lg:bg-yellow-500 sm:bg-blue-300;
+    @apply p-6 pt-2 px-2 sm:px-0 sm:pr-2 min-h-screen w-full;
 }
 
 .judul {
@@ -33,7 +38,7 @@
 }
 
 .z-top {
-    @apply z-[1000] p-5
+    @apply z-[1000] p-5 
 }
 .z-side {
     @apply z-[2000]

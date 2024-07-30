@@ -126,7 +126,7 @@ const InfoHaji = () => {
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/detail-haji/${haji.id}`}
+                    to={`/akesahu/data-haji/detail/${haji.id}`}
                     className="detail"
                     title="Lihat"
                   >
