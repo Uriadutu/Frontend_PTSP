@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { IoEyeSharp } from "react-icons/io5";
+import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
-import EditGuruPakModal from "../Modal/PaludiModal/EditGuruPakModal";
+import * as XLSX from "xlsx";
 
 const DataGuruPaludi = () => {
   const [gurus, setGurus] = useState([]);
-  const [openModalEdit, setOpenModalEdit] = useState(false)
-  const [selectedGuruPak, setselecGuruPak] = useState({})
   const [sortBy, setSortBy] = useState("nama_guru");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,7 +18,7 @@ const DataGuruPaludi = () => {
 
   const getGurus = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/gurupak");
+      const response = await axios.get("http://localhost:5000/guru"); // Update URL jika diperlukan
       setGurus(response.data);
     } catch (error) {
       console.log(error);
@@ -30,6 +28,13 @@ const DataGuruPaludi = () => {
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
   };
+
+  function capitalizeWords(sentence) {
+    return sentence
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 
   const deleteGuru = async (guruId) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus guru ini?")) {
@@ -42,10 +47,34 @@ const DataGuruPaludi = () => {
     }
   };
 
-  const handleEditGuruPak = (item) => {
-    setOpenModalEdit(true)
-    setselecGuruPak(item)
-  }
+  const downloadExcel = () => {
+    const dataToExport = gurus.map((guru, index) => ({
+      No: index + 1,
+      "Tempat Tugas": guru.Sekolah && guru.Sekolah.nama_sekolah,
+      NIP: guru.NIP,
+      "Nama Guru": guru.nama_guru,
+      "Status Pegawai": guru.status_pegawai,
+      "Kategori Guru": guru.kategori_guru,
+      "Jenis Guru": guru.jenis_guru,
+      Pangkat: guru.pangkat,
+      Jabatan: guru.jabatan,
+      "Tanggal Mulai": guru.tgl_mulai,
+      "Tempat Lahir": guru.tempat_lahir,
+      "Tanggal Lahir": guru.tanggal_lahir,
+      "Jenis Kelamin": guru.jenis_kelamin,
+      Agama: guru.agama,
+      "Pendidikan Terakhir": guru.pendidikan_terakhir,
+      Jurusan: guru.jurusan,
+      "Tahun Lulus": guru.tahun_lulus,
+      "No Telepon": guru.no_telp,
+      Email: guru.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataGuruPaludi");
+    XLSX.writeFile(workbook, "DataGuruPaludi.xlsx");
+  };
 
   const filteredAndSortedGurus = gurus
     .filter((guru) => {
@@ -86,17 +115,24 @@ const DataGuruPaludi = () => {
 
   return (
     <div className="contain">
-      {openModalEdit && (
-        <EditGuruPakModal
-        idGuru={selectedGuruPak}
-        getGuru={getGurus}
-        setIsOpenModalEdit={setOpenModalEdit} />
-        )}
-      <h1 className="judul mb-4">Data Guru</h1>
+      <h1 className="judul mb-4">Data Guru Paludi</h1>
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={downloadExcel}
+            className="btn-download hidden sm:block"
+          >
+            Export ke Excel
+          </button>
+
+          <button
+            onClick={downloadExcel}
+            className="btn-download sm:hidden block"
+          >
+            <IoDocument color="white" />
+          </button>
           <div className="flex items-center space-x-2">
-            <label className="text-sm ">Urut Berdasarkan:</label>
+            <label className="text-sm">Urut Berdasarkan:</label>
             <select
               className="input"
               value={sortBy}
@@ -136,27 +172,27 @@ const DataGuruPaludi = () => {
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
                 <td className="py-3 px-6 text-left">
-                  {(guru.nama_guru)}
+                  {capitalizeWords(guru.nama_guru)}
                 </td>
                 <td className="py-3 px-6 text-left">{guru.NIP}</td>
                 <td className="py-3 px-6 text-left">
-                  {(guru.status_pegawai)} 
+                  {capitalizeWords(guru.status_pegawai)}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {(guru && guru.SekolahKristen && guru.SekolahKristen.nama_sekolah)}
+                  {capitalizeWords(guru.Sekolah?.nama_sekolah || "")}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {(guru.kategori_guru)}
+                  {capitalizeWords(guru.kategori_guru)}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/paludi/data-guru-pak/detail-guru-pak/${guru.id}`}
+                    to={`/lapasi/data-guru/detail-guru/${guru.id}`}
                     className="detail"
                     title="Lihat"
                   >
                     <IoEyeSharp color="white" width={100} />
                   </Link>
-                  <button className="edit" title="Edit" onClick={()=> handleEditGuruPak(guru)}>
+                  <button className="edit" title="Edit">
                     <MdModeEdit color="white" />
                   </button>
                   <button

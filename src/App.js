@@ -49,6 +49,7 @@ import DataGuruPaludiPage from "./pages/PaludiPage/DataGuruPaludiPage.jsx";
 import DataPenyuluPage from "./pages/PaludiPage/DataPenyuluPage.jsx";
 import DetailPenyuluPage from "./pages/PaludiPage/DetailPenyuluPage.jsx";
 import DetailZakatPage from "./pages/SahuPage/DetailZakatPage.jsx";
+import DetailLembagaKristenPage from "./pages/PaludiPage/DetailLembagaKristenPage.jsx";
 
 
 function App() {
@@ -180,6 +181,10 @@ function App() {
           <Route
             path="/paludi/data-lembaga-keagamaan/"
             element={<DataLembagaKristenPage />}
+          />
+          <Route
+            path="/paludi/data-lembaga-kristen/detail/:id"
+            element={<DetailLembagaKristenPage />}
           />
 
           {/* Sahu */}

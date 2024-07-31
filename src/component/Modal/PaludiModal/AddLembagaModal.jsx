@@ -13,8 +13,8 @@ const AddLembagaModal = ({ setIsOpenModalAdd, getLembaga }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      await axios.post("http://localhost:5000/lembaga", {
+    try { 
+      await axios.post("http://localhost:5000/lembaga-kristen", {
         nama_lembaga: namaLembaga,
         alamat: alamat,
         tahun_berdiri: tahunBerdiri,

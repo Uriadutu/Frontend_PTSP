@@ -37,12 +37,8 @@ const DataGereja = () => {
     const lowerCaseSearchText = searchText.toLowerCase();
     const filtered = gereja.filter(
       (item) =>
-        item.nama_gereja.toLowerCase().includes(lowerCaseSearchText) ||
-        item.no_lapor.toLowerCase().includes(lowerCaseSearchText) ||
-        item.status_ijin.toLowerCase().includes(lowerCaseSearchText) ||
-        item.nomor_ibm.toLowerCase().includes(lowerCaseSearchText) ||
-        item.status_gedung.toLowerCase().includes(lowerCaseSearchText) ||
-        item.status_tanah.toLowerCase().includes(lowerCaseSearchText)
+        item.nama_gereja.toLowerCase().includes(lowerCaseSearchText)
+       
     );
 
     const indexOfLastGereja = currentPage * gerejaPerPage;
@@ -139,7 +135,7 @@ const DataGereja = () => {
           <input
             type="text"
             className="input"
-            placeholder="Cari Kecamatan / Nama Desa"
+            placeholder="Cari Nama Gereja"
             value={searchText}
             onChange={handleSearchChange}
           />
@@ -202,12 +198,17 @@ const DataGereja = () => {
       <nav className="flex justify-center mt-4">
         <ul className="pagination">
           {pageNumbers.map((number) => (
-            <li
-              key={number}
-              className={`page-item ${currentPage === number ? "active" : ""}`}
-              onClick={() => handlePageChange(number)}
-            >
-              {number}
+            <li key={number}>
+              <button
+                onClick={() => handlePageChange(number)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === number
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {number}
+              </button>
             </li>
           ))}
         </ul>
