@@ -110,7 +110,7 @@ const DataGereja = () => {
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Umat Islam
+            Tambah Gereja
           </button>
           <button
             onClick={downloadExcel}

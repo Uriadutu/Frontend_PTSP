@@ -32,10 +32,6 @@ const OrganisasiMasyarakat = () => {
     getOrganisasi();
   }, []);
 
-  useEffect(() => {
-    filterAndPaginateOrganisasi();
-  }, [dataOrganisasi, searchText, currentPage]);
-
   const filterAndPaginateOrganisasi = () => {
     const lowerCaseSearchText = searchText.toLowerCase();
     const filtered = dataOrganisasi.filter(
@@ -53,6 +49,12 @@ const OrganisasiMasyarakat = () => {
 
     setFilteredDataOrganisasi(currentOrganisasi);
   };
+
+  
+  useEffect(() => {
+    filterAndPaginateOrganisasi();
+  }, [dataOrganisasi, searchText, currentPage]);
+
 
   const hapusOrganisasi = async (id) => {
     try {
