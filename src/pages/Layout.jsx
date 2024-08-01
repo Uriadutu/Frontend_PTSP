@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
           <Sidebar />
         </div>
         <div
-          className="flex p-2 pt-5 sm:p-5 mt-7 w-full"
+          className="flex p-2 pt-5 sm:p-5 z-10 mt-7 w-full"
           style={{
             backgroundImage: `url(${BackgroundTop})`,
             backgroundRepeat: "no-repeat",
