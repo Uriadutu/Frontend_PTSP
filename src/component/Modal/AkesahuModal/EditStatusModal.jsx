@@ -96,7 +96,7 @@ const EditStatusModal = ({ setIsOpenModalEdit, hajiData, getHaji }) => {
                     Tahun Keberangkatan
                   </label>
                   <input
-                    type="text"
+                    type="date"
                     id="tahunKeberangkatan"
                     className="w-full input"
                     value={tahunKeberangkatan}

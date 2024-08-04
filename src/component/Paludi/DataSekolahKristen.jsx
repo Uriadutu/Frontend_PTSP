@@ -8,13 +8,10 @@ const DataSekolahKristen = () => {
   const [totalSMA, setTotalSMA] = useState(0);
   const [totalSDN, setTotalSDN] = useState(0);
   const [totalSDS, setTotalSDS] = useState(0);
-  const [totalSDP, setTotalSDP] = useState(0);
   const [totalSMPN, setTotalSMPN] = useState(0);
   const [totalSMPS, setTotalSMPS] = useState(0);
-  const [totalSMPP, setTotalSMPP] = useState(0);
   const [totalSMAN, setTotalSMAN] = useState(0);
   const [totalSMAS, setTotalSMAS] = useState(0);
-  const [totalSMAP, setTotalSMAP] = useState(0);
   const navigate = useNavigate();
 
   const toggleSubMenu = (jenjang) => {
@@ -36,7 +33,6 @@ const DataSekolahKristen = () => {
       subTotal: {
         negeri: totalSDN,
         swasta: totalSDS,
-        pondokPesantren: totalSDP,
       },
     },
     {
@@ -47,7 +43,6 @@ const DataSekolahKristen = () => {
       subTotal: {
         negeri: totalSMPN,
         swasta: totalSMPS,
-        pondokPesantren: totalSMPP,
       },
     },
     {
@@ -58,7 +53,6 @@ const DataSekolahKristen = () => {
       subTotal: {
         negeri: totalSMAN,
         swasta: totalSMAS,
-        pondokPesantren: totalSMAP,
       },
     },
   ];
@@ -86,19 +80,11 @@ const DataSekolahKristen = () => {
   useEffect(() => {
     getJumlahSekolahPerStatus("sekolah-dasarnegeri", setTotalSDN);
     getJumlahSekolahPerStatus("sekolah-dasarswasta", setTotalSDS);
-    getJumlahSekolahPerStatus("sekolah-dasarpondok-pesantren", setTotalSDP);
     getJumlahSekolahPerStatus("sekolah-menengah-pertamanegeri", setTotalSMPN);
     getJumlahSekolahPerStatus("sekolah-menengah-pertamaswasta", setTotalSMPS);
-    getJumlahSekolahPerStatus(
-      "sekolah-menengah-pertamapondok-pesantren",
-      setTotalSMPP
-    );
     getJumlahSekolahPerStatus("sekolah-menengah-atasnegeri", setTotalSMAN);
     getJumlahSekolahPerStatus("sekolah-menengah-atasswasta", setTotalSMAS);
-    getJumlahSekolahPerStatus(
-      "sekolah-menengah-ataspondok-pesantren",
-      setTotalSMAP
-    );
+    
   }, []);
 
   useEffect(() => {
@@ -164,20 +150,6 @@ const DataSekolahKristen = () => {
                       </td>
                       <td className="py-3 px-6 text-center whitespace-nowrap">
                         {item.subTotal.swasta}
-                      </td>
-                    </tr>
-                    <tr className="bg-gray-100 hover:bg-gray-200 transition-colors">
-                      <td className="py-3 px-6 text-left whitespace-nowrap"></td>
-                      <td
-                        className="py-3 px-6 text-left whitespace-nowrap cursor-pointer"
-                        onClick={() =>
-                          navigateToSekolah(item.value, "pondok-pesantren")
-                        }
-                      >
-                        Pondok Pesantren
-                      </td>
-                      <td className="py-3 px-6 text-center whitespace-nowrap">
-                        {item.subTotal.pondokPesantren}
                       </td>
                     </tr>
                   </>

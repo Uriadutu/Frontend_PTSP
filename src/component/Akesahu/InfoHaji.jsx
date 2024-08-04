@@ -106,7 +106,7 @@ const InfoHaji = () => {
               <th className="py-3 px-6 text-left">No</th>
               <th className="py-3 px-6 text-left">Nama Jamaah</th>
               <th className="py-3 px-6 text-left">Nomor Porsi</th>
-              <th className="py-3 px-6 text-left">Tanggal Daftar</th>
+              <th className="py-3 px-6 text-left">Tahun Berangkat</th>
               <th className="py-3 px-6 text-left">Status</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
@@ -120,18 +120,11 @@ const InfoHaji = () => {
                 <td className="py-3 px-6 text-left">{index + 1}</td>
                 <td className="py-3 px-6 text-left">{haji.nama_jamaah}</td>
                 <td className="py-3 px-6 text-left">{haji.nomor_porsi}</td>
-                <td className="py-3 px-6 text-left">{haji.tanggal_porsi}</td>
+                <td className="py-3 px-6 text-left">{haji.tgl_berangkat}</td>
                 <td className="py-3 px-6 text-left">
                   {haji.status_keberangkatan}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
-                  <Link
-                    to={`/akesahu/data-haji/detail/${haji.id}`}
-                    className="detail"
-                    title="Lihat"
-                  >
-                    <IoEyeSharp color="white" width={100} />
-                  </Link>
                   <button
                     className="edit"
                     title="Edit"

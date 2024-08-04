@@ -19,7 +19,7 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
   const [tahunLulus, setTahunLulus] = useState("");
   const [nomorTelepon, setNomorTelepon] = useState("");
   const [email, setEmail] = useState("");
-  const { idsekolah } = useParams();
+  const { idsekolah, jenjang } = useParams();
 
 
   const handleStatusPegawaiChange = (e) => {
@@ -38,6 +38,7 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
     try {
       await axios.post("http://localhost:5000/gurupak", {
         id_sekolah: idsekolah,
+        jenjang: jenjang,
         status_pegawai: statusPegawai,
         kategori_guru: kategoriGuru,
         jenis_guru: jenisGuru,
