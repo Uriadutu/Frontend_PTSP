@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-gray-100 border-b w-full fixed z-20 flex items-center">
+      <div className="bg-gray-100 border-b w-full fixed z-30 flex items-center">
         <NavLink
           to="/dashboard"
           exact
@@ -28,7 +28,7 @@ const Navbar = () => {
           SAPA SANTUN DEKAPI UMAT, LAYANAN ADMINISTRASI MANAJERIAL ORGANISASI
         </h1>
       </div>
-      <div className="bg-[#013500] border-b w-full sm:top-0 top-7 fixed flex justify-between items-center px-4 py-2 z-20 drop-shadow-lg">
+      <div className="bg-[#013500] border-b w-full sm:top-0 top-7 fixed flex justify-between items-center px-4 py-2 z-10 drop-shadow-lg">
         <div className="flex gap-2 items-center">
           <div className="md:hidden">
             <button onClick={toggleMenu}>

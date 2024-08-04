@@ -10,6 +10,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
   const [TahunBerdiri, setTahunBerdiri] = useState("");
   const [StatusAkreditasi, setStatusAkreditasi] = useState("");
   const [StatusBangunan, setStatusBangunan] = useState("");
+  const [skIzin, setSkIzin] = useState("");
   const [NoHerRegistrasiPendirian, setNoHerRegistrasiPendirian] = useState("");
   const [JumlahRombel, setJumlahRombel] = useState("");
   const [NamaKepalaSekolah, setNamaKepalaSekolah] = useState("");
@@ -33,6 +34,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
         tahun_berdiri: TahunBerdiri,
         status_akreditasi: StatusAkreditasi,
         status_bangunan: StatusBangunan,
+        sk_izin: skIzin,
         req_pendirian: NoHerRegistrasiPendirian,
         jumlah_rombel: JumlahRombel,
         nama_kepsek: NamaKepalaSekolah,
@@ -179,6 +181,21 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
                   <option value="Sewa">Sewa</option>
                   <option value="Hibah">Hibah</option>
                 </select>
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label
+                  htmlFor="skizinPendirian"
+                  className="label-input"
+                >
+                  Sk Izin Pedirian
+                </label>
+                <input
+                  value={skIzin}
+                  onChange={(e) => setSkIzin(e.target.value)}
+                  type="text"
+                  id="skizinPendirian"
+                  className="w-full input"
+                />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label

@@ -38,10 +38,10 @@
 }
 
 .z-top {
-    @apply z-[1000] p-5 
+    @apply z-[999] p-5 
 }
 .z-side {
-    @apply z-[2000]
+    @apply z-[1000]
 }
 
 .detail {

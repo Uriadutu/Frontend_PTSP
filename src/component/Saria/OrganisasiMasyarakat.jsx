@@ -53,7 +53,7 @@ const OrganisasiMasyarakat = () => {
   
   useEffect(() => {
     filterAndPaginateOrganisasi();
-  }, []);
+  }, [dataOrganisasi, searchText, currentPage]);
 
 
   const hapusOrganisasi = async (id) => {
