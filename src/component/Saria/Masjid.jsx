@@ -13,7 +13,7 @@ const Masjid = () => {
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [masjidPerPage] = useState(10);
-
+ 
   const { sub } = useParams();
   const navigate = useNavigate();
 
@@ -134,11 +134,8 @@ const Masjid = () => {
               <th className="py-3 px-6 text-left">Nama Masjid</th>
               <th className="py-3 px-6 text-left">Alamat</th>
               <th className="py-3 px-6 text-left">Tipologi</th>
-              <th className="py-3 px-6 text-left">Luas Bangunan</th>
               <th className="py-3 px-6 text-left">Tahun Berdiri</th>
               <th className="py-3 px-6 text-left">Kecamatan</th>
-              <th className="py-3 px-6 text-left">Status Tanah</th>
-              <th className="py-3 px-6 text-left">Luas Tanah</th>
               <th className="py-3 px-6 text-left">Aksi</th>
             </tr>
           </thead>
@@ -149,20 +146,17 @@ const Masjid = () => {
                 <td className="py-3 px-6 text-left">{item.nama_masjid}</td>
                 <td className="py-3 px-6 text-left">{item.alamat}</td>
                 <td className="py-3 px-6 text-left">{item.tipologi}</td>
-                <td className="py-3 px-6 text-left">{item.luas_bangunan}</td>
                 <td className="py-3 px-6 text-left">{item.tahun_berdiri}</td>
                 <td className="py-3 px-6 text-left">{item.kecamatan}</td>
-                <td className="py-3 px-6 text-left">{item.status_tanah}</td>
-                <td className="py-3 px-6 text-left">{item.luas_tanah}</td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <button
                     className="detail"
                     title="Lihat"
-                    onClick={() => navigate(`/${sub}/masjid/detail/${item.id_mesjid}`)}
+                    onClick={() => navigate(`/${sub}/masjid/detail/${item.id}`)}
                   >
                     <IoEyeSharp color="white" width={100} />
                   </button>
-                  <button className="delete" onClick={() => hapusMasjid(item.id_mesjid)} title="Hapus">
+                  <button className="delete" onClick={() => hapusMasjid(item.id)} title="Hapus">
                     <MdDelete color="white" />
                   </button>
                 </td>

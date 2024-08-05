@@ -106,7 +106,7 @@ const InfoHaji = () => {
               <th className="py-3 px-6 text-left">No</th>
               <th className="py-3 px-6 text-left">Nama Jamaah</th>
               <th className="py-3 px-6 text-left">Nomor Porsi</th>
-              <th className="py-3 px-6 text-left">Tahun Berangkat</th>
+              <th className="py-3 px-6 text-left">Tahun Berangkat / Batal</th>
               <th className="py-3 px-6 text-left">Status</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>

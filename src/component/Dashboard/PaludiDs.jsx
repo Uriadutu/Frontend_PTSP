@@ -37,22 +37,8 @@ const PaludiDs = () => {
     }
   }
 
-  const [haji, sethaji] = useState([])
-  const gethaji = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/haji/tanggal`
-      );
-      const total = response.data
-      sethaji(total)
-    } catch (error) {
-      console.log(error);      
-    }
-  }
-  console.log(haji);
 
   useEffect(()=> {
-    gethaji()
     getTotal("sekolah-dasarnegeri", setSdN)
     getTotal("sekolah-dasarswasta", setSdS)
     getTotal("sekolah-menengah-pertamanegeri", setSmpN)

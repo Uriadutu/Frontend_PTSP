@@ -5,6 +5,9 @@ import { HiMiniInboxArrowDown } from "react-icons/hi2";
 import { RiInboxUnarchiveFill } from "react-icons/ri";
 import PaludiDs from "./Dashboard/PaludiDs";
 import axios from "axios";
+import AkesahuDs from "./Dashboard/AkesahuDs";
+import SariaDs from "./Dashboard/SariaDs";
+import SahuDs from "./Dashboard/SahuDs";
 
 const Welcome = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
@@ -131,8 +134,13 @@ const Welcome = () => {
           </div>
         </div>
       </div>
-      <div className="flex grid grid-cols-1 mt-3">
+      <div className="flex grid grid-cols-1 mt-3 gap-y-3">
         <PaludiDs />
+        <AkesahuDs/>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <SariaDs/>
+        <SahuDs/>
+        </div>
       </div>
     </div>
   );

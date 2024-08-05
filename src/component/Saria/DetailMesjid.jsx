@@ -4,10 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const DetailMesjid = () => {
   const { id } = useParams(); // Ambil ID dari URL
-  const [mesjid, setMesjid] = useState(null);
+  const [mesjid, setMesjid] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  console.log(mesjid);
 
    const getMasjidbyId = async (idmasjid) => {
      try {
@@ -31,7 +33,7 @@ const DetailMesjid = () => {
 
   return (
     
-    
+     
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Detail Masjid</h1>
       <button onClick={()=> navigate(-1)} className="btn-back">Kembali</button>
