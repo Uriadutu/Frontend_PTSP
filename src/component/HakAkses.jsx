@@ -99,50 +99,52 @@ const HakAkses = () => {
           onChange={handleSearchChange}
         />
       </div>
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg mb-6">
-        <thead>
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-            <th className="py-3 px-6 text-left">No</th>
-            <th className="py-3 px-6 text-left">NIP</th>
-            <th className="py-3 px-6 text-left">Nama Pegawai</th>
-            <th className="py-3 px-6 text-left">Jenis Pegawai</th>
-            <th className="py-3 px-6 text-left">Satuan Kerja</th>
-            <th className="py-3 px-6 text-center">Aksi</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-600 text-sm font-light">
-          {filteredPegawai.map((pegawai, index) => (
-            <tr
-              key={pegawai.id}
-              className="border-b border-gray-200 hover:bg-gray-100"
-            >
-              <td className="py-3 px-6 text-left">
-                {(currentPage - 1) * pegawaiPerPage + index + 1}
-              </td>
-              <td className="py-3 px-6 text-left">{pegawai.NIP}</td>
-              <td className="py-3 px-6 text-left">{pegawai.nama_pegawai}</td>
-              <td className="py-3 px-6 text-left">{pegawai.jenis_pegawai}</td>
-              <td className="py-3 px-6 text-left">{pegawai.satuan_kerja}</td>
-              <td className="py-3 px-6 text-center">
-                <button
-                  className="p-2 border border-gray-100 rounded bg-gray-600 hover:bg-gray-500"
-                  onClick={() => handleOpenInfo(pegawai)}
-                  title="Info"
-                >
-                  <BsInfoCircleFill color="white" />
-                </button>
-                <button
-                  className="p-2 border border-gray-100 rounded bg-gray-600 hover:bg-gray-500 ml-2"
-                  onClick={() => handleEditClick(pegawai)}
-                  title="Edit"
-                >
-                  <IoSettings color="white" />
-                </button>
-              </td>
+      <div className="overflow-x-auto mt-2">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg mb-6">
+          <thead>
+            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <th className="py-3 px-6 text-left">No</th>
+              <th className="py-3 px-6 text-left">NIP</th>
+              <th className="py-3 px-6 text-left">Nama Pegawai</th>
+              <th className="py-3 px-6 text-left">Jenis Pegawai</th>
+              <th className="py-3 px-6 text-left">Satuan Kerja</th>
+              <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-gray-600 text-sm font-light">
+            {filteredPegawai.map((pegawai, index) => (
+              <tr
+                key={pegawai.id}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
+                <td className="py-3 px-6 text-left">
+                  {(currentPage - 1) * pegawaiPerPage + index + 1}
+                </td>
+                <td className="py-3 px-6 text-left">{pegawai.NIP}</td>
+                <td className="py-3 px-6 text-left">{pegawai.nama_pegawai}</td>
+                <td className="py-3 px-6 text-left">{pegawai.jenis_pegawai}</td>
+                <td className="py-3 px-6 text-left">{pegawai.satuan_kerja}</td>
+                <td className="py-3 px-6 flex gap-1 justify-center items-center ">
+                  <button
+                    className="p-2 border border-gray-100 rounded bg-gray-600 hover:bg-gray-500"
+                    onClick={() => handleOpenInfo(pegawai)}
+                    title="Info"
+                  >
+                    <BsInfoCircleFill color="white" />
+                  </button>
+                  <button
+                    className="p-2 border border-gray-100 rounded bg-gray-600 hover:bg-gray-500 ml-2"
+                    onClick={() => handleEditClick(pegawai)}
+                    title="Edit"
+                  >
+                    <IoSettings color="white" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <nav className="flex justify-center mt-4">
         <ul className="flex space-x-2">
           {pageNumbers.map((number) => (

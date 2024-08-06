@@ -95,7 +95,7 @@ const AddDokumenSekolah = ({
             <div className="mb-6">
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="sk_izin_file" className="label-input">
-                  SK Izin File
+                  SK Izin
                 </label>
                 <input
                   onChange={(e) => loadFile(e, setSkIzinFile)}
@@ -106,7 +106,7 @@ const AddDokumenSekolah = ({
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="no_reg_file" className="label-input">
-                  No Reg File
+                  No Registrasi
                 </label>
                 <input
                   onChange={(e) => loadFile(e, setNoRegFile)}
@@ -117,7 +117,7 @@ const AddDokumenSekolah = ({
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="akreditasi_file" className="label-input">
-                  Akreditasi File
+                  SK Akreditasi
                 </label>
                 <input
                   onChange={(e) => loadFile(e, setAkreditasiFile)}
@@ -128,7 +128,7 @@ const AddDokumenSekolah = ({
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="nss_file" className="label-input">
-                  NSS File
+                  NSS/NPSN
                 </label>
                 <input
                   onChange={(e) => loadFile(e, setNssFile)}
@@ -139,7 +139,7 @@ const AddDokumenSekolah = ({
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="serti_tanah_file" className="label-input">
-                  Serti Tanah File
+                  Sertifikat tanah
                 </label>
                 <input
                   onChange={(e) => loadFile(e, setSertiTanahFile)}

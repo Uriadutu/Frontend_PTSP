@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
+import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
 
 const AkesahuDs = () => {
   const [chartData, setChartData] = useState({
@@ -125,7 +125,7 @@ const AkesahuDs = () => {
       <div className="bg-white rounded drop-shadow-md w-full">
         <h1 className="text-xl font-bold text-center">Chart Haji</h1>
         <div className="flex justify-center items-center mt-5">
-          <Doughnut
+          <Pie
             data={{
               labels: ["Belum Diatur", "Berangkat", "Batal Berangkat"],
               datasets: [
