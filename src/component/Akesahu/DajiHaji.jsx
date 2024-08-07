@@ -71,9 +71,16 @@ const DataHaji = () => {
     const dataToExport = hajis.map((item, index) => ({
       No: index + 1,
       "Nomor Porsi": item.nomor_porsi,
+      "Tanggal Daftar" : item.tanggal_porsi,
       "Nama Jamaah": item.nama_jamaah,
-      Kecamatan: item.kecamatan,
-      "Nama Desa": item.nama_desa,
+      "Jenis Kelamin" :  item.jenis_kelamin,
+      "Pekerjaan" :  item.pekerjaan,
+      "Tempat Lahir"  :  item.tempat_lahir,
+      "Tanggal Lahir"  :  item.tanggal_lahir,
+      "Nama Desa"  : item.nama_desa,
+      "Kecamatan" : item.kecamatan,
+      "Bank" :  item.bank,
+
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
