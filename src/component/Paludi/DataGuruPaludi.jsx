@@ -64,7 +64,7 @@ const DataGuruPaludi = () => {
       "Jenis Kelamin": guru.jenis_kelamin,
       Agama: guru.agama,
       "Pendidikan Terakhir": guru.pendidikan_terakhir,
-      Jurusan: guru.jurusan,
+      Jurusan: guru.juruan,
       "Tahun Lulus": guru.tahun_lulus,
       "No Telepon": guru.no_telp,
       Email: guru.email,

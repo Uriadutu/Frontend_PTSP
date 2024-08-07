@@ -50,6 +50,7 @@ import DataPenyuluPage from "./pages/PaludiPage/DataPenyuluPage.jsx";
 import DetailPenyuluPage from "./pages/PaludiPage/DetailPenyuluPage.jsx";
 import DetailZakatPage from "./pages/SahuPage/DetailZakatPage.jsx";
 import DetailLembagaKristenPage from "./pages/PaludiPage/DetailLembagaKristenPage.jsx";
+import DetailLayananPengaduanPage from "./pages/DetailLayananPengaduanPage.jsx";
 
 
 function App() {
@@ -169,7 +170,10 @@ function App() {
           />
           <Route path="/paludi/data-gereja/" element={<DataGerejaPage />} />
           <Route path="paludi/data-penyuluh" element={<DataPenyuluPage />} />
-          <Route path="paludi/data-penyulu/detail/:id" element={<DetailPenyuluPage />} />
+          <Route
+            path="paludi/data-penyulu/detail/:id"
+            element={<DetailPenyuluPage />}
+          />
           <Route
             path="/paludi/data-gereja/detail/:id"
             element={<DetailGerejaPage />}
@@ -215,6 +219,10 @@ function App() {
           />
           <Route path="/:sub/surat-keluar" element={<SuratKeluarPage />} />
           <Route path="/layanan-pengaduan" element={<LayananPengaduanPage />} />
+          <Route
+            path="/layanan-pengaduan/detail/:id"
+            element={<DetailLayananPengaduanPage />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
