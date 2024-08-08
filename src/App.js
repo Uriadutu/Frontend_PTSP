@@ -51,6 +51,7 @@ import DetailPenyuluPage from "./pages/PaludiPage/DetailPenyuluPage.jsx";
 import DetailZakatPage from "./pages/SahuPage/DetailZakatPage.jsx";
 import DetailLembagaKristenPage from "./pages/PaludiPage/DetailLembagaKristenPage.jsx";
 import DetailLayananPengaduanPage from "./pages/DetailLayananPengaduanPage.jsx";
+import DataSekolahMingguPage from "./pages/PaludiPage/DataSekolahMingguPage.jsx";
 
 
 function App() {
@@ -177,6 +178,10 @@ function App() {
           <Route
             path="/paludi/data-gereja/detail/:id"
             element={<DetailGerejaPage />}
+          />
+          <Route
+            path="/paludi/data-sekolah-minggu/"
+            element={<DataSekolahMingguPage />}
           />
           <Route
             path="/paludi/data-organisasi-masyarakat/"

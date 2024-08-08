@@ -1,105 +1,98 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AddZakatModal from "../Modal/SahuModal/AddZakatModal";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import AddSekolahMingguModal from "../Modal/PaludiModal/AddSekolahMingguModal";
 import * as XLSX from "xlsx";
 
-const DataPenerimaZakat = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const [zakats, setZakat] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+const DataSekolahMinggu = () => {
+  const [openModalAdd, setOpenModalAdd] = useState(false);
+  const [sekolahMinggu, setSekolahMinggu] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sekolahMingguPerPage] = useState(10);
 
-  const navigate = useNavigate();
-
-  // Fetch data zakat
-  const getZakat = async () => {
+  const getSekolahMinggu = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/zakat");
-      setZakat(response.data);
+      const response = await axios.get("http://localhost:5000/sekolahMinggu");
+      setSekolahMinggu(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Fetch data zakat on component mount
+  const hapusSekolahMinggu = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/sekolahMinggu/${id}`);
+      getSekolahMinggu();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getZakat();
+    getSekolahMinggu();
   }, []);
 
-  // Delete zakat entry
-  const hapusZakat = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/zakat/${id}`);
-      getZakat();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const filteredSekolahMinggu = sekolahMinggu.filter((item) =>
+    item.nama.toLowerCase().includes(searchText.toLowerCase())
+  );
 
-  // Export data to Excel
   const downloadExcel = () => {
-    const dataToExport = zakats.map((item, index) => ({
-      No : index + 1,
-      "Nama Kecamatan": item.Kecamatan ? item.Kecamatan.nama_kecamatan : "",
-      Kategori: item.kategori,
-      Sumber: item.sumber,
-      "Jumlah Sumber": item.jumlah_sumber,
-      Jenis: item.jenis,
-      Beras: item.beras,
-      Uang: item.uang,
-      "Nominal Uang": item.nominal_uang,
-      Sedekah: item.sedekah,
-      "Jumlah Zakat": item.jumlah_zakat,
-      "Tahun Zakat": item.tahun_zakat,
+    const dataToExport = filteredSekolahMinggu.map((item, index) => ({
+      No: index + 1,
+      Nama: item.nama,
+      Lokasi: item.lokasi,
+      JumlahSiswa: item.jumlah_siswa,
+      "Nama Pengajar": item.nama_pengajar,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "DataZakat");
-    XLSX.writeFile(workbook, "DataZakat.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataSekolahMinggu");
+    XLSX.writeFile(workbook, "DataSekolahMinggu.xlsx");
   };
 
-  // Handle search
+  const indexOfLastSekolahMinggu = currentPage * sekolahMingguPerPage;
+  const indexOfFirstSekolahMinggu =
+    indexOfLastSekolahMinggu - sekolahMingguPerPage;
+  const currentSekolahMinggu = filteredSekolahMinggu.slice(
+    indexOfFirstSekolahMinggu,
+    indexOfLastSekolahMinggu
+  );
+
+  const pageNumbers = [];
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredSekolahMinggu.length / sekolahMingguPerPage);
+    i++
+  ) {
+    pageNumbers.push(i);
+  }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     setCurrentPage(1); // Reset to first page on search
   };
 
-  const filteredZakat = zakats.filter((item) =>
-    item.Kecamatan.nama_kecamatan
-      .toLowerCase()
-      .includes(searchText.toLowerCase())
-  );
-
-  // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredZakat.slice(indexOfFirstItem, indexOfLastItem);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(filteredZakat.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
     <div className="contain">
-      {openModal && (
-        <AddZakatModal setIsOpenModalAdd={setOpenModal} getZakat={getZakat} />
+      {openModalAdd && (
+        <AddSekolahMingguModal
+          setIsOpenModalAdd={setOpenModalAdd}
+          getSekolahMinggu={getSekolahMinggu}
+        />
       )}
-      <h1 className="judul">Data Penerima Dan Penyaluran Zakat</h1>
+      <h1 className="judul mb-4">Data Sekolah Minggu</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setOpenModal(true)}
+            onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Data Zakat
+            Tambah Sekolah Minggu
           </button>
           <button
             onClick={downloadExcel}
@@ -108,7 +101,7 @@ const DataPenerimaZakat = () => {
             Export ke Excel
           </button>
           <button
-            onClick={() => setOpenModal(true)}
+            onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
           >
             <IoAdd color="white" />
@@ -124,7 +117,7 @@ const DataPenerimaZakat = () => {
           <input
             type="text"
             className="input"
-            placeholder="Cari Nama Kecamatan"
+            placeholder="Cari Nama Sekolah Minggu"
             value={searchText}
             onChange={handleSearchChange}
           />
@@ -135,41 +128,35 @@ const DataPenerimaZakat = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
-              <th className="py-3 px-6 text-left">Nama Kecamatan</th>
-              <th className="py-3 px-6 text-left">Kategori Zakat</th>
-              <th className="py-3 px-6 text-left">Sumber Zakat</th>
-              <th className="py-3 px-6 text-left">Jumlah Sumber Zakat</th>
+              <th className="py-3 px-6 text-left">Nama</th>
+              <th className="py-3 px-6 text-left">Lokasi</th>
+              <th className="py-3 px-6 text-left">Jumlah Siswa</th>
+              <th className="py-3 px-6 text-left">Nama Pengajar</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {currentItems.map((item, index) => (
+            {currentSekolahMinggu.map((item, index) => (
               <tr
                 key={item.id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
-                <td className="py-3 px-6 text-left">
-                  {item.Kecamatan && item.Kecamatan.nama_kecamatan}
-                </td>
-                <td className="py-3 px-6 text-left">{item.kategori}</td>
-                <td className="py-3 px-6 text-left">{item.sumber}</td>
-                <td className="py-3 px-6 text-left">{item.jumlah_sumber}</td>
+                <td className="py-3 px-6 text-left">{item.nama}</td>
+                <td className="py-3 px-6 text-left">{item.lokasi}</td>
+                <td className="py-3 px-6 text-left">{item.jumlah_siswa}</td>
+                <td className="py-3 px-6 text-left">{item.nama_pengajar}</td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
-                  <button
-                    onClick={() =>
-                      navigate(
-                        `/sahu/data-penerima-penyaluran-zakat/detail-zakat/${item.id}`
-                      )
-                    }
+                  <Link
+                    to={`/paludi/data-sekolah-minggu/detail/${item.id}`}
                     className="detail"
                     title="Lihat"
                   >
-                    <IoEyeSharp color="white" />
-                  </button>
+                    <IoEyeSharp color="white" width={100} />
+                  </Link>
                   <button
                     className="delete"
-                    onClick={() => hapusZakat(item.id)}
+                    onClick={() => hapusSekolahMinggu(item.id)}
                     title="Hapus"
                   >
                     <MdDelete color="white" />
@@ -202,4 +189,4 @@ const DataPenerimaZakat = () => {
   );
 };
 
-export default DataPenerimaZakat;
+export default DataSekolahMinggu;

@@ -46,6 +46,7 @@ const DataPenyulu = () => {
       "Status Pegawai": item.status_pegawai,
       "Tempat Tugas": item.tempat_tugas,
       "Jumlah Kelompok": item.jumlah_binaan,
+      "Nama Kelompok Binaan" : item.KelompokBinaans && item.KelompokBinaans.map((kelompok) => kelompok.nama_kelompok).join(", "),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
@@ -91,7 +92,7 @@ const DataPenyulu = () => {
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Umat Islam
+            Tambah Penyuluh
           </button>
           <button
             onClick={downloadExcel}

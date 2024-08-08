@@ -73,6 +73,10 @@ const DetailZakat = () => {
           <strong>Jumlah Zakat:</strong>
           <p>{zakatData.jumlah_zakat}</p>
         </div>
+        <div>
+          <strong>Tahun Zakat:</strong>
+          <p>{zakatData.tahun_zakat}</p>
+        </div>
       </div>
     </div>
   );

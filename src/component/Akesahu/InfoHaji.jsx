@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import EditStatusModal from "../Modal/AkesahuModal/EditStatusModal";
+import AddPeriodeModal from "../Modal/AkesahuModal/AddPeriodeModal";
 
 const InfoHaji = () => {
   const [hajis, setHajis] = useState([]);
+  const [periodes, setPeriodes] = useState([]);
   const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [openPeriode, setOpenPeriode] = useState(false);
   const [selectedHaji, setSelectedHaji] = useState({});
   const [sortBy, setSortBy] = useState("nama_jamaah");
   const [currentPage, setCurrentPage] = useState(1);
   const [hajisPerPage] = useState(10);
+  const [activeTab, setActiveTab] = useState("statusKeberangkatan");
 
   useEffect(() => {
     getHajis();
+    getPeriodes();
   }, []);
 
   const getHajis = async () => {
     try {
       const response = await axios.get("http://localhost:5000/haji");
       setHajis(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getPeriodes = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/periode/haji");
+      setPeriodes(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -44,6 +56,15 @@ const InfoHaji = () => {
   const handleEditHaji = (item) => {
     setOpenModalEdit(true);
     setSelectedHaji(item);
+  };
+
+  const deletePeriode = async (periodeId) => {
+      try {
+        await axios.delete(`http://localhost:5000/periode/haji/${periodeId}`);
+        getPeriodes();
+      } catch (error) {
+        console.error("Error:", error);
+      }
   };
 
   const filteredAndSortedHajis = hajis.sort((a, b) => {
@@ -77,92 +98,181 @@ const InfoHaji = () => {
     <div className="contain">
       {openModalEdit && (
         <EditStatusModal
-        getHaji={getHajis}
-        setIsOpenModalEdit={setOpenModalEdit}
-        hajiData={selectedHaji}
-        
+          getHaji={getHajis}
+          setIsOpenModalEdit={setOpenModalEdit}
+          hajiData={selectedHaji}
+        />
+      )}
+      {openPeriode && (
+        <AddPeriodeModal
+          getPeriode={getPeriodes}
+          setIsOpenModalAdd={setOpenPeriode}
         />
       )}
       <h1 className="judul mb-4">Data Haji</h1>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2">
-            <label className="text-sm ">Urut Berdasarkan:</label>
-            <select
-              className="input"
-              value={sortBy}
-              onChange={handleSortChange}
-            >
-              <option value="nama_jamaah">Nama</option>
-              <option value="nomor_porsi">Nomor Porsi</option>
-            </select>
-          </div>
+          {activeTab === "statusKeberangkatan" && (
+            <div className="flex items-center space-x-2">
+              <label className="text-sm">Urut Berdasarkan:</label>
+              <select
+                className="input"
+                value={sortBy}
+                onChange={handleSortChange}
+              >
+                <option value="nama_jamaah">Nama</option>
+                <option value="nomor_porsi">Nomor Porsi</option>
+              </select>
+            </div>
+          )}
+          {activeTab === "periode" && (
+            <button className="btn-add" onClick={() => setOpenPeriode(true)}>
+              Tambah Periode
+            </button>
+          )}
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-          <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th className="py-3 px-6 text-left">No</th>
-              <th className="py-3 px-6 text-left">Nama Jamaah</th>
-              <th className="py-3 px-6 text-left">Nomor Porsi</th>
-              <th className="py-3 px-6 text-left">Tahun Berangkat / Batal</th>
-              <th className="py-3 px-6 text-left">Status</th>
-              <th className="py-3 px-6 text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-sm font-light">
-            {currentHajis.map((haji, index) => (
-              <tr
-                key={haji.id}
-                className="border-b border-gray-200 hover:bg-gray-100"
-              >
-                <td className="py-3 px-6 text-left">{index + 1}</td>
-                <td className="py-3 px-6 text-left">{haji.nama_jamaah}</td>
-                <td className="py-3 px-6 text-left">{haji.nomor_porsi}</td>
-                <td className="py-3 px-6 text-left">{haji.tgl_berangkat}</td>
-                <td className="py-3 px-6 text-left">
-                  {haji.status_keberangkatan}
-                </td>
-                <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+      <div className="tabs-container mt-3">
+        <div className="tabs">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+            <thead>
+              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th>
+                  {" "}
                   <button
-                    className="edit"
-                    title="Edit"
-                    onClick={() => handleEditHaji(haji)}
+                    className={`tab ${
+                      activeTab === "statusKeberangkatan" ? "active" : ""
+                    }`}
+                    onClick={() => setActiveTab("statusKeberangkatan")}
                   >
-                    <MdModeEdit color="white" />
+                    Status Keberangkatan
                   </button>
+                </th>
+                <th>
                   <button
-                    className="delete"
-                    onClick={() => deleteHaji(haji.id)}
-                    title="Hapus"
+                    className={`tab ${activeTab === "periode" ? "active" : ""}`}
+                    onClick={() => setActiveTab("periode")}
                   >
-                    <MdDelete color="white" />
+                    Periode
                   </button>
-                </td>
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+          </table>
+        </div>
       </div>
-      <nav className="flex justify-center mt-4">
-        <ul className="flex space-x-2">
-          {pageNumbers.map((number) => (
-            <li key={number}>
-              <button
-                onClick={() => paginate(number)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === number
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {number}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+
+      {activeTab === "statusKeberangkatan" && (
+        <div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">No</th>
+                  <th className="py-3 px-6 text-left">Nama Jamaah</th>
+                  <th className="py-3 px-6 text-left">Nomor Porsi</th>
+                  <th className="py-3 px-6 text-left">
+                    Tahun Berangkat / Batal
+                  </th>
+                  <th className="py-3 px-6 text-left">Status</th>
+                  <th className="py-3 px-6 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 text-sm font-light">
+                {currentHajis.map((haji, index) => (
+                  <tr
+                    key={haji.id}
+                    className="border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td className="py-3 px-6 text-left">{index + 1}</td>
+                    <td className="py-3 px-6 text-left">{haji.nama_jamaah}</td>
+                    <td className="py-3 px-6 text-left">{haji.nomor_porsi}</td>
+                    <td className="py-3 px-6 text-left">
+                      {haji.tgl_berangkat}
+                    </td>
+                    <td className="py-3 px-6 text-left">
+                      {haji.status_keberangkatan}
+                    </td>
+                    <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                      <button
+                        className="edit"
+                        title="Edit"
+                        onClick={() => handleEditHaji(haji)}
+                      >
+                        <MdModeEdit color="white" />
+                      </button>
+                      <button
+                        className="delete"
+                        onClick={() => deleteHaji(haji.id)}
+                        title="Hapus"
+                      >
+                        <MdDelete color="white" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <nav className="flex justify-center mt-4">
+            <ul className="flex space-x-2">
+              {pageNumbers.map((number) => (
+                <li key={number}>
+                  <button
+                    onClick={() => paginate(number)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === number
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
+      {activeTab === "periode" && (
+        <div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">No</th>
+                  <th className="py-3 px-6 text-left">Tanggal</th>
+                  <th className="py-3 px-6 text-left">Jumlah Jamaah</th>
+                  <th className="py-3 px-6 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 text-sm font-light">
+                {periodes.map((periode, index) => (
+                  <tr
+                    key={periode.id}
+                    className="border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td className="py-3 px-6 text-left">{index + 1}</td>
+                    <td className="py-3 px-6 text-left">{periode.tanggal}</td>
+                    <td className="py-3 px-6 text-left">
+                      {periode.jumlah_jamaah}
+                    </td>
+                    <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                      <button
+                        className="delete"
+                        onClick={() => deletePeriode(periode.id)}
+                        title="Hapus"
+                      >
+                        <MdDelete color="white" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

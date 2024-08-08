@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../utils/helper";
 
 const DetailPengaduan = () => {
-  const [pengaduanData, setPengaduanData] = useState([]);
+  const [pengaduanData, setPengaduanData] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -19,7 +19,6 @@ const DetailPengaduan = () => {
     }
   };
 
-  console.log(id);
   useEffect(() => {
     getPengaduanById(id);
   }, [id]);
@@ -36,20 +35,32 @@ const DetailPengaduan = () => {
       </button>
       <div className="p-6 grid grid-cols-2 gap-4 bg-white shadow-lg rounded-lg mt-2">
         <div>
-          <strong>Jenis Pengaduan:</strong>
-          <p>{pengaduanData.jenisPengaduan}</p>
+          <strong>Judul Laporan:</strong>
+          <p>{pengaduanData.judul_laporan}</p>
+        </div>
+        <div>
+          <strong>Tanggal Kejadian:</strong>
+          <p>{pengaduanData.tgl_kejadian}</p>
+        </div>
+        <div>
+          <strong>Lokasi Kejadian:</strong>
+          <p>{pengaduanData.lokasi_kejadian}</p>
+        </div>
+        <div>
+          <strong>Kategori Laporan:</strong>
+          <p>{pengaduanData.kategori_laporan}</p>
         </div>
         <div>
           <strong>Deskripsi Pengaduan:</strong>
           <p>{pengaduanData.deskripsiPengaduan}</p>
         </div>
         <div>
+          <strong>Sifat Laporan:</strong>
+          <p>{pengaduanData.sifat_laporan}</p>
+        </div>
+        <div>
           <strong>Nama Pegawai:</strong>
-          <p>
-            {pengaduanData &&
-              pengaduanData.Pegawai &&
-              pengaduanData.Pegawai.nama_pegawai}
-          </p>
+          <p>{pengaduanData.Pegawai?.nama_pegawai}</p>
         </div>
         <div>
           <strong>Tanggal Pengaduan:</strong>

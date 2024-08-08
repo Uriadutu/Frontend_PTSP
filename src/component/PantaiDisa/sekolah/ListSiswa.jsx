@@ -1,29 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { IoEyeSharp } from 'react-icons/io5';
-import { MdDelete, MdModeEdit } from 'react-icons/md';
-import AddSiswaModal from '../../Modal/PantaiDisaModal/AddSiswaModal';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { IoEyeSharp } from "react-icons/io5";
+import { MdDelete, MdModeEdit } from "react-icons/md";
+import AddSiswaModal from "../../Modal/PantaiDisaModal/AddSiswaModal";
 
 const ListSiswa = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
-  const [Siswas, setSiswa] = useState([])
-  const navigate = useNavigate()
-  const {idsekolah} = useParams();
+  const [Siswas, setSiswa] = useState([]);
+  const navigate = useNavigate();
+  const { idsekolah } = useParams();
 
-  useEffect(()=> {
-    getSiswaBySekolah(idsekolah)
-  },[idsekolah])
+  useEffect(() => {
+    getSiswaBySekolah(idsekolah);
+  }, [idsekolah]);
   const getSiswaBySekolah = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/siswa/sekolah/${id}`);
-      setSiswa(response.data)
+      const response = await axios.get(
+        `http://localhost:5000/siswa/sekolah/${id}`
+      );
+      setSiswa(response.data);
     } catch (error) {
       console.log(error);
     }
-}
+  };
 
-const hapusSiswa = 0;
+  const hapusSiswa = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/siswa/${id}`);
+      getSiswaBySekolah();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="contain">
       {openModalAdd && (
@@ -62,7 +71,7 @@ const hapusSiswa = 0;
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
                 <td className="py-3 px-6 text-left">{item && item.NISN}</td>
-               
+
                 <td className="py-3 px-6 text-left">
                   {item && item.nama_siswa}
                 </td>
@@ -102,6 +111,6 @@ const hapusSiswa = 0;
       </div>
     </div>
   );
-}
+};
 
-export default ListSiswa
+export default ListSiswa;

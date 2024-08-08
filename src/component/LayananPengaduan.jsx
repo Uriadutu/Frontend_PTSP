@@ -20,7 +20,15 @@ const LayananPengaduan = () => {
     }
   }
 
-  const hapusPengaduan = 0;
+  const hapusPengaduan = async(id)=> {
+    try {
+      await axios.delete(`http://localhost:5000/pengaduan/${id}`)
+      getPengaduan();
+    } catch (error) {
+     console.log(error); 
+    }
+  };
+  
 
   useEffect(()=> {
     getPengaduan()
@@ -56,8 +64,8 @@ const LayananPengaduan = () => {
               <th className="py-3 px-6 text-left">No</th>
               <th className="py-3 px-6 text-left">Nama</th>
               <th className="py-3 px-6 text-left">NIP</th>
-              <th className="py-3 px-6 text-left">Tanggal</th>
-              <th className="py-3 px-6 text-left">Jenis Pengaduan</th>
+              <th className="py-3 px-6 text-left">Kategori</th>
+              <th className="py-3 px-6 text-left">Sifat</th>
               <th className="py-3 px-6 text-left">Aksi</th>
             </tr>
           </thead>
@@ -75,10 +83,10 @@ const LayananPengaduan = () => {
                   {item && item.Pegawai && item.Pegawai.NIP}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && formatDate(item.createdAt)}
+                  {item && item.kategori_laporan}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.jenisPengaduan}
+                  {item && item.sifat_laporan}
                 </td> 
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <button

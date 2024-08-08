@@ -25,7 +25,13 @@ const ListGuru = () => {
     }
   };
 
-  const hapusGuru = 0;
+  const hapusGuru = async(id) => {
+    try {
+      await axios.delete(`http://localhost:5000/guru/${id}`);
+    } catch (error) {
+      
+    }
+  };
   return (
     <div className="contain">
       {openModalAdd && (

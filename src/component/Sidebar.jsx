@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut, reset } from "../features/authSlice";
-import axios from "axios";
 import { FaTimes } from "react-icons/fa";
 
 const Sidebar = ({ tutupSidebar }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [satker, setSatker] = useState([]);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,20 +47,6 @@ const Sidebar = ({ tutupSidebar }) => {
     navigate("/");
   };
 
-  const satuanKerja = user?.satuan_kerja;
-  const satuan_kerja = satker?.nama_satker;
-  const getSatker = async (id) => {
-    try {
-      const response = await axios.get(`http://localhost:5000/satker/${id}`);
-      setSatker(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getSatker(satuanKerja);
-  }, [satuanKerja]);
   const getNavLinkClass = ({ isActive }) =>
     `block p-3 pl-10 ${isActive ? "bg-[#DDFFDC]" : "hover:bg-gray-200"}`;
 
@@ -71,7 +55,7 @@ const Sidebar = ({ tutupSidebar }) => {
       <div className="mb-4 px-2 sm:p-4 bg-gray-50 drop-shadow-xl">
         <div className="flex justify-between px-2">
           <button onClick={() => tutup(false)} className="sm:hidden block">
-            <FaTimes size={21}/>
+            <FaTimes size={21} />
           </button>
           <div className="mr-2">
             {user && user.role === "Admin" && (
@@ -88,7 +72,7 @@ const Sidebar = ({ tutupSidebar }) => {
                   {user && user.nama_pegawai}
                 </h1>
                 <h1 className="text-lg text-end sm:text-left">
-                  {satuan_kerja}
+                  {user && user.satuan_kerja}
                 </h1>
               </div>
             )}
@@ -103,60 +87,72 @@ const Sidebar = ({ tutupSidebar }) => {
           </NavLink>
           {/* lapasi */}
           {(user?.role === "Admin" || user?.hakAkses?.lapasi === true) && (
-            <div className="relative">
-              <button
-                className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
-                onClick={() => toggleDropdown("lapasi")}
-              >
-                <span>Lapasi</span>
-                <svg
-                  className={`w-4 h-4 transform transition-transform duration-300 ${
-                    openDropdown === "lapasi" ? "rotate-180" : "rotate-0"
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+            <div className="">
+              <div className="relative">
+                <button
+                  className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
+                  onClick={() => toggleDropdown("lapasi")}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-              {openDropdown === "lapasi" && (
-                <div className="pl-6 transition-all duration-500 ease-out">
-                  <NavLink
-                    to="/lapasi/data-satuan-kerja"
-                    className={getNavLinkClass}
+                  <span>Lapasi</span>
+                  <svg
+                    className={`w-4 h-4 transform transition-transform duration-300 ${
+                      openDropdown === "lapasi" ? "rotate-180" : "rotate-0"
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    Data Satuan Kerja
-                  </NavLink>
-                  <NavLink
-                    to="/lapasi/data-jabatan"
-                    className={getNavLinkClass}
-                  >
-                    Data Jabatan
-                  </NavLink>
-                  <NavLink
-                    to="/lapasi/data-pegawai"
-                    className={getNavLinkClass}
-                  >
-                    Data Pegawai
-                  </NavLink>
-                  <NavLink to="/lapasi/surat-masuk" className={getNavLinkClass}>
-                    Data Surat Masuk
-                  </NavLink>
-                  <NavLink
-                    to="/lapasi/surat-keluar"
-                    className={getNavLinkClass}
-                  >
-                    Data Surat Keluar
-                  </NavLink>
-                </div>
-              )}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </button>
+                {openDropdown === "lapasi" && (
+                  <div className="pl-6 transition-all duration-500 ease-out">
+                    <NavLink
+                      to="/lapasi/data-satuan-kerja"
+                      className={getNavLinkClass}
+                    >
+                      Data Satuan Kerja
+                    </NavLink>
+                    <NavLink
+                      to="/lapasi/data-jabatan"
+                      className={getNavLinkClass}
+                    >
+                      Data Jabatan
+                    </NavLink>
+                    <NavLink
+                      to="/lapasi/data-pegawai"
+                      className={getNavLinkClass}
+                    >
+                      Data Pegawai
+                    </NavLink>
+                    <NavLink
+                      to="/lapasi/surat-masuk"
+                      className={getNavLinkClass}
+                    >
+                      Data Surat Masuk
+                    </NavLink>
+                    <NavLink
+                      to="/lapasi/surat-keluar"
+                      className={getNavLinkClass}
+                    >
+                      Data Surat Keluar
+                    </NavLink>
+                  </div>
+                )}
+              </div>
+              <NavLink 
+                to="https://srikandi.arsip.go.id/auth/login"
+                className={getNavLinkClass}
+                target="_blank"
+              >
+                Pabos
+              </NavLink>
             </div>
           )}
 
@@ -389,6 +385,18 @@ const Sidebar = ({ tutupSidebar }) => {
                     className={getNavLinkClass}
                   >
                     Data Penyuluh
+                  </NavLink>
+                  <NavLink
+                    to="/paludi/data-sekolah-minggu/"
+                    className={getNavLinkClass}
+                  >
+                    Data Sekolah Minggu
+                  </NavLink>
+                  <NavLink
+                    to="/paludi/data-pelayan-gereja/"
+                    className={getNavLinkClass}
+                  >
+                    Data Pelayan Gereja
                   </NavLink>
                   <NavLink
                     to="/paludi/data-organisasi-masyarakat/"

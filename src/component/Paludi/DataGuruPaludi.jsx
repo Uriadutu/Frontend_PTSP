@@ -50,24 +50,23 @@ const DataGuruPaludi = () => {
   const downloadExcel = () => {
     const dataToExport = gurus.map((guru, index) => ({
       No: index + 1,
-      "Tempat Tugas": guru.Sekolah && guru.Sekolah.nama_sekolah,
-      NIP: guru.NIP,
-      "Nama Guru": guru.nama_guru,
       "Status Pegawai": guru.status_pegawai,
       "Kategori Guru": guru.kategori_guru,
       "Jenis Guru": guru.jenis_guru,
-      Pangkat: guru.pangkat,
-      Jabatan: guru.jabatan,
+      "Nama Guru": guru.nama_guru,
+      "NIP": guru.NIP,
+      "Pangkat": guru.pangkat,
+      "Jabatan": guru.jabatan,
+      "Tempat Tugas": guru.Sekolah && guru.Sekolah.nama_sekolah,
       "Tanggal Mulai": guru.tgl_mulai,
       "Tempat Lahir": guru.tempat_lahir,
       "Tanggal Lahir": guru.tanggal_lahir,
       "Jenis Kelamin": guru.jenis_kelamin,
-      Agama: guru.agama,
       "Pendidikan Terakhir": guru.pendidikan_terakhir,
-      Jurusan: guru.juruan,
+      "Jurusan": guru.juruan,
       "Tahun Lulus": guru.tahun_lulus,
       "No Telepon": guru.no_telp,
-      Email: guru.email,
+      "Email": guru.email,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);

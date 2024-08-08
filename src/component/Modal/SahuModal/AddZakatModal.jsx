@@ -16,6 +16,7 @@ const AddZakatModal = ({ setIsOpenModalAdd, getZakat }) => {
   const [nominalUang, setNominalUang] = useState("");
   const [infaqSedekah, setInfaqSedekah] = useState("");
   const [jumlahZakat, setJumlahZakat] = useState("");
+  const [tahunZakat, setTahunZakat] = useState([]);
   const [kecamatan, setKecamatan] = useState([]);
 
   const handleJenisZakatChange = (e) => {
@@ -49,6 +50,7 @@ const AddZakatModal = ({ setIsOpenModalAdd, getZakat }) => {
         nominal_uang: nominalUang,
         sedekah: infaqSedekah,
         jumlah_zakat: jumlahZakat,
+        tahun_zakat : tahunZakat
       });
 
       setIsOpenModalAdd(false);
@@ -267,6 +269,18 @@ const AddZakatModal = ({ setIsOpenModalAdd, getZakat }) => {
                   className="w-full input"
                   value={jumlahZakat}
                   onChange={(e) => setJumlahZakat(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="jumlahZakat" className="label-input">
+                  Tahun Zakat
+                </label>
+                <input
+                  id="jumlahZakat"
+                  className="w-full input"
+                  value={tahunZakat}
+                  onChange={(e) => setTahunZakat(e.target.value)}
                   type="text"
                 />
               </div>

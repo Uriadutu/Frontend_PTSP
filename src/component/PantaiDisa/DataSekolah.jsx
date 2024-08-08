@@ -37,6 +37,7 @@ const DataSekolah = () => {
         negeri: totalSDN,
         swasta: totalSDS,
         pondokPesantren: totalSDP,
+        madin : "1"
       },
     },
     {
@@ -48,6 +49,7 @@ const DataSekolah = () => {
         negeri: totalSMPN,
         swasta: totalSMPS,
         pondokPesantren: totalSMPP,
+        madin : "1"
       },
     },
     {
@@ -59,6 +61,7 @@ const DataSekolah = () => {
         negeri: totalSMAN,
         swasta: totalSMAS,
         pondokPesantren: totalSMAP,
+        madin : "1"
       },
     },
   ];
@@ -178,6 +181,20 @@ const DataSekolah = () => {
                       </td>
                       <td className="py-3 px-6 text-center whitespace-nowrap">
                         {item.subTotal.pondokPesantren}
+                      </td>
+                    </tr>
+                    <tr className="bg-gray-100 hover:bg-gray-200 transition-colors">
+                      <td className="py-3 px-6 text-left whitespace-nowrap"></td>
+                      <td
+                        className="py-3 px-6 text-left whitespace-nowrap cursor-pointer"
+                        onClick={() =>
+                          navigateToSekolah(item.value, "madrasa-diniyah")
+                        }
+                      >
+                        Madrasa Diniyah
+                      </td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap">
+                        {item.subTotal.madin}
                       </td>
                     </tr>
                   </>

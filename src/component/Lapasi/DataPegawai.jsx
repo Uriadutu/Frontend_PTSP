@@ -108,6 +108,10 @@ const DataPegawai = () => {
     pageNumbers.push(i);
   }
 
+   const totalPNS = pegawai.filter(
+     (item) => item.jenis_pegawai === "PNS"
+   ).length;
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -123,7 +127,7 @@ const DataPegawai = () => {
           selectedPegawai={selectedPegawai}
         />
       )}
-      <h1 className="judul">Data Pegawai</h1>
+      <h1 className="judul">Data Pegawai {totalPNS}</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <button

@@ -6,6 +6,28 @@
 }
 .btn-back {
     @apply px-3 py-2 mb-0 bg-gray-100 border border-gray-200 text-gray-600 font-semibold text-sm rounded-md hover:bg-gray-50 transition duration-300;
+}.tabs-container {
+  display: flex;
+  justify-content: left; /* Center the tabs horizontally */
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 3px; /* Space between buttons */
+  align-items: center;
+  border-radius: 0.375rem; /* rounded-t-md */
+}
+
+.tab {
+  padding: 0.25rem; /* p-1 */
+  border: 1px solid #d1d5db; /* border-gray-200 */
+  color : #494949fa
+}
+
+.tab.active {
+  @apply border border-blue-500 text-gray-950/* Optional: Add a different border color for the active tab */
+
+
 }
 
 .btn-download {

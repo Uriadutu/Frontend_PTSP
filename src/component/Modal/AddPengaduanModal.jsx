@@ -2,15 +2,24 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const AddPengaduanModal = ({ setIsOpenModalAdd, getPengaduan }) => {
-  const [jenisPengaduan, setJenisPengaduan] = useState("");
+  const [judulLaporan, setJudulLaporan] = useState("");
+  const [tglKejadian, setTglKejadian] = useState("");
+  const [lokasiKejadian, setLokasiKejadian] = useState("");
+  const [kategori, setKategori] = useState("");
+  const [kategoriLainnya, setKategoriLainnya] = useState("");
   const [deskripsiPengaduan, setDeskripsiPengaduan] = useState("");
+  const [sifatLaporan, setSifatLaporan] = useState("rahasia");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/pengaduan", {
-        jenisPengaduan,
+        judul_laporan: judulLaporan,
+        tgl_kejadian: tglKejadian,
+        lokasi_kejadian: lokasiKejadian,
+        kategori_laporan: kategori === "Lainnya" ? kategoriLainnya : kategori,
         deskripsiPengaduan,
+        sifat_laporan: sifatLaporan,
       });
 
       setIsOpenModalAdd(false);
@@ -28,7 +37,7 @@ const AddPengaduanModal = ({ setIsOpenModalAdd, getPengaduan }) => {
       className="fixed inset-0 flex items-center justify-center bg-gray-500 z-top bg-opacity-30"
     >
       <form onSubmit={handleSubmit}>
-        <div className="w-full max-w-lg bg-white rounded-lg shadow-lg">
+        <div className="w-full max-w-lg bg-white rounded-lg shadow-lg overflow-y-auto">
           <div className="flex items-center justify-between p-4 border-b rounded-t">
             <h3 className="text-xl font-semibold text-gray-900">
               Tambah Pengaduan
@@ -59,16 +68,83 @@ const AddPengaduanModal = ({ setIsOpenModalAdd, getPengaduan }) => {
           </div>
           <div className="p-4 space-y-4">
             <div className="mb-6">
-              <label htmlFor="jenisPengaduan" className="label-input">
-                Jenis Pengaduan
+              <label htmlFor="judulLaporan" className="label-input">
+                Judul Laporan
               </label>
               <input
-                value={jenisPengaduan}
-                onChange={(e) => setJenisPengaduan(e.target.value)}
+                value={judulLaporan}
+                onChange={(e) => setJudulLaporan(e.target.value)}
                 type="text"
-                id="jenisPengaduan"
+                id="judulLaporan"
                 className="w-full input"
               />
+
+              <label htmlFor="tglKejadian" className="label-input">
+                Tanggal Kejadian
+              </label>
+              <input
+                value={tglKejadian}
+                onChange={(e) => setTglKejadian(e.target.value)}
+                type="date"
+                id="tglKejadian"
+                className="w-full input"
+              />
+
+              <label htmlFor="lokasiKejadian" className="label-input">
+                Lokasi Kejadian
+              </label>
+              <input
+                value={lokasiKejadian}
+                onChange={(e) => setLokasiKejadian(e.target.value)}
+                type="text"
+                id="lokasiKejadian"
+                className="w-full input"
+              />
+
+              <label htmlFor="kategori" className="label-input">
+                Kategori Laporan
+              </label>
+              <select
+                value={kategori}
+                onChange={(e) => setKategori(e.target.value)}
+                className="w-full input"
+              >
+                <option value="Agama">Agama</option>
+                <option value="Ekonomi Dan Keuangan">Ekonomi Dan Keuangan</option>
+                <option value="Kesetaraan Gender">Kesetaraan Gender</option>
+                <option value="Teknologi Informasi Dan Komunikasi">
+                  Teknologi Informasi Dan Komunikasi
+                </option>
+                <option value="Sosial Dan Kesejahteraan">
+                  Sosial Dan Kesejahteraan
+                </option>
+                <option value="Ketentraman Dan Ketertiban Umum">
+                  Ketentraman Dan Ketertiban Umum
+                </option>
+                <option value="Pendidikan Dan Kebudayaan">Pendidikan Dan Kebudayaan</option>
+                <option value="Kekerasan Di Satuan Pendidikan">Kekerasan Di Satuan Pendidikan</option>
+                <option value="Politik Dan Hukum">Politik Dan Hukum</option>
+                <option value="Kependudukan">Kependudukan</option>
+                <option value="Ketenagakerjaan">Ketenagakerjaan</option>
+                <option value="Perhubungan">Perhubungan</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+
+              {kategori === "Lainnya" && (
+                <div className="mt-4">
+                  <label htmlFor="kategoriLainnya" className="label-input">
+                    Lainnya
+                  </label>
+                  <input
+                    value={kategoriLainnya}
+                    onChange={(e) => setKategoriLainnya(e.target.value)}
+                    type="text"
+                    id="kategoriLainnya"
+                    className="w-full input"
+                  />
+                </div>
+              )}
+
               <label htmlFor="deskripsiPengaduan" className="label">
                 Deskripsi Pengaduan
               </label>
@@ -78,6 +154,30 @@ const AddPengaduanModal = ({ setIsOpenModalAdd, getPengaduan }) => {
                 id="deskripsiPengaduan"
                 className="w-full input"
               />
+
+              <label className="label-input">Sifat Laporan</label>
+              <div className="flex items-center space-x-4">
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value="rahasia"
+                    checked={sifatLaporan === "rahasia"}
+                    onChange={(e) => setSifatLaporan(e.target.value)}
+                    className="form-radio"
+                  />
+                  <span className="ml-2">Rahasia</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value="Anonim"
+                    checked={sifatLaporan === "Anonim"}
+                    onChange={(e) => setSifatLaporan(e.target.value)}
+                    className="form-radio"
+                  />
+                  <span className="ml-2">Anonim</span>
+                </label>
+              </div>
             </div>
           </div>
           <div className="flex items-center justify-end p-4 space-x-3 border-t border-gray-200 rounded-b">
