@@ -52,6 +52,12 @@ import DetailZakatPage from "./pages/SahuPage/DetailZakatPage.jsx";
 import DetailLembagaKristenPage from "./pages/PaludiPage/DetailLembagaKristenPage.jsx";
 import DetailLayananPengaduanPage from "./pages/DetailLayananPengaduanPage.jsx";
 import DataSekolahMingguPage from "./pages/PaludiPage/DataSekolahMingguPage.jsx";
+import PelayanGerejaPage from "./pages/PaludiPage/PelayanGerejaPage.jsx";
+import DetailPelayanGerejaPage from "./pages/PaludiPage/DetailPelayanGerejaPage.jsx";
+import PenyuluhIslamPage from "./pages/SariaPage/PenyuluhIslamPage.jsx";
+import DetailPenyuluhIslamPage from "./pages/SariaPage/DetialPenyuluhIslamPage.jsx";
+import PetaKepengawasanPage from "./pages/SidikaPage/PetaKepengawasanPage.jsx";
+import DataTpqPage from "./pages/SariaPage/DataTpqPage.jsx";
 
 
 function App() {
@@ -123,6 +129,18 @@ function App() {
             element={<MajelisTalimPage />}
           />
           <Route
+            path="/saria/data-taman-pendidikan-quran"
+            element={<DataTpqPage />}
+          />
+          <Route
+            path="/saria/data-penyuluh"
+            element={<PenyuluhIslamPage />}
+          />
+          <Route
+            path="/saria/data-penyuluh/detail/:id"
+            element={<DetailPenyuluhIslamPage />}
+          />
+          <Route
             path="/:sub/data-organisasi-masyarakat"
             element={<OrganisasiMasyarakatPage />}
           />
@@ -184,6 +202,14 @@ function App() {
             element={<DataSekolahMingguPage />}
           />
           <Route
+            path="/paludi/data-pelayan-gereja/"
+            element={<PelayanGerejaPage />}
+          />
+          <Route
+            path="/paludi/data-pelayan-gereja/detail/:id"
+            element={<DetailPelayanGerejaPage />}
+          />
+          <Route
             path="/paludi/data-organisasi-masyarakat/"
             element={<DataOrganisasiKristenPage />}
           />
@@ -211,6 +237,13 @@ function App() {
             path="/:sub/data-tanah-wakaf"
             element={<DataTanahWakafPage />}
           />
+
+          {/* Sidika */}
+          <Route
+            path="/sidika/peta-kepengawasan"
+            element={<PetaKepengawasanPage />}
+          />
+
 
           {/* Surat-surat */}
           <Route path="/:sub/surat-masuk" element={<SuratMasukPage />} />

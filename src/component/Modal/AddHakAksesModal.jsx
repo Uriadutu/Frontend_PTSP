@@ -11,7 +11,8 @@ const AddHakAksesModal = ({ setIsOpenModalAdd, selectedPegawai, fetchPegawai }) 
   const [akesahu, setAksesahu] = useState(false);
   const [saria, setSaria] = useState(false);
   const [paludi, setPaludi] = useState(false);
-  const [sahu, setSahu] = useState(false);
+  const [sahu, setSahu] = useState(false); 
+  const [sidika, setSidika] = useState(false); 
 
   const getPegawai = async (id) => {
     try {
@@ -32,7 +33,8 @@ const AddHakAksesModal = ({ setIsOpenModalAdd, selectedPegawai, fetchPegawai }) 
       setAksesahu(hakAksesData.aksesahu);
       setSaria(hakAksesData.saria);
       setPaludi(hakAksesData.paludi);
-      setSahu(hakAksesData.sahu);
+      setSahu(hakAksesData.sahu); 
+      setSidika(hakAksesData.sidika); 
     } catch (error) {
       console.log(error);
     }
@@ -60,6 +62,7 @@ const AddHakAksesModal = ({ setIsOpenModalAdd, selectedPegawai, fetchPegawai }) 
         saria,
         paludi,
         sahu,
+        sidika,
       });
       setIsOpenModalAdd(false);
       fetchPegawai();
@@ -196,6 +199,15 @@ const AddHakAksesModal = ({ setIsOpenModalAdd, selectedPegawai, fetchPegawai }) 
                     className="mr-2"
                   />
                   Sahu
+                </label>
+                <label className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    checked={sidika}
+                    onChange={(e) => setSidika(e.target.checked)}
+                    className="mr-2"
+                  />
+                  Sidika
                 </label>
               </div>
             </div>

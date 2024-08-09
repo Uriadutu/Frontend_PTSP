@@ -1,100 +1,98 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
-import { IoAdd, IoDocument } from "react-icons/io5";
-import AddSekolahMingguModal from "../Modal/PaludiModal/AddSekolahMingguModal";
+import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
+import AddPenyuluhIslamModal from "../Modal/SariaModal/AddPenyuluhIslamModal";
 
-const DataSekolahMinggu = () => {
+const PenyuluhIslam = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
-  const [sekolahMinggu, setSekolahMinggu] = useState([]);
+  const [penyulus, setPenyulu] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sekolahMingguPerPage] = useState(10);
+  const [penyulusPerPage] = useState(10);
 
-  const getSekolahMinggu = async () => {
+  const getPenyulu = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/sekolahminggu");
-      setSekolahMinggu(response.data);
+      const response = await axios.get("http://localhost:5000/penyuluh/islam");
+      setPenyulu(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const hapusSekolahMinggu = async (id) => {
+  const hapusPenyulu = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/sekolahminggu/${id}`);
-      getSekolahMinggu();
+      await axios.delete(`http://localhost:5000/penyuluh/islam/${id}`);
+      getPenyulu();
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getSekolahMinggu();
+    getPenyulu();
   }, []);
 
-  const filteredSekolahMinggu = sekolahMinggu.filter((item) =>(
-    item.nama_gereja.toLowerCase().includes(searchText.toLowerCase()),
-    item.nama_pengasuh.toLowerCase().includes(searchText.toLowerCase()))
+  const filteredPenyulus = penyulus.filter((item) =>
+    item.nama.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const downloadExcel = () => {
-    const dataToExport = filteredSekolahMinggu.map((item, index) => ({
+    const dataToExport = filteredPenyulus.map((item, index) => ({
       No: index + 1,
-      "Nama Gereja": item.nama_gereja,
-      "Jumlah Anak": item.jumlah_anak,
-      "Nama Guru Sekolah Minggu": item.nama_pengasuh,
-    }))
+      Nama: item.nama,
+      "Status Pegawai": item.status_pegawai,
+      "Tempat Tugas": item.tempat_tugas,
+      "Jumlah Kelompok": item.jumlah_binaan,
+      "Nama Kelompok Binaan" : item.KelompokBinaans && item.KelompokBinaans.map((kelompok) => kelompok.nama_kelompok).join(", "),
+    }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "DataSekolahMinggu");
-    XLSX.writeFile(workbook, "DataSekolahMinggu.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataPenyulu");
+    XLSX.writeFile(workbook, "DataPenyuluhIslam.xlsx");
   };
 
-  const indexOfLastSekolahMinggu = currentPage * sekolahMingguPerPage;
-  const indexOfFirstSekolahMinggu =
-    indexOfLastSekolahMinggu - sekolahMingguPerPage;
-  const currentSekolahMinggu = filteredSekolahMinggu.slice(
-    indexOfFirstSekolahMinggu,
-    indexOfLastSekolahMinggu
+  const indexOfLastPenyulu = currentPage * penyulusPerPage;
+  const indexOfFirstPenyulu = indexOfLastPenyulu - penyulusPerPage;
+  const currentPenyulus = filteredPenyulus.slice(
+    indexOfFirstPenyulu,
+    indexOfLastPenyulu
   );
-
-  console.log(sekolahMinggu);
-  
 
   const pageNumbers = [];
   for (
     let i = 1;
-    i <= Math.ceil(filteredSekolahMinggu.length / sekolahMingguPerPage);
+    i <= Math.ceil(filteredPenyulus.length / penyulusPerPage);
     i++
   ) {
     pageNumbers.push(i);
   }
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const handleSearchChange = (e) => {
-    setSearchText(e.target.value);
-    setCurrentPage(1); // Reset to first page on search
-  };
+    const handleSearchChange = (e) => {
+      setSearchText(e.target.value);
+      setCurrentPage(1); // Reset to first page on search
+    };
 
   return (
     <div className="contain">
       {openModalAdd && (
-        <AddSekolahMingguModal
+        <AddPenyuluhIslamModal
           setIsOpenModalAdd={setOpenModalAdd}
-          getSekolahMinggu={getSekolahMinggu}
+          getPenyulu={getPenyulu}
         />
       )}
-      <h1 className="judul mb-4">Data Sekolah Minggu</h1>
+      <h1 className="judul mb-4">Data Penyuluh</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Sekolah Minggu
+            Tambah Penyuluh
           </button>
           <button
             onClick={downloadExcel}
@@ -119,7 +117,7 @@ const DataSekolahMinggu = () => {
           <input
             type="text"
             className="input"
-            placeholder="Cari Nama Sekolah Minggu"
+            placeholder="Cari Kecamatan / Nama Desa"
             value={searchText}
             onChange={handleSearchChange}
           />
@@ -130,26 +128,35 @@ const DataSekolahMinggu = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
-              <th className="py-3 px-6 text-left">Nama Gereja</th>
-              <th className="py-3 px-6 text-left">Jumlah Anak</th>
-              <th className="py-3 px-6 text-left">Nama Guru Sekolah Minggu</th>
+              <th className="py-3 px-6 text-left">Nama</th>
+              <th className="py-3 px-6 text-left">Status Pegawai</th>
+              <th className="py-3 px-6 text-left">Tempat Tugas</th>
+              <th className="py-3 px-6 text-left">Jumlah Kelompok</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {currentSekolahMinggu.map((item, index) => (
+            {currentPenyulus.map((item, index) => (
               <tr
                 key={item.id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
-                <td className="py-3 px-6 text-left">{item && item.Gereja && item.Gereja.nama_gereja}</td>
-                <td className="py-3 px-6 text-left">{item.jumlah_anak}</td>
-                <td className="py-3 px-6 text-left">{item.nama_pengasuh}</td>
+                <td className="py-3 px-6 text-left">{item.nama}</td>
+                <td className="py-3 px-6 text-left">{item.status_pegawai}</td>
+                <td className="py-3 px-6 text-left">{item.tempat_tugas}</td>
+                <td className="py-3 px-6 text-left">{item.jumlah_binaan}</td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                  <Link
+                    to={`/saria/data-penyuluh/detail/${item.id}`}
+                    className="detail"
+                    title="Lihat"
+                  >
+                    <IoEyeSharp color="white" width={100} />
+                  </Link>
                   <button
                     className="delete"
-                    onClick={() => hapusSekolahMinggu(item.id)}
+                    onClick={() => hapusPenyulu(item.id)}
                     title="Hapus"
                   >
                     <MdDelete color="white" />
@@ -182,4 +189,5 @@ const DataSekolahMinggu = () => {
   );
 };
 
-export default DataSekolahMinggu;
+export default PenyuluhIslam;
+ 

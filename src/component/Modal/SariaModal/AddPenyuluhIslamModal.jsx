@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddPenyuluModal = ({ setIsOpenModalAdd, getPenyulu }) => {
+const AddPenyuluhIslamModal = ({ setIsOpenModalAdd, getPenyulu }) => {
   const [statusPegawai, setStatusPegawai] = useState("");
   const [nama, setNama] = useState("");
   const [tempatTugas, setTempatTugas] = useState("");
@@ -27,7 +27,7 @@ const AddPenyuluModal = ({ setIsOpenModalAdd, getPenyulu }) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/penyulu", {
+      await axios.post("http://localhost:5000/penyuluh/islam", {
         status_pegawai: statusPegawai,
         nama: nama,
         tempat_tugas: tempatTugas,
@@ -184,4 +184,4 @@ const AddPenyuluModal = ({ setIsOpenModalAdd, getPenyulu }) => {
   );
 };
 
-export default AddPenyuluModal;
+export default AddPenyuluhIslamModal;

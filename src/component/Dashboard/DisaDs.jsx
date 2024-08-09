@@ -16,7 +16,6 @@ const DisaDs = () => {
   const [guru, setGuru] = useState([])
   const [siswa, setSiswa] = useState([])
 
-  console.log(siswa, guru, "data");
 
 
   const getGuruDanSiswa = async(end, set) => {

@@ -26,6 +26,8 @@ const Sidebar = ({ tutupSidebar }) => {
       setOpenDropdown("sahu");
     } else if (path.startsWith("/paludi")) {
       setOpenDropdown("paludi");
+    } else if (path.startsWith("/sidika")) {
+      setOpenDropdown("sidika");
     } else {
       setOpenDropdown(null);
     }
@@ -146,7 +148,7 @@ const Sidebar = ({ tutupSidebar }) => {
                   </div>
                 )}
               </div>
-              <NavLink 
+              <NavLink
                 to="https://srikandi.arsip.go.id/auth/login"
                 className={getNavLinkClass}
                 target="_blank"
@@ -306,6 +308,24 @@ const Sidebar = ({ tutupSidebar }) => {
                     className={getNavLinkClass}
                   >
                     Data Majelis Ta'lim
+                  </NavLink>
+                  <NavLink
+                    to="/saria/data-taman-pendidikan-quran"
+                    className={getNavLinkClass}
+                  >
+                    Data TPQ
+                  </NavLink>
+                  <NavLink
+                    to="/saria/data-penyuluh"
+                    className={getNavLinkClass}
+                  >
+                    Data Penyuluh
+                  </NavLink>
+                  <NavLink
+                    to="/saria/data-penyuluh"
+                    className={getNavLinkClass}
+                  >
+                    Data Penyuluh
                   </NavLink>
                   <NavLink
                     to="/saria/data-organisasi-masyarakat"
@@ -474,6 +494,63 @@ const Sidebar = ({ tutupSidebar }) => {
                     Data Surat Masuk
                   </NavLink>
                   <NavLink to="/sahu/surat-keluar" className={getNavLinkClass}>
+                    Data Surat Keluar
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
+          {(user?.role === "Admin" || user?.hakAkses?.sidika === true) && (
+            <div className="relative">
+              <button
+                className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
+                onClick={() => toggleDropdown("sidika")}
+              >
+                <span>Sidika</span>
+                <svg
+                  className={`w-4 h-4 transform transition-transform duration-300 ${
+                    openDropdown === "sidika" ? "rotate-180" : "rotate-0"
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+              {openDropdown === "sidika" && (
+                <div className="pl-6 transition-all duration-500 ease-out">
+                  <NavLink
+                    to="/sidika/peta-kepengawasan"
+                    className={getNavLinkClass}
+                  >
+                    Peta Kepengawasan
+                  </NavLink>
+                  <NavLink
+                    to="/sidika/data-pendampingan-akademik"
+                    className={getNavLinkClass}
+                  >
+                    Pendampingan Akademik
+                  </NavLink>
+                  <NavLink
+                    to="/sidika/data-pendampingan-menejerial"
+                    className={getNavLinkClass}
+                  >
+                    Pendampingan Menejerial
+                  </NavLink>
+                  <NavLink to="/sidika/surat-masuk" className={getNavLinkClass}>
+                    Data Surat Masuk
+                  </NavLink>
+                  <NavLink
+                    to="/sidika/surat-keluar"
+                    className={getNavLinkClass}
+                  >
                     Data Surat Keluar
                   </NavLink>
                 </div>
