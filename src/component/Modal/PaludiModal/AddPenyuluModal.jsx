@@ -42,6 +42,8 @@ const AddPenyuluModal = ({ setIsOpenModalAdd, getPenyulu }) => {
     }
   };
 
+  console.log(kelompokBinaan, "data");
+  
   return (
     <div
       id="default-modal"
