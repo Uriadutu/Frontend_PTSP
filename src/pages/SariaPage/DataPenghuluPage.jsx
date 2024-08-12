@@ -3,9 +3,9 @@ import Layout from "../Layout"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../../features/authSlice";
-import DetailPenyuluIslam from "../../component/Saria/DetailPenyuluhIslam";
+import DataPenghulu from "../../component/Saria/DataPenghulu";
 
-const DetailPenyuluhIslamPage = () => {
+const DataPenghuluPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isError } = useSelector((state) => state.auth);
@@ -21,9 +21,9 @@ const DetailPenyuluhIslamPage = () => {
   }, [isError, user, navigate]);
   return (
     <Layout>
-      <DetailPenyuluIslam />
+      <DataPenghulu />
     </Layout>
   );
 };
 
-export default DetailPenyuluhIslamPage;
+export default DataPenghuluPage;

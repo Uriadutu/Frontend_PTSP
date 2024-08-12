@@ -9,12 +9,15 @@ const DataSekolah = () => {
   const [totalSDN, setTotalSDN] = useState(0);
   const [totalSDS, setTotalSDS] = useState(0);
   const [totalSDP, setTotalSDP] = useState(0);
+  const [totalSDM, setTotalSDM] = useState(0);
   const [totalSMPN, setTotalSMPN] = useState(0);
   const [totalSMPS, setTotalSMPS] = useState(0);
   const [totalSMPP, setTotalSMPP] = useState(0);
+  const [totalSMPM, setTotalSMPM] = useState(0);
   const [totalSMAN, setTotalSMAN] = useState(0);
   const [totalSMAS, setTotalSMAS] = useState(0);
   const [totalSMAP, setTotalSMAP] = useState(0);
+  const [totalSMAM, setTotalSMAM] = useState(0);
   const navigate = useNavigate();
 
   const toggleSubMenu = (jenjang) => {
@@ -37,7 +40,7 @@ const DataSekolah = () => {
         negeri: totalSDN,
         swasta: totalSDS,
         pondokPesantren: totalSDP,
-        madin : "1"
+        madin : totalSDM
       },
     },
     {
@@ -49,7 +52,7 @@ const DataSekolah = () => {
         negeri: totalSMPN,
         swasta: totalSMPS,
         pondokPesantren: totalSMPP,
-        madin : "1"
+        madin : totalSMPM
       },
     },
     {
@@ -61,7 +64,7 @@ const DataSekolah = () => {
         negeri: totalSMAN,
         swasta: totalSMAS,
         pondokPesantren: totalSMAP,
-        madin : "1"
+        madin : totalSMAM
       },
     },
   ];
@@ -90,17 +93,26 @@ const DataSekolah = () => {
     getJumlahSekolahPerStatus("sekolah-dasarnegeri", setTotalSDN);
     getJumlahSekolahPerStatus("sekolah-dasarswasta", setTotalSDS);
     getJumlahSekolahPerStatus("sekolah-dasarpondok-pesantren", setTotalSDP);
+    getJumlahSekolahPerStatus("sekolah-dasarmadrasa-diniyah", setTotalSDM);
     getJumlahSekolahPerStatus("sekolah-menengah-pertamanegeri", setTotalSMPN);
     getJumlahSekolahPerStatus("sekolah-menengah-pertamaswasta", setTotalSMPS);
     getJumlahSekolahPerStatus(
       "sekolah-menengah-pertamapondok-pesantren",
       setTotalSMPP
     );
+    getJumlahSekolahPerStatus(
+      "sekolah-menengah-pertamamadrasa-diniyah",
+      setTotalSMPM
+    );
     getJumlahSekolahPerStatus("sekolah-menengah-atasnegeri", setTotalSMAN);
     getJumlahSekolahPerStatus("sekolah-menengah-atasswasta", setTotalSMAS);
     getJumlahSekolahPerStatus(
       "sekolah-menengah-ataspondok-pesantren",
       setTotalSMAP
+    );
+    getJumlahSekolahPerStatus(
+      "sekolah-menengah-atasmadrasa-diniyah",
+      setTotalSMAM
     );
   }, []);
 

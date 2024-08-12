@@ -95,7 +95,7 @@ const Sidebar = ({ tutupSidebar }) => {
                   className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                   onClick={() => toggleDropdown("lapasi")}
                 >
-                  <span>Lapasi</span>
+                  <span>Lapasi (Kepegawaian)</span>
                   <svg
                     className={`w-4 h-4 transform transition-transform duration-300 ${
                       openDropdown === "lapasi" ? "rotate-180" : "rotate-0"
@@ -153,7 +153,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className={getNavLinkClass}
                 target="_blank"
               >
-                Pabos
+                Pabos (Sekretariat)
               </NavLink>
             </div>
           )}
@@ -165,7 +165,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("pantaiDisa")}
               >
-                <span>Pantai Disa</span>
+                <span>Pantai Disa (Seksi Pendis)</span>
                 <svg
                   className={`w-4 h-4 transform transition-transform duration-300 ${
                     openDropdown === "pantaiDisa" ? "rotate-180" : "rotate-0"
@@ -227,7 +227,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("akesahu")}
               >
-                <span>Akesahu</span>
+                <span>Akesahu (Seksi PHU)</span>
                 <svg
                   className={`w-4 h-4 transform transition-transform duration-300 ${
                     openDropdown === "akesahu" ? "rotate-180" : "rotate-0"
@@ -277,7 +277,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("saria")}
               >
-                <span>Saria</span>
+                <span>Saria (Seksi Bimas Islam)</span>
                 <svg
                   className={`w-4 h-4 transform transition-transform duration-300 ${
                     openDropdown === "saria" ? "rotate-180" : "rotate-0"
@@ -322,10 +322,10 @@ const Sidebar = ({ tutupSidebar }) => {
                     Data Penyuluh
                   </NavLink>
                   <NavLink
-                    to="/saria/data-penyuluh"
+                    to="/saria/data-penghulu"
                     className={getNavLinkClass}
                   >
-                    Data Penyuluh
+                    Data Penghulu
                   </NavLink>
                   <NavLink
                     to="/saria/data-organisasi-masyarakat"
@@ -359,7 +359,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("paludi")}
               >
-                <span>Paludi</span>
+                <span>Paludi (Seksi Bimas Kristen)</span>
                 <svg
                   className={`w-4 h-4 transform transition-transform duration-300 ${
                     openDropdown === "paludi" ? "rotate-180" : "rotate-0"
@@ -452,7 +452,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("sahu")}
               >
-                <span>Sahu</span>
+                <span>Sahu (Penyelenggara ZaWa)</span>
                 <svg
                   className={`w-4 h-4 transform transition-transform duration-300 ${
                     openDropdown === "sahu" ? "rotate-180" : "rotate-0"
@@ -506,7 +506,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("sidika")}
               >
-                <span>Sidika</span>
+                <span>Sidika (Pengawas)</span>
                 <svg
                   className={`w-4 h-4 transform transition-transform duration-300 ${
                     openDropdown === "sidika" ? "rotate-180" : "rotate-0"

@@ -58,6 +58,9 @@ import PenyuluhIslamPage from "./pages/SariaPage/PenyuluhIslamPage.jsx";
 import DetailPenyuluhIslamPage from "./pages/SariaPage/DetialPenyuluhIslamPage.jsx";
 import PetaKepengawasanPage from "./pages/SidikaPage/PetaKepengawasanPage.jsx";
 import DataTpqPage from "./pages/SariaPage/DataTpqPage.jsx";
+import DataPenghuluPage from "./pages/SariaPage/DataPenghuluPage.jsx";
+import AkademikPage from "./pages/SidikaPage/AkademikPage.jsx";
+import MenejerialPage from "./pages/SidikaPage/MenejerialPage.jsx";
 
 
 function App() {
@@ -139,6 +142,10 @@ function App() {
           <Route
             path="/saria/data-penyuluh/detail/:id"
             element={<DetailPenyuluhIslamPage />}
+          />
+          <Route
+            path="/saria/data-penghulu"
+            element={<DataPenghuluPage />}
           />
           <Route
             path="/:sub/data-organisasi-masyarakat"
@@ -242,6 +249,14 @@ function App() {
           <Route
             path="/sidika/peta-kepengawasan"
             element={<PetaKepengawasanPage />}
+          />
+          <Route
+            path="/sidika/data-pendampingan-akademik"
+            element={<AkademikPage />}
+          />
+          <Route
+            path="/sidika/data-pendampingan-menejerial"
+            element={<MenejerialPage />}
           />
 
 

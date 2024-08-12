@@ -3,59 +3,46 @@ import axios from "axios";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
-import AddPengawasModal from "../Modal/SidikaModal/AddPengawasModal";
-import InfoPengawasModal from "../Modal/SidikaModal/InfoPengawasModal";
+import AddPenghuluModal from "../Modal/SariaModal/AddPenghuluModal";
 
-const PetaKepengawasan = () => {
+const DataPenghulu = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
-  const [openModalInfo, setOpenModalInfo] = useState(false);
-  const [pengawas, setPengawas] = useState([]);
+  const [Penghulu, setPenghulu] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pengawasPerPage] = useState(10);
-  const [pengawasData, setPengawasData] = useState([])
-
+  const [PenghuluPerPage] = useState(10);
 
   // Fetch data from server
-  const getPengawas = async () => {
+  const getPenghulu = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/peta");
-      setPengawas(response.data);
+      const response = await axios.get("http://localhost:5000/penghulu");
+      setPenghulu(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getPengawas();
+    getPenghulu();
   }, []);
 
-  const lihatModal = (pengawasDataClick) => {
-    setOpenModalInfo(true); 
-    setPengawasData(pengawasDataClick)
-  }
-
   // Filter and paginate data
-  const filteredPengawas = pengawas.filter(
-    (item) =>
-      // item.wilayamengawas.nama_wilayah
-      //   .toLowerCase()
-      //   .includes(searchText.toLowerCase()) ||
-      item.Pegawai.nama_pegawai.toLowerCase().includes(searchText.toLowerCase())
+  const filteredPenghulu = Penghulu.filter((item) =>
+    item.Pegawai.nama_pegawai.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const indexOfLastPengawas = currentPage * pengawasPerPage;
-  const indexOfFirstPengawas = indexOfLastPengawas - pengawasPerPage;
-  const currentPengawas = filteredPengawas.slice(
-    indexOfFirstPengawas,
-    indexOfLastPengawas
+  const indexOfLastPenghulu = currentPage * PenghuluPerPage;
+  const indexOfFirstPenghulu = indexOfLastPenghulu - PenghuluPerPage;
+  const currentPenghulu = filteredPenghulu.slice(
+    indexOfFirstPenghulu,
+    indexOfLastPenghulu
   );
 
   // Delete function
-  const hapusPengawas = async (id) => {
+  const hapusPenghulu = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/peta/${id}`);
-      getPengawas();
+      await axios.delete(`http://localhost:5000/penghulu/${id}`);
+      getPenghulu();
     } catch (error) {
       console.log(error);
     }
@@ -74,45 +61,39 @@ const PetaKepengawasan = () => {
 
   // Export to Excel
   const downloadExcel = () => {
-    const dataToExport = currentPengawas.map((item, index) => ({
-      No: (currentPage - 1) * pengawasPerPage + index + 1,
-      "Nama Pegawai": item.Pegawai.nama_pegawai,
-      "Jenis Pengawas": item.jenis_pengawas,
-      Jabatan: item.Pegawai.jabatan,
-      "Satuan Kerja":  item.Pegawai.satuan_kerja,
-      "Wilayah Pengawas": item.wilayamengawas
-        .map((item) => item.nama_wilayah)
-        .join(", "),
+    const dataToExport = currentPenghulu.map((item, index) => ({
+      No: (currentPage - 1) * PenghuluPerPage + index + 1,
+
+      Kecamatan: item.Kecamatan.nama_kecamatan,
+      Desa: item.nama_desa,
+      "Jumlah Santri": item.jumlah_santri,
+      "Jumlah Santriwati": item.jumlah_santriwati,
+      "Jumlah Ustad": item.jumlah_ustad,
+      "Jumlah Ustadzah": item.jumlah_ustadzah,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "DataPengawas");
-    XLSX.writeFile(workbook, "DataPengawas.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataPenghulu");
+    XLSX.writeFile(workbook, "DataPenghulu.xlsx");
   };
 
   return (
     <div className="contain">
       {openModalAdd && (
-        <AddPengawasModal
+        <AddPenghuluModal
           setIsOpenModalAdd={setOpenModalAdd}
-          getDataPengawas={getPengawas}
+          getPenghulu={getPenghulu}
         />
       )}
-      {openModalInfo && (
-        <InfoPengawasModal
-          setIsOpenModalAdd={setOpenModalInfo}
-          Pengawas={pengawasData}
-        />
-      )}
-      <h1 className="judul">Peta Kepengawasan</h1>
+      <h1 className="judul">Data Penghulu</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Pengawas
+            Tambah Penghulu
           </button>
           <button
             onClick={downloadExcel}
@@ -137,7 +118,7 @@ const PetaKepengawasan = () => {
           <input
             type="text"
             className="input"
-            placeholder="Cari Nama Pegawai"
+            placeholder="Cari Nama Kecamatan"
             value={searchText}
             onChange={handleSearchChange}
           />
@@ -150,44 +131,37 @@ const PetaKepengawasan = () => {
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
               <th className="py-3 px-6 text-left">NIP</th>
-              <th className="py-3 px-6 text-left">Nama Pegawai</th>
-              <th className="py-3 px-6 text-left">Jenis Pengawas</th>
+              <th className="py-3 px-6 text-left">Nama Penghulu</th>
               <th className="py-3 px-6 text-left">Jabatan</th>
-              <th className="py-3 px-6 text-center">Wilayah Mengawas</th>
+              <th className="py-3 px-6 text-left">Satker</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {currentPengawas.map((item, index) => (
+            {currentPenghulu.map((item, index) => (
               <tr
                 key={item.id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">
-                  {(currentPage - 1) * pengawasPerPage + index + 1}
+                  {(currentPage - 1) * PenghuluPerPage + index + 1}
                 </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.Pegawai && item.Pegawai.NIP}
-                </td>
+                  <td className="py-3 px-6 text-left">
+                    {item && item.id_pegawai}
+                  </td>
                 <td className="py-3 px-6 text-left">
                   {item && item.Pegawai && item.Pegawai.nama_pegawai}
                 </td>
-                <td className="py-3 px-6 text-left">{item.jenis_pengawas}</td>
                 <td className="py-3 px-6 text-left">
                   {item && item.Pegawai && item.Pegawai.jabatan}
                 </td>
-                <td className="py-3 px-6 text-center">
-                  <button
-                    className="input text-center"
-                    onClick={() => lihatModal(item)}
-                  >
-                    Lihat
-                  </button>
+                <td className="py-3 px-6 text-left">
+                  {item && item.Pegawai && item.Pegawai.satuan_kerja}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <button
                     className="delete"
-                    onClick={() => hapusPengawas(item.id)}
+                    onClick={() => hapusPenghulu(item.id)}
                     title="Hapus"
                   >
                     <MdDelete color="white" />
@@ -201,7 +175,7 @@ const PetaKepengawasan = () => {
       <nav className="flex justify-center mt-4">
         <ul className="pagination">
           {Array.from(
-            { length: Math.ceil(filteredPengawas.length / pengawasPerPage) },
+            { length: Math.ceil(filteredPenghulu.length / PenghuluPerPage) },
             (_, i) => i + 1
           ).map((number) => (
             <li key={number}>
@@ -223,4 +197,4 @@ const PetaKepengawasan = () => {
   );
 };
 
-export default PetaKepengawasan;
+export default DataPenghulu;

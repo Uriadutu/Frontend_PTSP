@@ -3,9 +3,9 @@ import Layout from "../Layout"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../../features/authSlice";
-import DetailPenyuluIslam from "../../component/Saria/DetailPenyuluhIslam";
+import Menejerial from "../../component/Sidika/Menejerial";
 
-const DetailPenyuluhIslamPage = () => {
+const MenejerialPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isError } = useSelector((state) => state.auth);
@@ -15,15 +15,15 @@ const DetailPenyuluhIslamPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError || user?.hakAkses?.saria === false) {
+    if (isError || user?.hakAkses?.sidika === false) {
       navigate("/dashboard");
     }
   }, [isError, user, navigate]);
   return (
     <Layout>
-      <DetailPenyuluIslam />
+      <Menejerial />
     </Layout>
   );
 };
 
-export default DetailPenyuluhIslamPage;
+export default MenejerialPage;

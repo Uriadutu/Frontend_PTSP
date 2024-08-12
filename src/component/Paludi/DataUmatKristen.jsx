@@ -152,8 +152,6 @@ const DataUmatKristen = () => {
               <th className="py-3 px-6 text-left">Nama Pimpinan Gereja</th>
               <th className="py-3 px-6 text-left">Denominasi</th>
               <th className="py-3 px-6 text-left">Jumlah Umat</th>
-              <th className="py-3 px-6 text-left">Jumlah Pria</th>
-              <th className="py-3 px-6 text-left">Jumlah Wanita</th>
               <th className="py-3 px-6 text-left">Alamat</th>
               <th className="py-3 px-6 text-left">Aksi</th>
             </tr>
@@ -178,12 +176,6 @@ const DataUmatKristen = () => {
                 </td>
                 <td className="py-3 px-6 text-left">
                   {item && item.jumlah_umat}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.jumlah_pria}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.jumlah_wanita}
                 </td>
                 <td className="py-3 px-6 text-left">
                   {item && item.nama_desa} - {item && item.kecamatan}
