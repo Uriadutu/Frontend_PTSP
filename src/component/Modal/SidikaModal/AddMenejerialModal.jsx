@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
+const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
   const [idPegawai, setIdPegawai] = useState("");
-  const [pegawaiId, setPegawaiId] = useState(""); // State baru untuk menyimpan id pegawai
+  const [idPengawas, setIdPengawas] = useState("");
+  const [namaPegawai, setNamaPegawai] = useState("");
   const [filteredPegawai, setFilteredPegawai] = useState([]);
   const [pegawai, setPegawai] = useState([]);
-  const [namaSekolah, setNamaSekolah] = useState("");
-  const [filteredSekolah, setFilteredSekolah] = useState([]);
-  const [sekolah, setSekolah] = useState([]);
-  const [statusAkasemik, setStatusAkademik] = useState("");
+  const [filteredWilayah, setFilteredWilayah] = useState([]);
+  const [statusPegawai, setStatusPegawai] = useState("");
   const [keterangan, setKeterangan] = useState("");
-  const [jumlahPeserta, setJumlahPeserta] = useState(0);
-
+  const [statusSertifikat, setStatusSertifikat] = useState(0);
   const [msg, setMsg] = useState("");
-  console.log(sekolah, "data");
-  
+  const [namaSekolah, setNamaSekolah] = useState("");
+  const [dataSekolah, setDataSekolah] = useState({});
+  const [isFocused, setIsFocused] = useState(false);
+
 
   const getPegawai = async () => {
     try {
@@ -26,13 +26,51 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
     }
   };
 
-  const getSekolah = async () => {
+  const getPengawasAndWilayah = async (id) => {
     try {
-      const [responseKristen, responseUmum] = await Promise.all([
-        axios.get("http://localhost:5000/sekolah-kristen"),
-        axios.get("http://localhost:5000/sekolah"),
+      const responsePengawas = await axios.get(
+        `http://localhost:5000/peta/pengawas/${id}`
+      );
+      setIdPengawas(responsePengawas.data.id);
+      setNamaPegawai(responsePengawas.data.Pegawai.nama_pegawai);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSekolahByNama = async (nama) => {
+    try {
+      const [responseKristen, responseIslam] = await Promise.all([
+        axios.get(`http://localhost:5000/sekolah-kristen/nama/${nama}`),
+        axios.get(`http://localhost:5000/sekolah/nama/${nama}`),
       ]);
-      setSekolah([...responseKristen.data, ...responseUmum.data]);
+
+      // Memastikan data adalah array, jika tidak, jadikan array
+      const dataKristen = Array.isArray(responseKristen.data)
+        ? responseKristen.data
+        : [responseKristen.data];
+      const dataIslam = Array.isArray(responseIslam.data)
+        ? responseIslam.data
+        : [responseIslam.data];
+
+      // Menggabungkan hasil dari kedua permintaan
+      const combinedData = [...dataKristen, ...dataIslam];
+
+      // Memeriksa apakah ada sekolah dengan nama tersebut dan mengambil data pertama
+      const sekolah = combinedData.length > 0 ? combinedData[0] : {};
+      setDataSekolah(sekolah);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const getWilayahPengawas = async (id) => {
+    try {
+      const responseWilayah = await axios.get(
+        `http://localhost:5000/peta/wilayah/${id}`
+      );
+      setFilteredWilayah(responseWilayah.data);
     } catch (error) {
       console.log(error);
     }
@@ -40,26 +78,13 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
 
   useEffect(() => {
     getPegawai();
-    getSekolah();
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:5000/akademik", {
-        id_pegawai: pegawaiId, // Kirim pegawaiId ke backend
-        nama_sekolah: namaSekolah,
-        status_akademik: statusAkasemik,
-        jumlah_peserta: jumlahPeserta,
-        keterangan : keterangan ? keterangan : "-",
-      });
-      setIsOpenModalAdd(false);
-      getAkademik();
-    } catch (error) {
-      console.error("Failed to add Akademik:", error);
-      setMsg(error.response.data.msg);
+    if (idPengawas) {
+      getWilayahPengawas(idPengawas);
     }
-  };
+    if (namaSekolah) {
+      getSekolahByNama(namaSekolah);
+    }
+  }, [idPengawas, namaSekolah]);
 
   useEffect(() => {
     if (idPegawai.trim() !== "") {
@@ -72,27 +97,43 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
     }
   }, [idPegawai, pegawai]);
 
-  useEffect(() => {
-    if (namaSekolah.trim() !== "") {
-      const filtered = sekolah.filter((item) =>
-        item.nama_sekolah.toLowerCase().startsWith(namaSekolah.toLowerCase())
-      );
-      setFilteredSekolah(filtered);
-    } else {
-      setFilteredSekolah([]);
-    }
-  }, [namaSekolah, sekolah]);
-
   const handleSelectNIP = (selectedNIP, id) => {
     setIdPegawai(selectedNIP);
-    setPegawaiId(id); // Simpan id pegawai yang dipilih
-    setFilteredPegawai([]); // Clear suggestions after selection
+    getPengawasAndWilayah(id);
+    setFilteredPegawai([]);
+    setIsFocused(false);
   };
 
-  const handleSelectSekolah = (selectedSekolah) => {
-    setNamaSekolah(selectedSekolah);
-    setFilteredSekolah([]); // Clear suggestions after selection
+  const handleBlur = () => {
+    if (idPegawai) {
+      const selectedPegawai = pegawai.find(
+        (item) => item.Pegawai.NIP === idPegawai
+      );
+      if (selectedPegawai) {
+        handleSelectNIP(idPegawai, selectedPegawai.Pegawai.id);
+      }
+    }
   };
+
+  const handleSaveMenejerial = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:5000/menejerial", {
+        id_pegawai: idPegawai, // Kirim pegawaiId ke backend
+        nama_sekolah: namaSekolah,
+        nama_kepsek: dataSekolah.nama_kepsek,
+        status_sertifikat: statusSertifikat,
+        status_pegawai: statusPegawai ,
+        keterangan : keterangan ? keterangan : "-",
+      });
+      setIsOpenModalAdd(false);
+      getAkademik();
+    } catch (error) {
+      console.error("Failed to add Akademik:", error);
+      setMsg(error.response.data.msg);
+    }
+  } 
 
   return (
     <div
@@ -102,7 +143,7 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
       className="fixed inset-0 flex items-center justify-center bg-gray-500 z-top bg-opacity-30"
     >
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSaveMenejerial}
         className="bg-white rounded-lg shadow-lg inline"
       >
         <div className="">
@@ -146,18 +187,20 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
                     className="input w-full"
                     value={idPegawai}
                     onChange={(e) => setIdPegawai(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={handleBlur}
                     required
                   />
-                  {filteredPegawai.length > 0 && (
+                  {isFocused && filteredPegawai?.length > 0 && (
                     <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
                       {filteredPegawai.map((item, index) => (
                         <li
                           key={index}
                           className="p-2 hover:bg-gray-200 cursor-pointer"
-                          onClick={() =>
+                          onMouseDown={() =>
                             handleSelectNIP(
                               item?.Pegawai?.NIP,
-                              item?.Pegawai?.id // Set id pegawai di sini
+                              item?.Pegawai?.id
                             )
                           }
                         >
@@ -170,70 +213,92 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
               </div>
               <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
                 <label className="text-gray-700 font-medium">
-                  Nama Sekolah:
+                  Nama Pengawas:
                 </label>
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="input w-full"
-                    value={namaSekolah}
-                    onChange={(e) => setNamaSekolah(e.target.value)}
-                    required
-                  />
-                  {filteredSekolah.length > 0 && (
-                    <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
-                      {filteredSekolah.map((item, index) => (
-                        <li
-                          key={index}
-                          className="p-2 hover:bg-gray-200 cursor-pointer"
-                          onClick={() => handleSelectSekolah(item.nama_sekolah)}
-                        >
-                          {item.nama_sekolah}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <input
+                  type="text"
+                  className="input w-full"
+                  value={namaPegawai}
+                  disabled
+                />
               </div>
               <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
                 <label className="text-gray-700 font-medium">
-                  Status Akademik:
+                  Nama Sekolah:
+                </label>
+                <select
+                  className="input w-full"
+                  value={namaSekolah}
+                  onChange={(e) => setNamaSekolah(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Pilih Nama Sekolah
+                  </option>
+                  {filteredWilayah?.length > 0 &&
+                    filteredWilayah.map((item) => (
+                      <option key={item.id} value={item.nama_wilayah}>
+                        {item.nama_wilayah}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
+                <label className="text-gray-700 font-medium">
+                  Nama Kepala Sekolah:
+                </label>
+                <input
+                  type="text"
+                  className="input w-full"
+                  value={dataSekolah?.nama_kepsek || ""}
+                  disabled
+                />
+              </div>
+              <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
+                <label className="text-gray-700 font-medium">
+                  Sertifikat Kumad
                 </label>
                 <select
                   type="text"
                   className="input w-full"
-                  value={statusAkasemik}
-                  onChange={(e) => setStatusAkademik(e.target.value)}
+                  value={statusSertifikat}
+                  onChange={(e) => setStatusSertifikat(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Pilih Status
+                  </option>
+                  <option value="Belum">Belum</option>
+                  <option value="Sudah">Sudah</option>
+                </select>
+              </div>
+              <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
+                <label className="text-gray-700 font-medium">
+                  Status Pegawai:
+                </label>
+                <select
+                  type="text"
+                  className="input w-full"
+                  value={statusPegawai}
+                  onChange={(e) => setStatusPegawai(e.target.value)}
                   required
                 >
                   <option value="" disabled>
                     Pilih Status
                   </option>
-                  <option value="Berkala">Berkala</option>
-                  <option value="Non Berkala">Non Berkala</option>
+                  <option value="PNS">PNS</option>
+                  <option value="Non PNS">Non PNS</option>
                 </select>
               </div>
-              <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
-                <label className="text-gray-700 font-medium">
-                  Jumlah Peserta :
-                </label>
-                <input
-                  type="number"
-                  className="input w-full"
-                  value={jumlahPeserta}
-                  onChange={(e) => setJumlahPeserta(e.target.value)}
-                  required
-                />
-              </div>
+
               <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
                 <label className="text-gray-700 font-medium">Keterangan:</label>
                 <textarea
+                  type="text"
                   className="input w-full"
                   value={keterangan}
                   onChange={(e) => setKeterangan(e.target.value)}
-                //   required
                 />
               </div>
+              <p className="text-red-700 my-2">{msg}</p>
             </div>
             <div className="flex items-center justify-between p-4 space-x-3 border-t border-gray-200 rounded-b">
               <h1>{msg}</h1>
@@ -257,4 +322,4 @@ const AddAkademikModal = ({ setIsOpenModalAdd, getAkademik }) => {
   );
 };
 
-export default AddAkademikModal;
+export default AddMenejerialModal;

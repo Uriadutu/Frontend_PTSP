@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AddJabatanModal from "../Modal/LapasiModal/AddJabatan";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import JabatanPDF from "../../Export/LapasiExport/JabatanPDF";
 
 const DataJabatan = () => {
   const [jabatan, setJabatan] = useState([]);
@@ -11,7 +13,8 @@ const DataJabatan = () => {
   const [openModal, setOpenModal] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [jabatanPerPage] = useState(10);
+  const [jabatanPerPage, setJabatanPerPage] = useState(10); // State for per page items
+  const ComponentToPDF = useRef();
 
   const getJabatan = async () => {
     try {
@@ -28,7 +31,9 @@ const DataJabatan = () => {
 
   useEffect(() => {
     filterAndPaginateJabatan();
-  }, [jabatan, searchText, currentPage]);
+  }, [jabatan, searchText, currentPage, jabatanPerPage]);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const filterAndPaginateJabatan = () => {
     const lowerCaseSearchText = searchText.toLowerCase();
@@ -79,6 +84,11 @@ const DataJabatan = () => {
     XLSX.writeFile(workbook, "DataJabatan.xlsx");
   };
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataJabatan.pdf`,
+  });
+
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(jabatan.length / jabatanPerPage); i++) {
     pageNumbers.push(i);
@@ -92,6 +102,10 @@ const DataJabatan = () => {
           setIsOpenModalAdd={setOpenModal}
         />
       )}
+      {/* This component will be printed to PDF */}
+      <div style={{ display: "none" }}>
+        <JabatanPDF ref={ComponentToPDF} jabatan={jabatan} />
+      </div>
       <div className="judul">Data Jabatan</div>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -107,6 +121,9 @@ const DataJabatan = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn-add sm:hidden block"
@@ -119,8 +136,11 @@ const DataJabatan = () => {
           >
             <IoDocument color="white" />
           </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
+            <IoDocument color="white" />
+          </button>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
           <input
             type="text"
             className="input"
@@ -128,6 +148,20 @@ const DataJabatan = () => {
             value={searchText}
             onChange={handleSearchChange}
           />
+          {/* Dropdown for items per page */}
+          <select
+            value={jabatanPerPage}
+            onChange={(e) => {
+              setJabatanPerPage(Number(e.target.value));
+              setCurrentPage(1); // Reset to first page on change
+            }}
+            className="p-2 border border-gray-300 rounded"
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
         </div>
       </div>
       <div className="overflow-x-auto mt-2">
@@ -146,43 +180,43 @@ const DataJabatan = () => {
                 key={index}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
-                <td className="py-3 px-6 text-left">
-                  {(currentPage - 1) * jabatanPerPage + index + 1}
+                <td className="py-3 px-6 text-left whitespace-nowrap">
+                  {index + 1}
                 </td>
                 <td className="py-3 px-6 text-left">{item.kode_jabatan}</td>
                 <td className="py-3 px-6 text-left">{item.nama_jabatan}</td>
                 <td className="py-3 px-6 text-left">
                   <button
-                    className="delete"
-                    onClick={() => hapusJabatan(item.id)}
-                    title="Hapus"
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => hapusJabatan(item.id_jabatan)}
                   >
-                    <MdDelete color="white" />
+                    <MdDelete size={20} />
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* Pagination */}
+        <nav className="flex justify-center mt-4">
+          <ul className="flex space-x-2">
+            {pageNumbers.map((number) => (
+              <li key={number}>
+                <button
+                  onClick={() => paginate(number)}
+                  className={`px-3 py-1 rounded ${
+                    currentPage === number
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  {number}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
-      <nav className="flex justify-center mt-4">
-        <ul className="flex space-x-2">
-          {pageNumbers.map((number) => (
-            <li key={number}>
-              <button
-                onClick={() => handlePageChange(number)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === number
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {number}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </div>
   );
 };

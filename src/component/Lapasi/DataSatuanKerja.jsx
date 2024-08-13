@@ -11,7 +11,7 @@ const DataSatuanKerja = () => {
   const [filteredSatker, setFilteredSatker] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [satkerPerPage] = useState(10);
+  const [satkerPerPage, setSatkerPerPage] = useState(10);
 
   const getSatker = async () => {
     try {
@@ -38,6 +38,11 @@ const DataSatuanKerja = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleSatkerPerPageChange = (e) => {
+    setSatkerPerPage(parseInt(e.target.value));
+    setCurrentPage(1); // Reset to first page on per page change
   };
 
   const downloadExcel = () => {
@@ -75,7 +80,7 @@ const DataSatuanKerja = () => {
 
   useEffect(() => {
     filterAndPaginateSatker();
-  }, [satker, searchText, currentPage]);
+  }, [satker, searchText, currentPage, satkerPerPage]);
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(satker.length / satkerPerPage); i++) {
@@ -126,6 +131,16 @@ const DataSatuanKerja = () => {
             value={searchText}
             onChange={handleSearchChange}
           />
+          <select
+            className="ml-4 input"
+            value={satkerPerPage}
+            onChange={handleSatkerPerPageChange}
+          >
+            <option value={10}>10 </option>
+            <option value={25}>25</option>
+            <option value={50}>50 </option>
+            <option value={100}>100 </option>
+          </select>
         </div>
       </div>
       <div className="overflow-x-auto mt-2">
@@ -142,25 +157,19 @@ const DataSatuanKerja = () => {
           <tbody className="text-gray-600 text-sm font-light">
             {filteredSatker.map((item, index) => (
               <tr
-                key={index}
+                key={item.id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">
                   {(currentPage - 1) * satkerPerPage + index + 1}
                 </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.kode_satker}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.nama_satker}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {item && item.alamat_satker}
-                </td>
+                <td className="py-3 px-6 text-left">{item.kode_satker}</td>
+                <td className="py-3 px-6 text-left">{item.nama_satker}</td>
+                <td className="py-3 px-6 text-left">{item.alamat_satker}</td>
                 <td className="py-3 px-6 text-left">
                   <button
                     className="delete"
-                    onClick={() => hapusSatker(item && item.id)}
+                    onClick={() => hapusSatker(item.id)}
                     title="Hapus"
                   >
                     <MdDelete color="white" />

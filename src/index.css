@@ -34,6 +34,10 @@
     
     @apply px-3 py-2 mb-0 bg-green-500 text-white font-semibold text-sm rounded-md shadow-md hover:bg-green-600 transition duration-300;
 }
+.btn-pdf {
+    
+    @apply px-3 py-2 mb-0 bg-red-500 text-white font-semibold text-sm rounded-md shadow-md hover:bg-red-600 transition duration-300;
+}
 
 .contain {
     @apply p-6 pt-2 px-2 sm:px-0 sm:pr-2 min-h-screen w-full;
