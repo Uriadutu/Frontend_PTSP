@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ModalAddSatker from "../Modal/LapasiModal/AddSatker";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import * as XLSX from "xlsx";
+import SatuanKerjaPDF from "../../Export/LapasiExport/SatuanKerjaPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataSatuanKerja = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -12,6 +14,7 @@ const DataSatuanKerja = () => {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [satkerPerPage, setSatkerPerPage] = useState(10);
+  const ComponentToPDF = useRef();
 
   const getSatker = async () => {
     try {
@@ -74,6 +77,11 @@ const DataSatuanKerja = () => {
     setFilteredSatker(currentSatker);
   };
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataSatuanKerja.pdf`,
+  });
+
   useEffect(() => {
     getSatker();
   }, []);
@@ -95,6 +103,9 @@ const DataSatuanKerja = () => {
           getSatker={getSatker}
         />
       )}
+      <div style={{ display: "none" }}>
+        <SatuanKerjaPDF ref={ComponentToPDF} satker={satker} />
+      </div>
       <h1 className="judul">Data Satuan Kerja</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -102,13 +113,16 @@ const DataSatuanKerja = () => {
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Satker
+            Tambah Jabatan
           </button>
           <button
             onClick={downloadExcel}
             className="btn-download hidden sm:block"
           >
             Export ke Excel
+          </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
           </button>
           <button
             onClick={() => setOpenModalAdd(true)}
@@ -120,6 +134,9 @@ const DataSatuanKerja = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -137,7 +154,7 @@ const DataSatuanKerja = () => {
             onChange={handleSatkerPerPageChange}
           >
             <option value={10}>10 </option>
-            <option value={25}>25</option>
+            <option value={20}>20</option>
             <option value={50}>50 </option>
             <option value={100}>100 </option>
           </select>

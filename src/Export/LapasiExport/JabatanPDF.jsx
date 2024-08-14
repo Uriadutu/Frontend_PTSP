@@ -23,13 +23,15 @@ const JabatanPDF = React.forwardRef(({ jabatan }, ref) => {
       </div>
       <h1 className="text-center mb-2">DATA JABATAN</h1>
       <div className="mt-4">
-        <h1 className="text-left mb-1">Layanan Profesional Administrasi (Lapasi)</h1>
-        <h1 className="text-left mb-2">
+        <h1 className="text-left mb-1">
+          Layanan Profesional Administrasi (Lapasi)
+        </h1>
+        <h1 className="text-left">
           Tanggal{" "}
           <span className="ml-4">: {new Date().toLocaleDateString()}</span>
         </h1>
       </div>
-      <table className="w-full border-collapse text-sm">
+      <table className="w-full print:mt-5 border-collapse text-sm mt-6">
         <thead>
           <tr>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
@@ -45,17 +47,19 @@ const JabatanPDF = React.forwardRef(({ jabatan }, ref) => {
         </thead>
         <tbody>
           {jabatan.map((item, index) => (
-            <tr key={index}>
-              <td className="border border-gray-300 p-2 text-left">
-                {index + 1}
-              </td>
-              <td className="border border-gray-300 p-2 text-left">
-                {item.kode_jabatan}
-              </td>
-              <td className="border border-gray-300 p-2 text-left">
-                {item.nama_jabatan}
-              </td>
-            </tr>
+            <React.Fragment key={index}>
+              <tr>
+                <td className="border border-gray-300 p-2 text-left">
+                  {index + 1}
+                </td>
+                <td className="border border-gray-300 p-2 text-left">
+                  {item.kode_jabatan}
+                </td>
+                <td className="border border-gray-300 p-2 text-left">
+                  {item.nama_jabatan}
+                </td>
+              </tr>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

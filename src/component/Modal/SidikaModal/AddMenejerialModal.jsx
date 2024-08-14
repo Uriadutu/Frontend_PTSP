@@ -45,7 +45,6 @@ const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
         axios.get(`http://localhost:5000/sekolah/nama/${nama}`),
       ]);
 
-      // Memastikan data adalah array, jika tidak, jadikan array
       const dataKristen = Array.isArray(responseKristen.data)
         ? responseKristen.data
         : [responseKristen.data];
@@ -89,7 +88,7 @@ const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
   useEffect(() => {
     if (idPegawai.trim() !== "") {
       const filtered = pegawai.filter((item) =>
-        item.Pegawai.NIP.toLowerCase().startsWith(idPegawai.toLowerCase())
+        item?.Pegawai?.NIP.toLowerCase().startsWith(idPegawai.toLowerCase())
       );
       setFilteredPegawai(filtered);
     } else {
@@ -107,7 +106,7 @@ const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
   const handleBlur = () => {
     if (idPegawai) {
       const selectedPegawai = pegawai.find(
-        (item) => item.Pegawai.NIP === idPegawai
+        (item) => item?.Pegawai?.NIP === idPegawai
       );
       if (selectedPegawai) {
         handleSelectNIP(idPegawai, selectedPegawai.Pegawai.id);
@@ -122,7 +121,7 @@ const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
       await axios.post("http://localhost:5000/menejerial", {
         id_pegawai: idPegawai, // Kirim pegawaiId ke backend
         nama_sekolah: namaSekolah,
-        nama_kepsek: dataSekolah.nama_kepsek,
+        nama_kepsek: dataSekolah?.nama_kepsek,
         status_sertifikat: statusSertifikat,
         status_pegawai: statusPegawai ,
         keterangan : keterangan ? keterangan : "-",
@@ -249,7 +248,7 @@ const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
                 <input
                   type="text"
                   className="input w-full"
-                  value={dataSekolah?.nama_kepsek || ""}
+                  value={dataSekolah?.nama_kepsek}
                   disabled
                 />
               </div>

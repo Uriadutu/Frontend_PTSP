@@ -15,7 +15,7 @@ const DataPegawai = () => {
   const [selectedPegawai, setSelectedPegawai] = useState({});
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pegawaiPerPage] = useState(10);
+  const [pegawaiPerPage, setPegawaiPerPage] = useState(10);
   const navigate = useNavigate();
 
   const getPegawai = async () => {
@@ -134,13 +134,18 @@ const DataPegawai = () => {
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Pegawai
+            Tambah Jabatan
           </button>
           <button
-            onClick={downloadExcel}
+            // onClick={downloadExcel}
             className="btn-download hidden sm:block"
           >
             Export ke Excel
+          </button>
+          <button 
+          // onClick={printPDF}
+           className="btn-pdf hidden sm:block">
+            Print PDF
           </button>
           <button
             onClick={() => setOpenModalAdd(true)}
@@ -149,13 +154,18 @@ const DataPegawai = () => {
             <IoAdd color="white" />
           </button>
           <button
-            onClick={downloadExcel}
+            // onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
             <IoDocument color="white" />
           </button>
+          <button 
+          // onClick={printPDF}                 
+          className="btn-pdf sm:hidden block">
+            <IoDocument color="white" />
+          </button>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex gap-2 items-center">
           <input
             type="text"
             className="input"
@@ -163,6 +173,19 @@ const DataPegawai = () => {
             value={searchText}
             onChange={handleSearchChange}
           />
+          <select
+            value={pegawaiPerPage}
+            onChange={(e) => {
+              setPegawaiPerPage(Number(e.target.value));
+              setCurrentPage(1); // Reset to first page on change
+            }}
+            className="p-2 border border-gray-300 rounded"
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
         </div>
       </div>
       <div className="overflow-x-auto mt-2">

@@ -10,7 +10,7 @@ const Akademik = () => {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
 
   const getAkademik = async () => {
     try {
@@ -37,6 +37,8 @@ const Akademik = () => {
   const downloadExcel = () => {
     const dataToExport = dataAkademik.map((item, index) => ({
       No: index + 1,
+      NIP: item && item.Pegawai && item.Pegawai.NIP,
+      "Nama Pengawas": item && item.Pegawai && item.Pegawai.nama_pegawai,
       "Nama Sekolah": item.nama_sekolah,
       "Status Akademik": item.status_akademik,
       "Jumlah Peserta": item.jumlah_peserta,
@@ -76,8 +78,9 @@ const Akademik = () => {
     <div className="contain">
       {openModal && (
         <AddAkademikModal
-        getAkademik={getAkademik}
-        setIsOpenModalAdd={setOpenModal}/>
+          getAkademik={getAkademik}
+          setIsOpenModalAdd={setOpenModal}
+        />
       )}
       <h1 className="judul">Pendampingan Akademik</h1>
       <div className="flex justify-between mb-4">
@@ -122,6 +125,8 @@ const Akademik = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
+              <th className="py-3 px-6 text-left">NIP</th>
+              <th className="py-3 px-6 text-left">Nama Pengawas</th>
               <th className="py-3 px-6 text-left">Nama Sekolah</th>
               <th className="py-3 px-6 text-left">Status Akademik</th>
               <th className="py-3 px-6 text-left">Jumlah Peserta</th>
@@ -137,6 +142,12 @@ const Akademik = () => {
               >
                 <td className="py-3 px-6 text-left">
                   {indexOfFirstItem + index + 1}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.Pegawai && item.Pegawai.NIP}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.Pegawai && item.Pegawai.nama_pegawai}
                 </td>
                 <td className="py-3 px-6 text-left">{item.nama_sekolah}</td>
                 <td className="py-3 px-6 text-left">{item.status_akademik}</td>

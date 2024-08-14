@@ -90,7 +90,10 @@ const Sidebar = ({ tutupSidebar }) => {
           {/* lapasi */}
           {(user?.role === "Admin" || user?.hakAkses?.lapasi === true) && (
             <div className="">
-              <div className="relative">
+              <div
+                className="relative"
+                title="Layanan Profesional Administrasi"
+              >
                 <button
                   className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                   onClick={() => toggleDropdown("lapasi")}
@@ -152,6 +155,7 @@ const Sidebar = ({ tutupSidebar }) => {
                 to="https://srikandi.arsip.go.id/auth/login"
                 className={getNavLinkClass}
                 target="_blank"
+                title="Pelayanan Bersama Organisasi"
               >
                 Pabos (Sekretariat)
               </NavLink>
@@ -160,7 +164,10 @@ const Sidebar = ({ tutupSidebar }) => {
 
           {/* pantai-disa */}
           {(user?.role === "Admin" || user?.hakAkses?.pantai_disa === true) && (
-            <div className="relative">
+            <div
+              className="relative"
+              title="Pantau Inovasi Digitalisasi Satker"
+            >
               <button
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("pantaiDisa")}
@@ -222,7 +229,7 @@ const Sidebar = ({ tutupSidebar }) => {
 
           {/* akusahu */}
           {(user?.role === "Admin" || user?.hakAkses?.aksesahu === true) && (
-            <div className="relative">
+            <div className="relative" title="Akselerasi Syarat Haji dan Umrah">
               <button
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("akesahu")}
@@ -272,7 +279,7 @@ const Sidebar = ({ tutupSidebar }) => {
 
           {/* saria */}
           {(user?.role === "Admin" || user?.hakAkses?.saria === true) && (
-            <div className="relative">
+            <div className="relative" title="Sarana Informasi Agama">
               <button
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("saria")}
@@ -354,7 +361,10 @@ const Sidebar = ({ tutupSidebar }) => {
           )}
           {/* paludi */}
           {(user?.role === "Admin" || user?.hakAkses?.paludi === true) && (
-            <div className="relative">
+            <div
+              className="relative"
+              title="Pembinaan Agama pada Lembaga dan Pendidikan"
+            >
               <button
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("paludi")}
@@ -447,7 +457,7 @@ const Sidebar = ({ tutupSidebar }) => {
 
           {/* sahu */}
           {(user?.role === "Admin" || user?.hakAkses?.sahu === true) && (
-            <div className="relative">
+            <div className="relative" title="Santun Amanah dan Humanis">
               <button
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("sahu")}
@@ -503,6 +513,7 @@ const Sidebar = ({ tutupSidebar }) => {
           {(user?.role === "Admin" || user?.hakAkses?.sidika === true) && (
             <div className="relative">
               <button
+                title="Sistim Digitalisasi Kepengawasan"
                 className="flex items-center justify-between w-full p-3 pl-10 hover:bg-gray-200"
                 onClick={() => toggleDropdown("sidika")}
               >

@@ -21,7 +21,7 @@ const SatuanKerjaPDF = React.forwardRef(({ satker }, ref) => {
           </div>
         </div>
       </div>
-      <h1 className="text-center mb-2">DATA Satuan Kerja</h1>
+      <h1 className="text-center mb-2">DATA SATUAN KERJA</h1>
       <div className="mt-4">
         <h1 className="text-left mb-1">
           Layanan Profesional Administrasi (Lapasi)
