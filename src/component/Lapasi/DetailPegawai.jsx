@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import dayjs from "dayjs";
 
 const DetailPegawai = () => {
   const [pegawaiData, setPegawaiData] = useState(null);
-  const [masaKerja, setMasaKerja] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -15,34 +13,47 @@ const DetailPegawai = () => {
         `http://localhost:5000/pegawai/${idPegawai}`
       );
       setPegawaiData(response.data);
-      calculateMasaKerja(response.data.tmt_pengangkatan);
     } catch (error) {
       console.error("Error fetching Pegawai data:", error);
     }
   };
 
-  const calculateMasaKerja = (tmtPengangkatan) => {
-    const tmtDate = dayjs(tmtPengangkatan);
-    const now = dayjs();
-    let diffYears = now.diff(tmtDate, "year");
-    tmtDate.add(diffYears, "year");
-    let diffMonths = now.diff(tmtDate, "month");
+ const hitungMasaKerja = (tmt_pengangkatan) => {
+    if (!tmt_pengangkatan) return "";
 
-    if (diffMonths >= 12) {
-      const extraYears = Math.floor(diffMonths / 12);
-      diffYears += extraYears;
-      diffMonths %= 12;
+    const today = new Date();
+    const tmtDate = new Date(tmt_pengangkatan);
+
+    let years = today.getFullYear() - tmtDate.getFullYear();
+    let months = today.getMonth() - tmtDate.getMonth();
+    let days = today.getDate() - tmtDate.getDate();
+
+    if (months < 0) {
+      years--;
+      months += 12;
     }
 
-    let result = "";
-    if (diffYears > 0) {
-      result += `${diffYears} tahun `;
-    }
-    if (diffMonths > 0) {
-      result += `${diffMonths} bulan`;
+    if (days < 0) {
+      months--;
+      let prevMonth = today.getMonth() === 0 ? 11 : today.getMonth() - 1;
+      let prevMonthDays = new Date(
+        today.getFullYear(),
+        prevMonth + 1,
+        0
+      ).getDate();
+      days += prevMonthDays;
     }
 
-    setMasaKerja(result.trim());
+    let weeks = Math.floor(days / 7);
+    days = days % 7;
+
+    let masaKerjaArray = [];
+    if (years > 0) masaKerjaArray.push(`${years} tahun`);
+    if (months > 0) masaKerjaArray.push(`${months} bulan`);
+    if (weeks > 0) masaKerjaArray.push(`${weeks} minggu`);
+    if (days > 0) masaKerjaArray.push(`${days} hari`);
+
+    return masaKerjaArray.join(" ");
   };
 
   useEffect(() => {
@@ -90,7 +101,7 @@ const DetailPegawai = () => {
         </div>
         <div>
           <strong>Masa Kerja:</strong>
-          <p>{masaKerja}</p>
+          <p>{hitungMasaKerja(pegawaiData.tmt_pengangkatan)}</p>
         </div>
         <div>
           <strong>TMT Pensiun:</strong>

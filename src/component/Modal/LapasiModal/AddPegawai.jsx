@@ -20,6 +20,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
   const [TanggalLahir, setTanggalLahir] = useState("");
   const [Agama, setAgama] = useState("");
   const [SatuanKerja, setSatuanKerja] = useState("");
+  const [msg, setMsg] = useState([])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
       getPegawai()
     } catch (error) {
       console.log(error);
+      setMsg(error.response.data.msg)
     }
   };
 
@@ -113,6 +115,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
+
           <div className="p-4 space-y-4 inline-block h-[75%] overflow-y-scroll">
             <div className="mb-6">
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -138,7 +141,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
                 <input
                   value={NIP}
                   onChange={(e) => setNIP(e.target.value)}
-                  type="text"
+                  type="number"
                   id="nip"
                   className="w-full input"
                 />
@@ -389,17 +392,20 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-end p-4 space-x-3 border-t border-gray-200 rounded-b">
-            <button type="submit" className="btn btn-simpan">
-              Simpan
-            </button>
-            <button
-              onClick={() => setIsOpenModalAdd(false)}
-              type="submit"
-              className="btn-batal"
-            >
-              Batal
-            </button>
+          <div className="flex items-center p-4 justify-between border-t border-gray-200 rounded-b">
+            <h1>{msg}</h1>
+            <div className="flex items-center justify-end space-x-3 ">
+              <button type="submit" className="btn btn-simpan">
+                Simpan
+              </button>
+              <button
+                onClick={() => setIsOpenModalAdd(false)}
+                type="submit"
+                className="btn-batal"
+              >
+                Batal
+              </button>
+            </div>
           </div>
         </div>
       </form>

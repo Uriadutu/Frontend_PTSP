@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SekolahPDF from "../../Export/PantaiDisaExport/SekolahPDF";
+import { useReactToPrint } from "react-to-print";
+import { IoDocument } from "react-icons/io5";
 
 const DataSekolah = () => {
   const [activeJenjang, setActiveJenjang] = useState(null);
@@ -19,6 +22,7 @@ const DataSekolah = () => {
   const [totalSMAP, setTotalSMAP] = useState(0);
   const [totalSMAM, setTotalSMAM] = useState(0);
   const navigate = useNavigate();
+  const ComponentToPDF = useRef();
 
   const toggleSubMenu = (jenjang) => {
     setActiveJenjang((prevJenjang) =>
@@ -40,7 +44,7 @@ const DataSekolah = () => {
         negeri: totalSDN,
         swasta: totalSDS,
         pondokPesantren: totalSDP,
-        madin : totalSDM
+        madin: totalSDM,
       },
     },
     {
@@ -52,7 +56,7 @@ const DataSekolah = () => {
         negeri: totalSMPN,
         swasta: totalSMPS,
         pondokPesantren: totalSMPP,
-        madin : totalSMPM
+        madin: totalSMPM,
       },
     },
     {
@@ -64,7 +68,7 @@ const DataSekolah = () => {
         negeri: totalSMAN,
         swasta: totalSMAS,
         pondokPesantren: totalSMAP,
-        madin : totalSMAM
+        madin: totalSMAM,
       },
     },
   ];
@@ -114,17 +118,44 @@ const DataSekolah = () => {
       "sekolah-menengah-atasmadrasa-diniyah",
       setTotalSMAM
     );
-  }, []);
+  }, [
+    setTotalSDN,
+    setTotalSDS,
+    setTotalSDP,
+    setTotalSDM,
+    setTotalSMPN,
+    setTotalSMPS,
+    setTotalSMPP,
+    setTotalSMPM,
+    setTotalSMAN,
+    setTotalSMAS,
+    setTotalSMAP,
+    setTotalSMAM,
+  ]);
 
   useEffect(() => {
     getJumlahSekolah("sekolah-dasar", setTotalSD);
     getJumlahSekolah("sekolah-menengah-pertama", setTotalSMP);
     getJumlahSekolah("sekolah-menengah-atas", setTotalSMA);
-  }, []);
+  }, [setTotalSD, setTotalSMP, setTotalSMA]);
+
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataSekolah(pantai_disa).pdf`,
+  });
 
   return (
     <div className="contain">
+      <div style={{ display: "none" }}>
+        <SekolahPDF ref={ComponentToPDF} />
+      </div>
       <h1 className="judul">Data Sekolah</h1>
+      <button onClick={printPDF} className="btn-pdf hidden sm:block">
+        Print PDF
+      </button>
+      <button onClick={printPDF} className="btn-pdf sm:hidden block">
+        <IoDocument color="white" />
+      </button>
       <div className="mt-2 overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
           <thead>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AddPegawaiModal from "../Modal/LapasiModal/AddPegawai";
 import EditPegawaiModal from "../Modal/LapasiModal/EditPegawaiModal";
 import axios from "axios";
@@ -6,6 +6,8 @@ import { MdDelete, MdModeEdit } from "react-icons/md";
 import { IoEyeSharp, IoAdd, IoDocument } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
+import PegawaiPDF from "../../Export/LapasiExport/PegawaiPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataPegawai = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -16,12 +18,53 @@ const DataPegawai = () => {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pegawaiPerPage, setPegawaiPerPage] = useState(10);
+
   const navigate = useNavigate();
+  const ComponentToPDF = useRef();
+
+  const hitungMasaKerja = (tmt_pengangkatan) => {
+    if (!tmt_pengangkatan) return "";
+
+    const today = new Date();
+    const tmtDate = new Date(tmt_pengangkatan);
+
+    let years = today.getFullYear() - tmtDate.getFullYear();
+    let months = today.getMonth() - tmtDate.getMonth();
+    let days = today.getDate() - tmtDate.getDate();
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    if (days < 0) {
+      months--;
+      let prevMonth = today.getMonth() === 0 ? 11 : today.getMonth() - 1;
+      let prevMonthDays = new Date(
+        today.getFullYear(),
+        prevMonth + 1,
+        0
+      ).getDate();
+      days += prevMonthDays;
+    }
+
+    let weeks = Math.floor(days / 7);
+    days = days % 7;
+
+    let masaKerjaArray = [];
+    if (years > 0) masaKerjaArray.push(`${years} tahun`);
+    if (months > 0) masaKerjaArray.push(`${months} bulan`);
+    if (weeks > 0) masaKerjaArray.push(`${weeks} minggu`);
+    if (days > 0) masaKerjaArray.push(`${days} hari`);
+
+    return masaKerjaArray.join(" ");
+  };
 
   const getPegawai = async () => {
     try {
       const response = await axios.get("http://localhost:5000/pegawai");
       setPegawai(response.data);
+      hitungMasaKerja(response.data.tmt_pengangkatan);
     } catch (error) {
       console.log(error);
     }
@@ -50,6 +93,11 @@ const DataPegawai = () => {
     setCurrentPage(pageNumber);
   };
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataJabatan.pdf`,
+  });
+
   const downloadExcel = () => {
     const dataToExport = pegawai.map((item, index) => ({
       No: index + 1,
@@ -60,6 +108,7 @@ const DataPegawai = () => {
       Jabatan: item.jabatan,
       "TMT Terakhir": item.tmt_terakhir,
       "TMT Pengangkatan": item.tmt_pengangkatan,
+      "Masa Kerja": hitungMasaKerja(item.tmt_pengangkatan),
       "TMT Pensiun": item.tmt_pensiun,
       "Pendidikan Terakhir": item.pend_terakhir,
       Jurusan: item.jurusan,
@@ -108,9 +157,9 @@ const DataPegawai = () => {
     pageNumbers.push(i);
   }
 
-   const totalPNS = pegawai.filter(
-     (item) => item.jenis_pegawai === "PNS"
-   ).length;
+  const totalPNS = pegawai.filter(
+    (item) => item.jenis_pegawai === "PNS"
+  ).length;
 
   return (
     <div className="contain">
@@ -127,7 +176,14 @@ const DataPegawai = () => {
           selectedPegawai={selectedPegawai}
         />
       )}
-      <h1 className="judul">Data Pegawai {totalPNS}</h1>
+      <div style={{ display: "none" }}>
+        <PegawaiPDF
+          ref={ComponentToPDF}
+          pegawai={pegawai}
+          fungsiCalculate={hitungMasaKerja}
+        />
+      </div>
+      <h1 className="judul">Data Pegawai</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <button
@@ -137,14 +193,12 @@ const DataPegawai = () => {
             Tambah Jabatan
           </button>
           <button
-            // onClick={downloadExcel}
+            onClick={downloadExcel}
             className="btn-download hidden sm:block"
           >
             Export ke Excel
           </button>
-          <button 
-          // onClick={printPDF}
-           className="btn-pdf hidden sm:block">
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
             Print PDF
           </button>
           <button
@@ -154,14 +208,12 @@ const DataPegawai = () => {
             <IoAdd color="white" />
           </button>
           <button
-            // onClick={downloadExcel}
+            onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
             <IoDocument color="white" />
           </button>
-          <button 
-          // onClick={printPDF}                 
-          className="btn-pdf sm:hidden block">
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

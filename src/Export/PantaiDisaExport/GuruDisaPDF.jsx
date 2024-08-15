@@ -2,7 +2,7 @@ import React from "react";
 import logoKemenag from "../../img/depag.png";
 import { tanggalPDF } from "../../utils/helper";
 
-const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
+const GuruDisaPDF = React.forwardRef(({ guru }, ref) => {
   return (
     <div ref={ref} className="py-3 pl-4 pr-3 mx-5 mt-10">
       <div className="flex items-center justify-center mb-5 pb-4 border-b-2 border-separate border-black">
@@ -22,14 +22,13 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
           </div>
         </div>
       </div>
-      <h1 className="text-center mb-2">DATA PEGAWAI</h1>
+      <h1 className="text-center mb-2">DATA GURU</h1>
       <div className="mt-4">
         <h1 className="text-left mb-1">
-          Layanan Profesional Administrasi (Lapasi)
+          Layanan Seksi Pendidikan Islam (Pantai Disa)
         </h1>
         <h1 className="text-left mb-2">
-          Tanggal{" "}
-          <span className="ml-4">: {tanggalPDF(new Date())}</span>
+          Tanggal <span className="ml-4">: {tanggalPDF(new Date())}</span>
         </h1>
       </div>
       <table className="w-full border-collapse text-sm">
@@ -42,10 +41,16 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
               NIP
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Jenis Pegawai
+              Nama guru
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Nama Pegawai
+              Status Pegawai
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Kategori Guru
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Jenis Guru
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
               Pangkat/Golongan
@@ -54,16 +59,22 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
               Jabatan
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              TMT Terakhir
+              Tempat Tugas
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              TMT Pengangkatan
+              Tanggal Mulai Kerja
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Masa Kerja
+              Tempat Lahir
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              TMT Pensiun
+              Tanggal Lahir
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Jenis Kelamin
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Agama
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
               Pendidikan Terakhir
@@ -75,24 +86,15 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
               Tahun Lulus
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Janis Kelamin
+              Tahun Nomor Telp/Wa
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Tempat Lahir
-            </th>
-            <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Tanggal Lahir
-            </th>
-            <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Agama
-            </th>
-            <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Satuan Kerja
+              Email
             </th>
           </tr>
         </thead>
         <tbody>
-          {pegawai.map((item, index) => (
+          {guru.map((item, index) => (
             <tr key={index}>
               <td className="border border-gray-300 p-2 text-left">
                 {index + 1}
@@ -101,32 +103,40 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
                 {item.NIP}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.jenis_pegawai}
+                {item.nama_guru}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.nama_pegawai}
+                {item.status_pegawai}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.pangkat_gol}
+                {item.kategori_guru}
+              </td>
+              <td className="border border-gray-300 p-2 text-left">
+                {item.jenis_guru}
+              </td>
+              <td className="border border-gray-300 p-2 text-left">
+                {item.pangkat}
               </td>
               <td className="border border-gray-300 p-2 text-left">
                 {item.jabatan}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.tmt_terakhir}
+                {item.tgl_mulai}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.tmt_pengangkatan}
-              </td>
-              
-              <td className="border border-gray-300 p-2 text-left">
-                {fungsiCalculate(item.tmt_pengangkatan)}
+                {item.tempat_lahir}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.tmt_pensiun}
+                {item.tanggal_lahir}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.pend_terakhir}
+                {item.jenis_kelamin}
+              </td>
+              <td className="border border-gray-300 p-2 text-left">
+                {item.agama}
+              </td>
+              <td className="border border-gray-300 p-2 text-left">
+                {item.pendidikan_terakhir}
               </td>
               <td className="border border-gray-300 p-2 text-left">
                 {item.jurusan}
@@ -135,19 +145,10 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
                 {item.tahun_lulus}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.jenis_kelamin}
+                {item.no_telp}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.temp_lahir}
-              </td>
-              <td className="border border-gray-300 p-2 text-left">
-                {item.tgl_lahir}
-              </td>
-              <td className="border border-gray-300 p-2 text-left">
-                {item.agama}
-              </td>
-              <td className="border border-gray-300 p-2 text-left">
-                {item.satuan_kerja}
+                {item.email}
               </td>
             </tr>
           ))}
@@ -157,4 +158,4 @@ const PegawaiPDF = React.forwardRef(({ pegawai, fungsiCalculate }, ref) => {
   );
 });
 
-export default PegawaiPDF;
+export default GuruDisaPDF;

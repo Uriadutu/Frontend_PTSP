@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import GuruDisaPDF from "../../Export/PantaiDisaExport/GuruDisaPDF";
 
 const DataGuru = () => {
   const [gurus, setGurus] = useState([]);
-  const [sortBy, setSortBy] = useState("nama_guru");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [gurusPerPage] = useState(10);
+  const [gurusPerPage, setGuruPerPage] = useState(10);
+  const ComponentToPDF = useRef();
+
 
   useEffect(() => {
     getGurus();
@@ -23,10 +26,6 @@ const DataGuru = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
   };
 
   function capitalizeWords(sentence) {
@@ -76,45 +75,39 @@ const DataGuru = () => {
     XLSX.writeFile(workbook, "DataGuru.xlsx");
   };
 
-  const filteredAndSortedGurus = gurus
-    .filter((guru) => {
-      const lowerCaseSearchText = searchText.toLowerCase();
-      return (
-        guru.nama_guru.toLowerCase().includes(lowerCaseSearchText) ||
-        (guru.NIP && guru.NIP.toLowerCase().includes(lowerCaseSearchText))
-      );
-    })
-    .sort((a, b) => {
-      if (sortBy === "nama_guru") {
-        return a.nama_guru.localeCompare(b.nama_guru);
-      } else if (sortBy === "NIP") {
-        const NIPA = a.NIP || "";
-        const NIPB = b.NIP || "";
-        return NIPA.localeCompare(NIPB);
-      }
-      return 0;
-    });
+  const filteredGurus = gurus.filter((guru) => {
+    const lowerCaseSearchText = searchText.toLowerCase();
+    return (
+      guru.nama_guru.toLowerCase().includes(lowerCaseSearchText) ||
+      (guru.NIP && guru.NIP.toLowerCase().includes(lowerCaseSearchText))
+    );
+  });
 
   const indexOfLastGuru = currentPage * gurusPerPage;
   const indexOfFirstGuru = indexOfLastGuru - gurusPerPage;
-  const currentGurus = filteredAndSortedGurus.slice(
-    indexOfFirstGuru,
-    indexOfLastGuru
-  );
+  const currentGurus = filteredGurus.slice(indexOfFirstGuru, indexOfLastGuru);
 
   const pageNumbers = [];
-  for (
-    let i = 1;
-    i <= Math.ceil(filteredAndSortedGurus.length / gurusPerPage);
-    i++
-  ) {
+  for (let i = 1; i <= Math.ceil(filteredGurus.length / gurusPerPage); i++) {
     pageNumbers.push(i);
   }
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataGuru(PantaiDisa).pdf`,
+  });
+
+
   return (
     <div className="contain">
+      <div style={{ display: "none" }}>
+        <GuruDisaPDF
+          ref={ComponentToPDF}
+          guru={gurus}
+        />
+      </div>
       <h1 className="judul mb-4">Data Guru</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">
@@ -124,32 +117,41 @@ const DataGuru = () => {
           >
             Export ke Excel
           </button>
-          
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
             <IoDocument color="white" />
           </button>
-          <div className="flex items-center space-x-2">
-            <label className="text-sm">Urut Berdasarkan:</label>
-            <select
-              className="input"
-              value={sortBy}
-              onChange={handleSortChange}
-            >
-              <option value="nama_guru">Nama</option>
-              <option value="NIP">NIP</option>
-            </select>
-          </div>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
+            <IoDocument color="white" />
+          </button>
         </div>
-        <input
-          type="text"
-          className="input"
-          placeholder="Cari Nama / NIP"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
+        <div className="flex gap-3 items-center">
+          <input
+            type="text"
+            className="input"
+            placeholder="Cari Nama / NIP"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <select
+            value={gurusPerPage}
+            onChange={(e) => {
+              setGuruPerPage(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="p-2 border border-gray-300 rounded"
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">

@@ -1,5 +1,6 @@
 import React from "react";
 import logoKemenag from "../../img/depag.png";
+import { tanggalPDF } from "../../utils/helper";
 
 const SatuanKerjaPDF = React.forwardRef(({ satker }, ref) => {
   return (
@@ -28,7 +29,7 @@ const SatuanKerjaPDF = React.forwardRef(({ satker }, ref) => {
         </h1>
         <h1 className="text-left mb-2">
           Tanggal{" "}
-          <span className="ml-4">: {new Date().toLocaleDateString()}</span>
+          <span className="ml-4">: {tanggalPDF(new Date())}</span>
         </h1>
       </div>
       <table className="w-full border-collapse text-sm">
