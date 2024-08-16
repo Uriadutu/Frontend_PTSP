@@ -121,6 +121,9 @@ const GuruDisaPDF = React.forwardRef(({ guru }, ref) => {
                 {item.jabatan}
               </td>
               <td className="border border-gray-300 p-2 text-left">
+                {item.Sekolah.nama_sekolah}
+              </td>
+              <td className="border border-gray-300 p-2 text-left">
                 {item.tgl_mulai}
               </td>
               <td className="border border-gray-300 p-2 text-left">
@@ -139,7 +142,7 @@ const GuruDisaPDF = React.forwardRef(({ guru }, ref) => {
                 {item.pendidikan_terakhir}
               </td>
               <td className="border border-gray-300 p-2 text-left">
-                {item.jurusan}
+                {item.juruan}
               </td>
               <td className="border border-gray-300 p-2 text-left">
                 {item.tahun_lulus}

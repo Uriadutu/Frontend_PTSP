@@ -3,7 +3,7 @@ import logoKemenag from "../../img/depag.png";
 import { tanggalPDF } from "../../utils/helper";
 import axios from "axios";
 
-const SekolahPDF = React.forwardRef(({}, ref) => {
+const SekolahPDF = React.forwardRef(({},ref) => {
   const [sds, setSds] = useState([]);
   const [sdn, setSdn] = useState([]);
   const [sdp, setSdp] = useState([]);
@@ -41,7 +41,20 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
     getSekolahbyStatus("sekolah-menengah-atasswasta", setSmas);
     getSekolahbyStatus("sekolah-menengah-ataspondok-pesantren", setSmap);
     getSekolahbyStatus("sekolah-menengah-atasmadrasa-diniyah", setSmam);
-  });
+  }, [
+    setSdn,
+    setSds,
+    setSdp,
+    setSdm,
+    setSmpn,
+    setSmps,
+    setSmpp,
+    setSmpm,
+    setSman,
+    setSmas,
+    setSmap,
+    setSmam,
+  ]);
 
   return (
     <div ref={ref} className="py-3 pl-4 pr-3 mx-5 mt-10">
@@ -166,12 +179,19 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
             ))
           ) : (
             <tr>
-              <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+              <td
+                className="border border-gray-300 p-2 text-center"
+                colSpan={13}
+              >
+                Data Sekolah Belum ada
+              </td>
             </tr>
           )}
         </tbody>
       </table>
-      <h1 className="text-left mb-2 font-semibold mt-4">Sekolah Dasar (Swasta) :</h1>
+      <h1 className="text-left mb-2 font-semibold mt-4">
+        Sekolah Dasar (Swasta) :
+      </h1>
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
@@ -264,7 +284,12 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
             ))
           ) : (
             <tr>
-              <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+              <td
+                className="border border-gray-300 p-2 text-center"
+                colSpan={13}
+              >
+                Data Sekolah Belum ada
+              </td>
             </tr>
           )}
         </tbody>
@@ -364,7 +389,12 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
             ))
           ) : (
             <tr>
-              <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+              <td
+                className="border border-gray-300 p-2 text-center"
+                colSpan={13}
+              >
+                Data Sekolah Belum ada
+              </td>
             </tr>
           )}
         </tbody>
@@ -465,7 +495,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -564,7 +596,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -663,7 +697,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -762,7 +798,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -861,7 +899,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -960,7 +1000,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -1059,7 +1101,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -1158,7 +1202,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
       <h1 className="text-left mb-2 font-semibold mt-4">
@@ -1257,7 +1303,9 @@ const SekolahPDF = React.forwardRef(({}, ref) => {
           ) : (
             <tr></tr>
           )}
-          <td  className="border border-gray-300 p-2 text-center" colSpan={13}>Data Sekolah Belum ada</td>
+          <td className="border border-gray-300 p-2 text-center" colSpan={13}>
+            Data Sekolah Belum ada
+          </td>
         </tbody>
       </table>
     </div>
