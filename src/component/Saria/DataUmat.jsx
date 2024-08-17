@@ -90,7 +90,7 @@ const DataUmat = () => {
 
   const printPDF = useReactToPrint({
     content: () => ComponentToPDF.current,
-    documentTitle: `InfoHaji(akesahu).pdf`,
+    documentTitle: `DataUmat(akesahu).pdf`,
   });
 
   return (

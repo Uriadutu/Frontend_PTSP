@@ -25,7 +25,7 @@ const DataUmatSariaPDF = React.forwardRef(({ umat }, ref) => {
       <h1 className="text-center mb-2">INFO KEBERANGKATAN HAJI DAN UMRAH</h1>
       <div className="mt-4">
         <h1 className="text-left mb-1">
-          Layanan Seksi Bimas Islam dengan (Saria)
+          Layanan Seksi Bimas Islam (Saria)
         </h1>
         <h1 className="text-left">
           Tanggal <span className="ml-4">: {tanggalPDF(new Date())}</span>
@@ -56,7 +56,6 @@ const DataUmatSariaPDF = React.forwardRef(({ umat }, ref) => {
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
               Jumlah Masjid
             </th>
-            
           </tr>
         </thead>
         <tbody>
@@ -72,7 +71,7 @@ const DataUmatSariaPDF = React.forwardRef(({ umat }, ref) => {
                 <td className="border border-gray-300 p-2 text-left">
                   {item.nama_desa}
                 </td>
-            <td className="border border-gray-300 p-2 text-left">
+                <td className="border border-gray-300 p-2 text-left">
                   {item.jumlah_penduduk}
                 </td>
                 <td className="border border-gray-300 p-2 text-left">
@@ -84,7 +83,6 @@ const DataUmatSariaPDF = React.forwardRef(({ umat }, ref) => {
                 <td className="border border-gray-300 p-2 text-left">
                   {item.jumlah_mesjid}
                 </td>
-                
               </tr>
             </React.Fragment>
           ))}
