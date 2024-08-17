@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddHajiModal from "../Modal/AkesahuModal/AddHajiModal";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import DataHajiPDF from "../../Export/AkesahuExport/DataHajiPDF";
 
 const DataHaji = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -12,9 +14,15 @@ const DataHaji = () => {
   const [filteredHajis, setFilteredHajis] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [hajiPerPage] = useState(10);
+  const [hajiPerPage] = useState(50);
   const navigate = useNavigate();
   const { sub } = useParams();
+  const ComponentToPDF = useRef();
+
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataHaji(akesahu).pdf`,
+  });
 
   useEffect(() => {
     getHaji();
@@ -71,16 +79,15 @@ const DataHaji = () => {
     const dataToExport = hajis.map((item, index) => ({
       No: index + 1,
       "Nomor Porsi": item.nomor_porsi,
-      "Tanggal Daftar" : item.tanggal_porsi,
+      "Tanggal Daftar": item.tanggal_porsi,
       "Nama Jamaah": item.nama_jamaah,
-      "Jenis Kelamin" :  item.jenis_kelamin,
-      "Pekerjaan" :  item.pekerjaan,
-      "Tempat Lahir"  :  item.tempat_lahir,
-      "Tanggal Lahir"  :  item.tanggal_lahir,
-      "Nama Desa"  : item.nama_desa,
-      "Kecamatan" : item.kecamatan,
-      "Bank" :  item.bank,
-
+      "Jenis Kelamin": item.jenis_kelamin,
+      Pekerjaan: item.pekerjaan,
+      "Tempat Lahir": item.tempat_lahir,
+      "Tanggal Lahir": item.tanggal_lahir,
+      "Nama Desa": item.nama_desa,
+      Kecamatan: item.kecamatan,
+      Bank: item.bank,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
@@ -99,6 +106,9 @@ const DataHaji = () => {
       {openModal && (
         <AddHajiModal setIsOpenModalAdd={setOpenModal} getHaji={getHaji} />
       )}
+      <div style={{ display: "none" }}>
+        <DataHajiPDF ref={ComponentToPDF} haji={hajis} />
+      </div>
 
       <h1 className="judul">Data Haji</h1>
       <div className="flex justify-between">
@@ -115,16 +125,22 @@ const DataHaji = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn-add sm:hidden block"
           >
-            <IoAdd color="white"/>
+            <IoAdd color="white" />
           </button>
           <button
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

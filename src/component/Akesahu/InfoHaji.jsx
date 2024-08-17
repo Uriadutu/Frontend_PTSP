@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import EditStatusModal from "../Modal/AkesahuModal/EditStatusModal";
 import AddPeriodeModal from "../Modal/AkesahuModal/AddPeriodeModal";
+import { useReactToPrint } from "react-to-print";
+import { IoAdd, IoDocument } from "react-icons/io5";
+import InfoHajiPDF from "../../Export/AkesahuExport/InfoHajiPDF";
+import PeriodeHajiPDF from "../../Export/AkesahuExport/PeriodeHajiPDF";
 
 const InfoHaji = () => {
   const [hajis, setHajis] = useState([]);
@@ -12,8 +16,19 @@ const InfoHaji = () => {
   const [selectedHaji, setSelectedHaji] = useState({});
   const [sortBy, setSortBy] = useState("nama_jamaah");
   const [currentPage, setCurrentPage] = useState(1);
-  const [hajisPerPage] = useState(10);
+  const [hajisPerPage] = useState(50);
   const [activeTab, setActiveTab] = useState("statusKeberangkatan");
+  const ComponentToPDF = useRef();
+  const PeriodePDF = useRef();
+
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `InfoHaji(akesahu).pdf`,
+  });
+  const printPeriodePDF = useReactToPrint({
+    content: () => PeriodePDF.current,
+    documentTitle: `PeriodeHaji(akesahu).pdf`,
+  });
 
   useEffect(() => {
     getHajis();
@@ -59,12 +74,12 @@ const InfoHaji = () => {
   };
 
   const deletePeriode = async (periodeId) => {
-      try {
-        await axios.delete(`http://localhost:5000/periode/haji/${periodeId}`);
-        getPeriodes();
-      } catch (error) {
-        console.error("Error:", error);
-      }
+    try {
+      await axios.delete(`http://localhost:5000/periode/haji/${periodeId}`);
+      getPeriodes();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const filteredAndSortedHajis = hajis.sort((a, b) => {
@@ -109,11 +124,20 @@ const InfoHaji = () => {
           setIsOpenModalAdd={setOpenPeriode}
         />
       )}
+      <div style={{ display: "none" }}>
+        <InfoHajiPDF ref={ComponentToPDF} haji={hajis} />
+      </div>
+      <div style={{ display: "none" }}>
+        <PeriodeHajiPDF ref={PeriodePDF} periode={periodes} />
+      </div>
       <h1 className="judul mb-4">Data Haji</h1>
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-3">
           {activeTab === "statusKeberangkatan" && (
             <div className="flex items-center space-x-2">
+              <button onClick={printPDF} className="btn-pdf hidden sm:block">
+                Print PDF
+              </button>
               <label className="text-sm">Urut Berdasarkan:</label>
               <select
                 className="input"
@@ -123,12 +147,33 @@ const InfoHaji = () => {
                 <option value="nama_jamaah">Nama</option>
                 <option value="nomor_porsi">Nomor Porsi</option>
               </select>
+
+              <button onClick={printPDF} className="btn-pdf sm:hidden block">
+                <IoDocument color="white" />
+              </button>
             </div>
           )}
           {activeTab === "periode" && (
-            <button className="btn-add" onClick={() => setOpenPeriode(true)}>
-              Tambah Periode
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className="btn-add hidden sm:block"
+                onClick={() => setOpenPeriode(true)}
+              >
+                Tambah Periode
+              </button>
+              <button
+                onClick={() => setOpenPeriode(true)}
+                className="btn-add sm:hidden block"
+              >
+                <IoAdd color="white" />
+              </button>
+              <button onClick={printPeriodePDF} className="btn-pdf hidden sm:block">
+                Print PDF
+              </button>
+              <button onClick={printPeriodePDF} className="btn-pdf sm:hidden block">
+                <IoDocument color="white" />
+              </button>
+            </div>
           )}
         </div>
       </div>

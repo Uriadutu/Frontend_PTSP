@@ -1,16 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import SiswaDisaPDF from "../../Export/PantaiDisaExport/SiswaDisaPDF";
 
 const DataSiswa = () => {
   const [siswas, setSiswas] = useState([]);
-  const [sortBy, setSortBy] = useState("nama_siswa");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [siswasPerPage] = useState(10);
+  const [siswasPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
+  console.log(siswas);
+  
+  
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataSiswa(PantaiDisa).pdf`,
+  });
+
 
   useEffect(() => {
     getSiswas();
@@ -25,9 +36,6 @@ const DataSiswa = () => {
     }
   };
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
 
   function capitalizeWords(sentence) {
     return sentence
@@ -55,16 +63,6 @@ const DataSiswa = () => {
         (siswa.NISN && siswa.NISN.toLowerCase().includes(lowerCaseSearchText))
       );
     })
-    .sort((a, b) => {
-      if (sortBy === "nama_siswa") {
-        return a.nama_siswa.localeCompare(b.nama_siswa);
-      } else if (sortBy === "NISN") {
-        const NISNA = a.NISN || "";
-        const NISNB = b.NISN || "";
-        return NISNA.localeCompare(NISNB);
-      }
-      return 0;
-    });
 
   const indexOfLastSiswa = currentPage * siswasPerPage;
   const indexOfFirstSiswa = indexOfLastSiswa - siswasPerPage;
@@ -114,6 +112,9 @@ const DataSiswa = () => {
 
   return (
     <div className="contain">
+      <div style={{ display: "none" }}>
+        <SiswaDisaPDF ref={ComponentToPDF} siswa={siswas} />
+      </div>
       <h1 className="judul mb-4">Data Siswa</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-3">
@@ -123,23 +124,18 @@ const DataSiswa = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
             <IoDocument color="white" />
           </button>
-          <div className="flex items-center space-x-2">
-            <label className="text-sm">Urut Berdasarkan:</label>
-            <select
-              className="input"
-              value={sortBy}
-              onChange={handleSortChange}
-            >
-              <option value="nama_siswa">Nama</option>
-              <option value="NISN">NISN</option>
-            </select>
-          </div>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
+            <IoDocument color="white" />
+          </button>
         </div>
         <input
           type="text"
