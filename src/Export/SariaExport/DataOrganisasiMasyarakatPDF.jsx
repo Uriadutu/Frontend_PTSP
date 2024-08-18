@@ -2,7 +2,7 @@ import React from "react";
 import logoKemenag from "../../img/depag.png";
 import { tanggalPDF } from "../../utils/helper";
 
-const JabatanPDF = React.forwardRef(({ jabatan }, ref) => {
+const DataOrganisasiMasyarakatPDF = React.forwardRef(({ organisasi }, ref) => {
   return (
     <div ref={ref} className="py-3 pl-4 pr-3 mx-5 mt-10">
       <div className="flex items-center justify-center mb-5 pb-4 border-b-2 border-separate border-black">
@@ -22,42 +22,64 @@ const JabatanPDF = React.forwardRef(({ jabatan }, ref) => {
           </div>
         </div>
       </div>
-      <h1 className="text-center mb-2">DATA JABATAN</h1>
+      <h1 className="text-center mb-2">DATA ORGANISASI MASYARAKAT</h1>
       <div className="mt-4">
-        <h1 className="text-left mb-1">
-          Layanan Profesional Administrasi (Lapasi)
-        </h1>
+        <h1 className="text-left mb-1">Layanan Seksi Bimas Islam (Saria)</h1>
         <h1 className="text-left">
-          Tanggal{" "}
-          <span className="ml-4">: {tanggalPDF(new Date())}</span>
+          Tanggal <span className="ml-4">: {tanggalPDF(new Date())}</span>
         </h1>
       </div>
-      <table className="w-full print:mt-5 border-collapse text-sm mt-6">
+
+      <table className="w-full border-collapse text-sm mt-6">
         <thead>
           <tr>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
               No
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Kode Jabatan
+              Nama Organisasi
             </th>
             <th className="border border-gray-300 p-2 text-left bg-gray-100">
-              Nama Jabatan
+              Alamat
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Tahun Berdiri
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Nama Pimpinan
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Tahun Periode
+            </th>
+            <th className="border border-gray-300 p-2 text-left bg-gray-100">
+              Jumlah Anggota
             </th>
           </tr>
         </thead>
         <tbody>
-          {jabatan.map((item, index) => (
+          {organisasi.map((item, index) => (
             <React.Fragment key={index}>
               <tr>
                 <td className="border border-gray-300 p-2 text-left">
                   {index + 1}
                 </td>
                 <td className="border border-gray-300 p-2 text-left">
-                  {item.kode_jabatan}
+                  {item.nama_organisasi}
                 </td>
                 <td className="border border-gray-300 p-2 text-left">
-                  {item.nama_jabatan}
+                  {item.alamat}
+                </td>
+                <td className="border border-gray-300 p-2 text-left">
+                  {item.tahun_berdiri}
+                </td>
+                <td className="border border-gray-300 p-2 text-left">
+                  {item.nama_pimpinan}
+                </td>
+                <td className="border border-gray-300 p-2 text-left">
+                  {item.tahun_periode}
+                </td>
+                <td className="border border-gray-300 p-2 text-left">
+                  {item.jumlah_anggota}
                 </td>
               </tr>
             </React.Fragment>
@@ -68,4 +90,4 @@ const JabatanPDF = React.forwardRef(({ jabatan }, ref) => {
   );
 });
 
-export default JabatanPDF;
+export default DataOrganisasiMasyarakatPDF;

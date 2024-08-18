@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
 import AddTpqModal from "../Modal/SariaModal/AddTpqModal";
 import { useNavigate } from "react-router-dom";
+import DataTPQPDF from "../../Export/SariaExport/DataTPQPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataTpq = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [tpq, setTpq] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [tpqPerPage] = useState(10);
+  const [tpqPerPage] = useState(50);
+  const ComponentToPDF = useRef();
 
-  const navigate = useNavigate();
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataTamanPendidikanQuran(saria).pdf`,
+  });
 
   // Fetch data from server
   const getTpq = async () => {
@@ -33,7 +39,9 @@ const DataTpq = () => {
   const filteredTpq = tpq.filter(
     (item) => (
       item.nama_desa.toLowerCase().includes(searchText.toLowerCase()),
-      item.Kecamatan.nama_kecamatan.toLowerCase().includes(searchText.toLowerCase())
+      item.Kecamatan.nama_kecamatan
+        .toLowerCase()
+        .includes(searchText.toLowerCase())
     )
   );
 
@@ -67,8 +75,8 @@ const DataTpq = () => {
     const dataToExport = currentTpq.map((item, index) => ({
       No: (currentPage - 1) * tpqPerPage + index + 1,
 
-      "Kecamatan": item.Kecamatan.nama_kecamatan,
-      "Desa": item.nama_desa,
+      Kecamatan: item.Kecamatan.nama_kecamatan,
+      Desa: item.nama_desa,
       "Jumlah Santri": item.jumlah_santri,
       "Jumlah Santriwati": item.jumlah_santriwati,
       "Jumlah Ustad": item.jumlah_ustad,
@@ -86,6 +94,9 @@ const DataTpq = () => {
       {openModalAdd && (
         <AddTpqModal setIsOpenModalAdd={setOpenModalAdd} getTpqs={getTpq} />
       )}
+      <div style={{ display: "none" }}>
+        <DataTPQPDF ref={ComponentToPDF} tpq={tpq} />
+      </div>
       <h1 className="judul">Data TPQ</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -101,6 +112,9 @@ const DataTpq = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -111,6 +125,9 @@ const DataTpq = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -148,12 +165,21 @@ const DataTpq = () => {
                   {(currentPage - 1) * tpqPerPage + index + 1}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.Kecamatan && item.Kecamatan.nama_kecamatan} - {item && item.nama_desa}
+                  {item && item.Kecamatan && item.Kecamatan.nama_kecamatan} -{" "}
+                  {item && item.nama_desa}
                 </td>
-                <td className="py-3 px-6 text-left">{item && item.jumlah_santri}</td>
-                <td className="py-3 px-6 text-left">{item && item.jumlah_santriwati}</td>
-                <td className="py-3 px-6 text-left">{item && item.jumlah_ustad}</td>
-                <td className="py-3 px-6 text-left">{item && item.jumlah_ustadzah}</td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.jumlah_santri}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.jumlah_santriwati}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.jumlah_ustad}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.jumlah_ustadzah}
+                </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <button
                     className="delete"

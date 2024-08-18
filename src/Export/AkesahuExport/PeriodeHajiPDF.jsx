@@ -12,7 +12,7 @@ const PeriodeHajiPDF = React.forwardRef(({ periode }, ref) => {
           </div>
           <div className="w-full flex justify-center ">
             <div className="">
-              <h1 className="text-center text-xl font-bold upercase">
+              <h1 className="text-center text-xl font-bold ">
                 Kantor Kementrian Agama Kabupaten Halmahera Barat
               </h1>
               <p className="text-center">

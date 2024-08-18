@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddMajelisModal from "../Modal/SariaModal/AddMajelisModal";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import MajelisPDF from "../../Export/SariaExport/MajelisPDF";
 
 const MajelisTalim = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -11,7 +13,13 @@ const MajelisTalim = () => {
   const [filteredDataMajelis, setFilteredDataMajelis] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [majelisPerPage] = useState(10);
+  const [majelisPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
+     const printPDF = useReactToPrint({
+       content: () => ComponentToPDF.current,
+       documentTitle: `DataMajelisTa’lim(saria).pdf`,
+     });
 
   const getMajelis = async () => {
     try {
@@ -95,6 +103,9 @@ const MajelisTalim = () => {
           getMajelis={getMajelis}
         />
       )}
+      <div style={{ display: "none" }}>
+        <MajelisPDF ref={ComponentToPDF} majelis={dataMajelis} />
+      </div>
       <h1 className="judul">Data Majelis Ta'Lim</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -110,6 +121,9 @@ const MajelisTalim = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -120,6 +134,9 @@ const MajelisTalim = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

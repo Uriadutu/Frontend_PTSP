@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import AddPenyuluhIslamModal from "../Modal/SariaModal/AddPenyuluhIslamModal";
+import { useReactToPrint } from "react-to-print";
+import DataPenyuluSariaPDF from "../../Export/SariaExport/DataPenyuluSariaPDF";
 
 const PenyuluhIslam = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [penyulus, setPenyulu] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [penyulusPerPage] = useState(10);
+  const [penyulusPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
 
   const getPenyulu = async () => {
     try {
@@ -46,7 +50,7 @@ const PenyuluhIslam = () => {
       "Status Pegawai": item.status_pegawai,
       "Tempat Tugas": item.tempat_tugas,
       "Jumlah Kelompok": item.jumlah_binaan,
-      "Nama Kelompok Binaan" : item.KelompokBinaans && item.KelompokBinaans.map((kelompok) => kelompok.nama_kelompok).join(", "),
+      "Nama Kelompok Binaan" : item.KelompokBinaanIslams && item.KelompokBinaanIslams.map((kelompok) => kelompok.nama_kelompok).join(", "),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
@@ -77,6 +81,11 @@ const PenyuluhIslam = () => {
       setCurrentPage(1); // Reset to first page on search
     };
 
+    const printPDF = useReactToPrint({
+      content: () => ComponentToPDF.current,
+      documentTitle: `DataPenyuluh(saria).pdf`,
+    });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -85,6 +94,9 @@ const PenyuluhIslam = () => {
           getPenyulu={getPenyulu}
         />
       )}
+      <div style={{ display: "none" }}>
+        <DataPenyuluSariaPDF ref={ComponentToPDF} penyulu={penyulus} />
+      </div>
       <h1 className="judul mb-4">Data Penyuluh</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -100,6 +112,9 @@ const PenyuluhIslam = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -111,6 +126,9 @@ const PenyuluhIslam = () => {
             className="btn-download sm:hidden block"
           >
             <IoDocument color="white" />
+            <button onClick={printPDF} className="btn-pdf sm:hidden block">
+              <IoDocument color="white" />
+            </button>
           </button>
         </div>
         <div className="flex justify-between items-center">

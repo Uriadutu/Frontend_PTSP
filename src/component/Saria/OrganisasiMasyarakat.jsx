@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import AddOrganisasiMasyarakatModal from "../Modal/SariaModal/AddOrganisasiModal";
 import * as XLSX from "xlsx";
 import { IoAdd, IoDocument } from "react-icons/io5";
+import { useReactToPrint } from "react-to-print";
+import DataOrganisasiMasyarakatPDF from "../../Export/SariaExport/DataOrganisasiMasyarakatPDF";
 
 const OrganisasiMasyarakat = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -11,7 +13,8 @@ const OrganisasiMasyarakat = () => {
   const [filteredDataOrganisasi, setFilteredDataOrganisasi] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [organisasiPerPage] = useState(10);
+  const [organisasiPerPage] = useState(50);
+  const ComponentToPDF = useRef();
 
   const getOrganisasi = async () => {
     try {
@@ -96,6 +99,11 @@ const OrganisasiMasyarakat = () => {
     pageNumbers.push(i);
   }
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `DataOrganisasiMasyarakat(saria).pdf`,
+   });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -104,6 +112,9 @@ const OrganisasiMasyarakat = () => {
           getOrganisasiMasyarakat={getOrganisasi}
         />
       )}
+      <div style={{ display: "none" }}>
+        <DataOrganisasiMasyarakatPDF ref={ComponentToPDF} organisasi={dataOrganisasi} />
+      </div>
       <h1 className="judul">Data Organisasi Masyarakat</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -119,6 +130,9 @@ const OrganisasiMasyarakat = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -129,6 +143,9 @@ const OrganisasiMasyarakat = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

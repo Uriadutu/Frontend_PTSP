@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AddKuaModal from "../Modal/SariaModal/AddKuaModal";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
 import { IoAdd, IoDocument } from "react-icons/io5";
+import { useReactToPrint } from "react-to-print";
+import DataKUAPDF from "../../Export/SariaExport/DataKUAPDF";
 
 const Kua = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -11,7 +13,8 @@ const Kua = () => {
   const [filteredDataKua, setFilteredDataKua] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [kuaPerPage] = useState(10);
+  const [kuaPerPage] = useState(50);
+  const ComponentToPDF = useRef();
 
   const getKua = async () => {
     try {
@@ -41,9 +44,8 @@ const Kua = () => {
 
   const filterAndPaginateKua = () => {
     const lowerCaseSearchText = searchText.toLowerCase();
-    const filtered = dataKua.filter(
-      (item) =>
-        item.nama_kua.toLowerCase().includes(lowerCaseSearchText)
+    const filtered = dataKua.filter((item) =>
+      item.nama_kua.toLowerCase().includes(lowerCaseSearchText)
     );
 
     const indexOfLastKua = currentPage * kuaPerPage;
@@ -83,11 +85,19 @@ const Kua = () => {
     pageNumbers.push(i);
   }
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataKUA(saria).pdf`,
+  });
+
   return (
     <div className="contain">
       {openModalAdd && (
         <AddKuaModal setIsOpenModalAdd={setOpenModalAdd} getKua={getKua} />
       )}
+      <div style={{ display: "none" }}>
+        <DataKUAPDF ref={ComponentToPDF} kua={dataKua} />
+      </div>
       <h1 className="judul">Data KUA</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -103,6 +113,9 @@ const Kua = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -115,7 +128,11 @@ const Kua = () => {
           >
             <IoDocument color="white" />
           </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
+            <IoDocument color="white" />
+          </button>
         </div>
+
         <div className="flex justify-between items-center">
           <input
             type="text"

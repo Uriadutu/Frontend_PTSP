@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AddLembagaKeagamaanModal from '../Modal/SariaModal/AddLembagaKeagamaanModal';
 import { MdDelete } from 'react-icons/md';
 import { IoAdd, IoDocument, IoEyeSharp } from 'react-icons/io5';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as XLSX from 'xlsx';
+import { useReactToPrint } from 'react-to-print';
+import LembagaSariaPDF from '../../Export/SariaExport/LembagaSariaPDF';
 
 const LembagaKeagamaan = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -12,7 +14,9 @@ const LembagaKeagamaan = () => {
   const [filteredDataLembaga, setFilteredDataLembaga] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [lembagaPerPage] = useState(10);
+  const [lembagaPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
   const { sub } = useParams();
   const navigate = useNavigate();
 
@@ -90,6 +94,11 @@ const LembagaKeagamaan = () => {
     pageNumbers.push(i);
   }
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `DataLembagaKeagamaan(saria).pdf`,
+   });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -98,6 +107,9 @@ const LembagaKeagamaan = () => {
           getLembagaKeagamaan={getLembaga}
         />
       )}
+      <div style={{ display: "none" }}>
+        <LembagaSariaPDF ref={ComponentToPDF} lembaga={dataLembaga} />
+      </div>
       <h1 className="judul">Data Lembaga Keagamaan</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -113,6 +125,9 @@ const LembagaKeagamaan = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -123,6 +138,9 @@ const LembagaKeagamaan = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

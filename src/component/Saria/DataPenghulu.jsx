@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
 import AddPenghuluModal from "../Modal/SariaModal/AddPenghuluModal";
+import DataPenguhuluPDF from "../../Export/SariaExport/DataPenghuluPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataPenghulu = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [Penghulu, setPenghulu] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [PenghuluPerPage] = useState(10);
+  const [PenghuluPerPage] = useState(50);
+  const ComponentToPDF = useRef();
 
   // Fetch data from server
   const getPenghulu = async () => {
@@ -78,6 +81,10 @@ const DataPenghulu = () => {
     XLSX.writeFile(workbook, "DataPenghulu.xlsx");
   };
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `DataPenghulu(saria).pdf`,
+   });
   return (
     <div className="contain">
       {openModalAdd && (
@@ -86,6 +93,9 @@ const DataPenghulu = () => {
           getPenghulu={getPenghulu}
         />
       )}
+      <div style={{ display: "none" }}>
+        <DataPenguhuluPDF ref={ComponentToPDF} penghulu={Penghulu} />
+      </div>
       <h1 className="judul">Data Penghulu</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -101,6 +111,9 @@ const DataPenghulu = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -111,6 +124,9 @@ const DataPenghulu = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -146,9 +162,9 @@ const DataPenghulu = () => {
                 <td className="py-3 px-6 text-left">
                   {(currentPage - 1) * PenghuluPerPage + index + 1}
                 </td>
-                  <td className="py-3 px-6 text-left">
-                    {item && item.id_pegawai}
-                  </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.id_pegawai}
+                </td>
                 <td className="py-3 px-6 text-left">
                   {item && item.Pegawai && item.Pegawai.nama_pegawai}
                 </td>
