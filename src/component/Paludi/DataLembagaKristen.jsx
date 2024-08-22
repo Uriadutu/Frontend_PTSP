@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import * as XLSX from "xlsx";
 import AddLembagaModal from "../Modal/PaludiModal/AddLembagaModal";
 import { Link } from "react-router-dom";
+import LembagaKeagamaanPDF from "../../Export/PaludiExport/LembagaKeagamaanPaludiPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataLembagaKristen = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -12,7 +14,8 @@ const DataLembagaKristen = () => {
   const [lembagaKristen, setLembagaKristen] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [lembagaPerPage] = useState(10);
+  const [lembagaPerPage] = useState(50);
+  const ComponentToPDF = useRef();
 
   const getLembagaKristen = async () => {
     try {
@@ -81,6 +84,11 @@ const DataLembagaKristen = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `LembagaKeagamaanKristen(paludi).pdf`,
+   });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -89,6 +97,9 @@ const DataLembagaKristen = () => {
           getLembaga={getLembagaKristen}
         />
       )}
+      <div style={{ display: "none" }}>
+        <LembagaKeagamaanPDF ref={ComponentToPDF} lembaga={lembagaKristen} />
+      </div>
       <h1 className="judul">Data Lembaga Keagamaan</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -104,6 +115,9 @@ const DataLembagaKristen = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -114,6 +128,9 @@ const DataLembagaKristen = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -153,8 +170,11 @@ const DataLembagaKristen = () => {
                 <td className="py-3 px-6 text-left">{item.nama_pimpinan}</td>
                 <td className="py-3 px-6 text-left">{item.tahun_periode}</td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
-                  <Link className="detail" to={`/paludi/data-lembaga-kristen/detail/${item.id}`}>
-                  <IoEyeSharp color="white" />
+                  <Link
+                    className="detail"
+                    to={`/paludi/data-lembaga-kristen/detail/${item.id}`}
+                  >
+                    <IoEyeSharp color="white" />
                   </Link>
                   <button
                     className="delete"

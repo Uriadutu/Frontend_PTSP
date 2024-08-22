@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import AddAkademikModal from "../Modal/SidikaModal/AddAkademikModal";
+import AkademikPDF from "../../Export/SidikaExport/AkademinPDF";
+import { useReactToPrint } from "react-to-print";
 
 const Akademik = () => {
   const [dataAkademik, setDataAkademik] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(50);
   const [openModal, setOpenModal] = useState(false);
+  const ComponentToPDF = useRef();
+
 
   const getAkademik = async () => {
     try {
@@ -74,6 +78,11 @@ const Akademik = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `DataAkademik(sidika).pdf`,
+   });
+
   return (
     <div className="contain">
       {openModal && (
@@ -82,6 +91,9 @@ const Akademik = () => {
           setIsOpenModalAdd={setOpenModal}
         />
       )}
+      <div style={{ display: "none" }}>
+        <AkademikPDF ref={ComponentToPDF} akademik={dataAkademik} />
+      </div>
       <h1 className="judul">Pendampingan Akademik</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -97,6 +109,9 @@ const Akademik = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn-add sm:hidden block"
@@ -107,6 +122,9 @@ const Akademik = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

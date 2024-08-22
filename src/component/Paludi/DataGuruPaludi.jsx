@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import DataGuruPakPDF from "../../Export/PaludiExport/DataGuruPakPDF";
+import EditGuruPakModal from "../Modal/PaludiModal/EditGuruPakModal";
 
 const DataGuruPaludi = () => {
   const [gurus, setGurus] = useState([]);
   const [sortBy, setSortBy] = useState("nama_guru");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [gurusPerPage] = useState(10);
+  const [openModalEdit, setOpenModalEdit] = useState(false)
+  const [selectedGuruPak, setSelectGuruPak] = useState([])
+  const [gurusPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
+
 
   useEffect(() => {
     getGurus();
@@ -18,7 +26,7 @@ const DataGuruPaludi = () => {
 
   const getGurus = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/guru"); // Update URL jika diperlukan
+      const response = await axios.get("http://localhost:5000/gurupak"); // Update URL jika diperlukan
       setGurus(response.data);
     } catch (error) {
       console.log(error);
@@ -39,7 +47,7 @@ const DataGuruPaludi = () => {
   const deleteGuru = async (guruId) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus guru ini?")) {
       try {
-        await axios.delete(`http://localhost:5000/guru/${guruId}`);
+        await axios.delete(`http://localhost:5000/gurupak/${guruId}`);
         getGurus();
       } catch (error) {
         console.error("Error:", error);
@@ -54,11 +62,11 @@ const DataGuruPaludi = () => {
       "Kategori Guru": guru.kategori_guru,
       "Jenis Guru": guru.jenis_guru,
       "Nama Guru": guru.nama_guru,
-      "NIP": guru.NIP,
-      "Pangkat": guru.pangkat,
+      "NIP": guru.nip_guru,
+      "Pangkat": guru.pangkat_gol,
       "Jabatan": guru.jabatan,
-      "Tempat Tugas": guru.Sekolah && guru.Sekolah.nama_sekolah,
-      "Tanggal Mulai": guru.tgl_mulai,
+      "Tempat Tugas": guru.SekolahKristen && guru.SekolahKristen.nama_sekolah,
+      "Tanggal Mulai": guru.tgl_mulai_kerja,
       "Tempat Lahir": guru.tempat_lahir,
       "Tanggal Lahir": guru.tanggal_lahir,
       "Jenis Kelamin": guru.jenis_kelamin,
@@ -112,8 +120,29 @@ const DataGuruPaludi = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataGuruPak(paludi).pdf`,
+  });
+
+  const handleEdit = (item) => {
+    setSelectGuruPak(item)
+    setOpenModalEdit(true)
+  }
+
+
   return (
     <div className="contain">
+      {openModalEdit && (
+        <EditGuruPakModal
+          idGuru={selectedGuruPak}
+          setIsOpenModalEdit={setOpenModalEdit}
+          getGuru={getGurus}
+        />
+      )}
+      <div style={{ display: "none" }}>
+        <DataGuruPakPDF ref={ComponentToPDF} pak={gurus} />
+      </div>
       <h1 className="judul mb-4">Data Guru Paludi</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">
@@ -123,11 +152,17 @@ const DataGuruPaludi = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
 
           <button
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
           <div className="flex items-center space-x-2">
@@ -166,37 +201,37 @@ const DataGuruPaludi = () => {
           <tbody className="text-gray-600 text-sm font-light">
             {currentGurus.map((guru, index) => (
               <tr
-                key={guru.id}
+                key={guru?.id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
                 <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.nama_guru)}
+                  {capitalizeWords(guru?.nama_guru)}
                 </td>
-                <td className="py-3 px-6 text-left">{guru.NIP}</td>
+                <td className="py-3 px-6 text-left">{guru?.NIP}</td>
                 <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.status_pegawai)}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.Sekolah?.nama_sekolah || "")}
+                  {capitalizeWords(guru?.status_pegawai)}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.kategori_guru)}
+                  {capitalizeWords(guru?.SekolahKristen?.nama_sekolah || "")}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {capitalizeWords(guru?.kategori_guru)}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/lapasi/data-guru/detail-guru/${guru.id}`}
+                    to={`/lapasi/data-guru/detail-guru/${guru?.id}`}
                     className="detail"
                     title="Lihat"
                   >
                     <IoEyeSharp color="white" width={100} />
                   </Link>
-                  <button className="edit" title="Edit">
+                  <button className="edit" title="Edit" onClick={()=>handleEdit(guru)}>
                     <MdModeEdit color="white" />
                   </button>
                   <button
                     className="delete"
-                    onClick={() => deleteGuru(guru.id)}
+                    onClick={() => deleteGuru(guru?.id)}
                     title="Hapus"
                   >
                     <MdDelete color="white" />

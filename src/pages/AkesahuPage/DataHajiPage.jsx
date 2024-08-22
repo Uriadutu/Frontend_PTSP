@@ -17,7 +17,7 @@ const DataHajiPage = () => {
 
   useEffect(() => {
     if (isError) {
-      navigate("/");
+      navigate("/login");
     } else if (user && user.role === "Pegawai" && !user.hakAkses) {
       navigate("/dashboard");
     }

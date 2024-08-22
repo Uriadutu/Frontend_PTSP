@@ -46,7 +46,7 @@ const DetailGereja = () => {
           <p>{gerejaData.status_ijin}</p>
         </div>
         <div>
-          <strong>Nomor IBM:</strong>
+          <strong>Nomor IMB:</strong>
           <p>{gerejaData.nomor_ibm}</p>
         </div>
         <div>

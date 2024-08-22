@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+import SekolahPaludiPDF from "../../Export/PaludiExport/SekolahPaludiPDF";
+import { IoDocument } from "react-icons/io5";
 
 const DataSekolahKristen = () => {
   const [activeJenjang, setActiveJenjang] = useState(null);
@@ -13,6 +16,9 @@ const DataSekolahKristen = () => {
   const [totalSMAN, setTotalSMAN] = useState(0);
   const [totalSMAS, setTotalSMAS] = useState(0);
   const navigate = useNavigate();
+  const ComponentToPDF = useRef();
+
+
 
   const toggleSubMenu = (jenjang) => {
     setActiveJenjang((prevJenjang) =>
@@ -93,9 +99,24 @@ const DataSekolahKristen = () => {
     getJumlahSekolah("sekolah-menengah-atas", setTotalSMA);
   }, []);
 
+   const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataSekolah(paludi).pdf`,
+  });
+
+
   return (
     <div className="contain">
+      <div style={{ display: "none" }}>
+        <SekolahPaludiPDF ref={ComponentToPDF} />
+      </div>
       <h1 className="judul">Data Sekolah</h1>
+      <button onClick={printPDF} className="btn-pdf hidden sm:block">
+        Print PDF
+      </button>
+      <button onClick={printPDF} className="btn-pdf sm:hidden block">
+        <IoDocument color="white" />
+      </button>
       <div className="mt-2 overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
           <thead>

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
 import AddPengawasModal from "../Modal/SidikaModal/AddPengawasModal";
 import InfoPengawasModal from "../Modal/SidikaModal/InfoPengawasModal";
+import PengawasPDF from "../../Export/SidikaExport/PengawasPDF";
+import { useReactToPrint } from "react-to-print";
 
 const PetaKepengawasan = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -12,8 +14,9 @@ const PetaKepengawasan = () => {
   const [pengawas, setPengawas] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pengawasPerPage] = useState(10);
+  const [pengawasPerPage] = useState(50);
   const [pengawasData, setPengawasData] = useState([])
+  const ComponentToPDF = useRef();
 
 
   // Fetch data from server
@@ -91,6 +94,11 @@ const PetaKepengawasan = () => {
     XLSX.writeFile(workbook, "DataPengawas.xlsx");
   };
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `PetaKepengawasan(sidika).pdf`,
+  });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -105,6 +113,9 @@ const PetaKepengawasan = () => {
           Pengawas={pengawasData}
         />
       )}
+      <div style={{ display: "none" }}>
+        <PengawasPDF ref={ComponentToPDF} pengawas={pengawas} />
+      </div>
       <h1 className="judul">Peta Kepengawasan</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -120,6 +131,9 @@ const PetaKepengawasan = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -130,6 +144,9 @@ const PetaKepengawasan = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

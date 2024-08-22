@@ -6,9 +6,15 @@ import { IoDocument } from "react-icons/io5";
 
 const DataSekolah = () => {
   const [activeJenjang, setActiveJenjang] = useState(null);
+  const [totalRA, setTotalRA] = useState(0);
   const [totalSD, setTotalSD] = useState(0);
   const [totalSMP, setTotalSMP] = useState(0);
   const [totalSMA, setTotalSMA] = useState(0);
+  //====================================
+  const [totalRAN, setTotalRAN] = useState(0);
+  const [totalRAS, setTotalRAS] = useState(0);
+  const [totalRAP, setTotalRAP] = useState(0);
+  const [totalRAM, setTotalRAM] = useState(0);
   const [totalSDN, setTotalSDN] = useState(0);
   const [totalSDS, setTotalSDS] = useState(0);
   const [totalSDP, setTotalSDP] = useState(0);
@@ -37,8 +43,20 @@ const DataSekolah = () => {
   const dataSekolah = [
     {
       no: 1,
-      jenjang: "Sekolah Dasar (SD)",
-      value: "sekolah-dasar",
+      jenjang: "Raudhatul Athfal (RA)",
+      value: "raudhatul-athfal",
+      total: totalRA,
+      subTotal: {
+        negeri: totalRAN,
+        swasta: totalRAS,
+        pondokPesantren: totalRAP,
+        madin: totalRAM,
+      },
+    },
+    {
+      no: 2,
+      jenjang: "Madrasah Ibtidaiyah (MI)",
+      value: "madrasah-ibtidaiyah",
       total: totalSD,
       subTotal: {
         negeri: totalSDN,
@@ -48,9 +66,9 @@ const DataSekolah = () => {
       },
     },
     {
-      no: 2,
-      jenjang: "Sekolah Menengah Pertama (SMP)",
-      value: "sekolah-menengah-pertama",
+      no: 3,
+      jenjang: "Madrasah Tsanawiyah (MTs)",
+      value: "madrasah-tsanawiyah",
       total: totalSMP,
       subTotal: {
         negeri: totalSMPN,
@@ -60,9 +78,9 @@ const DataSekolah = () => {
       },
     },
     {
-      no: 3,
-      jenjang: "Sekolah Menengah Atas (SMA)",
-      value: "sekolah-menengah-atas",
+      no: 4,
+      jenjang: "Madrasah Aliyah (MA)",
+      value: "madrasah-aliyah",
       total: totalSMA,
       subTotal: {
         negeri: totalSMAN,
@@ -94,31 +112,40 @@ const DataSekolah = () => {
   };
 
   useEffect(() => {
-    getJumlahSekolahPerStatus("sekolah-dasarnegeri", setTotalSDN);
-    getJumlahSekolahPerStatus("sekolah-dasarswasta", setTotalSDS);
-    getJumlahSekolahPerStatus("sekolah-dasarpondok-pesantren", setTotalSDP);
-    getJumlahSekolahPerStatus("sekolah-dasarmadrasa-diniyah", setTotalSDM);
-    getJumlahSekolahPerStatus("sekolah-menengah-pertamanegeri", setTotalSMPN);
-    getJumlahSekolahPerStatus("sekolah-menengah-pertamaswasta", setTotalSMPS);
+    getJumlahSekolahPerStatus("raudhatul-athfalnegeri", setTotalRAN);
+    getJumlahSekolahPerStatus("raudhatul-athfalswasta", setTotalRAS);
+    getJumlahSekolahPerStatus("raudhatul-athfalpondok-pesantren", setTotalRAP);
+    getJumlahSekolahPerStatus("raudhatul-athfalmadrasa-diniyah", setTotalRAM);
+
+    getJumlahSekolahPerStatus("madrasah-ibtidaiyahnegeri", setTotalSDN);
+    getJumlahSekolahPerStatus("madrasah-ibtidaiyahswasta", setTotalSDS);
     getJumlahSekolahPerStatus(
-      "sekolah-menengah-pertamapondok-pesantren",
+      "madrasah-ibtidaiyahpondok-pesantren",
+      setTotalSDP
+    );
+    getJumlahSekolahPerStatus(
+      "madrasah-ibtidaiyahmadrasa-diniyah",
+      setTotalSDM
+    );
+    getJumlahSekolahPerStatus("madrasah-tsanawiyahnegeri", setTotalSMPN);
+    getJumlahSekolahPerStatus("madrasah-tsanawiyahswasta", setTotalSMPS);
+    getJumlahSekolahPerStatus(
+      "madrasah-tsanawiyahpondok-pesantren",
       setTotalSMPP
     );
     getJumlahSekolahPerStatus(
-      "sekolah-menengah-pertamamadrasa-diniyah",
+      "madrasah-tsanawiyahmadrasa-diniyah",
       setTotalSMPM
     );
-    getJumlahSekolahPerStatus("sekolah-menengah-atasnegeri", setTotalSMAN);
-    getJumlahSekolahPerStatus("sekolah-menengah-atasswasta", setTotalSMAS);
-    getJumlahSekolahPerStatus(
-      "sekolah-menengah-ataspondok-pesantren",
-      setTotalSMAP
-    );
-    getJumlahSekolahPerStatus(
-      "sekolah-menengah-atasmadrasa-diniyah",
-      setTotalSMAM
-    );
+    getJumlahSekolahPerStatus("madrasah-aliyahnegeri", setTotalSMAN);
+    getJumlahSekolahPerStatus("madrasah-aliyahswasta", setTotalSMAS);
+    getJumlahSekolahPerStatus("madrasah-aliyahpondok-pesantren", setTotalSMAP);
+    getJumlahSekolahPerStatus("madrasah-aliyahmadrasa-diniyah", setTotalSMAM);
   }, [
+    setTotalRAN,
+    setTotalRAS,
+    setTotalRAP,
+    setTotalRAM,
     setTotalSDN,
     setTotalSDS,
     setTotalSDP,
@@ -134,10 +161,11 @@ const DataSekolah = () => {
   ]);
 
   useEffect(() => {
-    getJumlahSekolah("sekolah-dasar", setTotalSD);
-    getJumlahSekolah("sekolah-menengah-pertama", setTotalSMP);
-    getJumlahSekolah("sekolah-menengah-atas", setTotalSMA);
-  }, [setTotalSD, setTotalSMP, setTotalSMA]);
+    getJumlahSekolah("raudhatul-athfal", setTotalRA);
+    getJumlahSekolah("madrasah-ibtidaiyah", setTotalSD);
+    getJumlahSekolah("madrasah-tsanawiyah", setTotalSMP);
+    getJumlahSekolah("madrasah-aliyah", setTotalSMA);
+  }, [setTotalRA, setTotalSD, setTotalSMP, setTotalSMA]);
 
   const printPDF = useReactToPrint({
     content: () => ComponentToPDF.current,

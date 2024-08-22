@@ -40,28 +40,13 @@ const AddMenejerialModal = ({ setIsOpenModalAdd, getAkademik }) => {
 
   const getSekolahByNama = async (nama) => {
     try {
-      const [responseKristen, responseIslam] = await Promise.all([
-        axios.get(`http://localhost:5000/sekolah-kristen/nama/${nama}`),
-        axios.get(`http://localhost:5000/sekolah/nama/${nama}`),
-      ]);
-
-      const dataKristen = Array.isArray(responseKristen.data)
-        ? responseKristen.data
-        : [responseKristen.data];
-      const dataIslam = Array.isArray(responseIslam.data)
-        ? responseIslam.data
-        : [responseIslam.data];
-
-      // Menggabungkan hasil dari kedua permintaan
-      const combinedData = [...dataKristen, ...dataIslam];
-
-      // Memeriksa apakah ada sekolah dengan nama tersebut dan mengambil data pertama
-      const sekolah = combinedData.length > 0 ? combinedData[0] : {};
-      setDataSekolah(sekolah);
+      const sekolah = await axios.get(`http://localhost:5000/sekolahsidika/${nama}`);
+      setDataSekolah(sekolah.data);
     } catch (error) {
       console.log(error);
     }
   };
+
 
 
   const getWilayahPengawas = async (id) => {

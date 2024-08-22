@@ -6,12 +6,15 @@ import { MdDelete, MdModeEdit } from "react-icons/md";
 import * as XLSX from "xlsx";
 import { useReactToPrint } from "react-to-print";
 import GuruDisaPDF from "../../Export/PantaiDisaExport/GuruDisaPDF";
+import EditGuruModal from "../Modal/PantaiDisaModal/EditGuruModal";
 
 const DataGuru = () => {
   const [gurus, setGurus] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [gurusPerPage, setGuruPerPage] = useState(10);
+  const [openModalEdit, setOpenModalEdit] = useState(false)
+  const [selectedGuru, setSelectGuru] = useState([])
   const ComponentToPDF = useRef();
 
 
@@ -46,6 +49,10 @@ const DataGuru = () => {
     }
   };
 
+  const handleEdit = (item) => {
+    setSelectGuru(item)
+    setOpenModalEdit(true)
+  }
   const downloadExcel = () => {
     const dataToExport = gurus.map((guru, index) => ({
       No: index + 1,
@@ -100,14 +107,19 @@ const DataGuru = () => {
   });
 
 
+
   return (
     <div className="contain">
       <div style={{ display: "none" }}>
-        <GuruDisaPDF
-          ref={ComponentToPDF}
-          guru={gurus}
-        />
+        <GuruDisaPDF ref={ComponentToPDF} guru={gurus} />
       </div>
+      {openModalEdit && (
+        <EditGuruModal
+          setIsOpenModalEdit={setOpenModalEdit}
+          selectedGuru={selectedGuru}
+          getGuru={getGurus}
+        />
+      )}
       <h1 className="judul mb-4">Data Guru</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">
@@ -194,7 +206,11 @@ const DataGuru = () => {
                   >
                     <IoEyeSharp color="white" width={100} />
                   </Link>
-                  <button className="edit" title="Edit">
+                  <button
+                    className="edit"
+                    title="Edit"
+                    onClick={() => handleEdit(guru)}
+                  >
                     <MdModeEdit color="white" />
                   </button>
                   <button

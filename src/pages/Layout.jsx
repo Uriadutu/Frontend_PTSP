@@ -22,6 +22,7 @@ const Layout = ({ children }) => {
           <main className="min-h-screen m-0 w-full sm:ml-[300px] ">
             <Jejak />
             {children}
+           
           </main>
         </div>
       </div>

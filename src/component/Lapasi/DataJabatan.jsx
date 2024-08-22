@@ -67,9 +67,6 @@ const DataJabatan = () => {
     setCurrentPage(1); // Reset to first page on search
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
 
   const downloadExcel = () => {
     const dataToExport = jabatan.map((item, index) => ({
@@ -188,7 +185,7 @@ const DataJabatan = () => {
                 <td className="py-3 px-6 text-left">
                   <button
                     className="text-red-500 hover:text-red-700"
-                    onClick={() => hapusJabatan(item.id_jabatan)}
+                    onClick={() => hapusJabatan(item.id)}
                   >
                     <MdDelete size={20} />
                   </button>

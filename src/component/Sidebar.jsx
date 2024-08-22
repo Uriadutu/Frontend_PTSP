@@ -46,7 +46,7 @@ const Sidebar = ({ tutupSidebar }) => {
   const logout = () => {
     dispatch(LogOut());
     dispatch(reset());
-    navigate("/");
+    navigate("/login");
   };
 
   const getNavLinkClass = ({ isActive }) =>
@@ -116,6 +116,7 @@ const Sidebar = ({ tutupSidebar }) => {
                     ></path>
                   </svg>
                 </button>
+
                 {openDropdown === "lapasi" && (
                   <div className="pl-6 transition-all duration-500 ease-out">
                     <NavLink

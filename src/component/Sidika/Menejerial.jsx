@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
-import { IoAdd, IoDocument } from "react-icons/io5";
+import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import AddMenejerialModal from "../Modal/SidikaModal/AddMenejerialModal";
+import { useReactToPrint } from "react-to-print";
+import MenejerialPDF from "../../Export/SidikaExport/MenejerialPDF";
+import { Link } from "react-router-dom";
 
 const Menejerial = () => {
   const [dataAkademik, setDataAkademik] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(50);
   const [openModal, setOpenModal] = useState(false)
+  const ComponentToPDF = useRef();
 
-  console.log(dataAkademik);
-  
 
   const getAkademik = async () => {
     try {
@@ -78,13 +80,21 @@ const Menejerial = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `DataPendampinganMenejerial(sidika).pdf`,
+   });
   return (
     <div className="contain">
       {openModal && (
         <AddMenejerialModal
-        getAkademik={getAkademik}
-        setIsOpenModalAdd={setOpenModal}/>
+          getAkademik={getAkademik}
+          setIsOpenModalAdd={setOpenModal}
+        />
       )}
+      <div style={{ display: "none" }}>
+        <MenejerialPDF ref={ComponentToPDF} menejerial={dataAkademik} />
+      </div>
       <h1 className="judul">Pendampingan Menejerial</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -100,6 +110,9 @@ const Menejerial = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn-add sm:hidden block"
@@ -110,6 +123,9 @@ const Menejerial = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -123,7 +139,7 @@ const Menejerial = () => {
           />
         </div>
       </div>
-      <div className="overflow-x-auto mt-2">
+      <div className="overflow-x-auto w-[100%] mt-2">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -134,7 +150,6 @@ const Menejerial = () => {
               <th className="py-3 px-6 text-left">Kepala Sekolah</th>
               <th className="py-3 px-6 text-left">Bersertifikat</th>
               <th className="py-3 px-6 text-left">Status Pegawai</th>
-              <th className="py-3 px-6 text-left">Keterangan</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
           </thead>
@@ -147,14 +162,32 @@ const Menejerial = () => {
                 <td className="py-3 px-6 text-left">
                   {indexOfFirstItem + index + 1}
                 </td>
-                <td className="py-3 px-6 text-left">{item && item.Pegawai && item.Pegawai.NIP}</td>
-                <td className="py-3 px-6 text-left">{item && item.Pegawai && item.Pegawai.nama_pegawai}</td>
-                <td className="py-3 px-6 text-left">{item && item.nama_sekolah}</td>
-                <td className="py-3 px-6 text-left">{item && item.nama_kepsek}</td>
-                <td className="py-3 px-6 text-left">{item && item.status_sertifikat}</td>
-                <td className="py-3 px-6 text-left">{item && item.status_pegawai}</td>
-                <td className="py-3 px-6 text-left">{item && item.keterangan}</td>
-                <td className="py-3 px-6 text-center">
+                <td className="py-3 px-6 text-left">
+                  {item && item.Pegawai && item.Pegawai.NIP}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.Pegawai && item.Pegawai.nama_pegawai}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.nama_sekolah}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.nama_kepsek}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.status_sertifikat}
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.status_pegawai}
+                </td>
+                <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                  <Link
+                    to={`/sidika/data-menejerial/detail/${item.id}`}
+                    className="detail"
+                    title="Lihat"
+                  >
+                    <IoEyeSharp color="white" width={100} />
+                  </Link>
                   <button
                     className="delete"
                     onClick={() => hapusAkademik(item.id)}

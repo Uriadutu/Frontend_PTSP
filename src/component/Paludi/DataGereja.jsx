@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddGerejaModal from "../Modal/PaludiModal/AddGerejaModal";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
+import GerejaPDF from "../../Export/PaludiExport/GerejaPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataGereja = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
@@ -12,7 +14,9 @@ const DataGereja = () => {
   const [filteredGereja, setFilteredGereja] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [gerejaPerPage] = useState(10);
+  const [gerejaPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
 
   // Fetch data from server
   const getGereja = async () => {
@@ -76,7 +80,7 @@ const DataGereja = () => {
       "Nama Gereja": item.nama_gereja,
       "No Tanda Lapor": item.no_lapor,
       "Status Ijin": item.status_ijin,
-      "Nomor IBM": item.nomor_ibm,
+      "Nomor IMB": item.nomor_ibm,
       "Status Gedung": item.status_gedung,
       "Status Tanah": item.status_tanah,
       "Luas Bangunan": item.luas_bangunan,
@@ -95,6 +99,11 @@ const DataGereja = () => {
     pageNumbers.push(i);
   }
 
+   const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataGereja(paludi).pdf`,
+  });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -103,6 +112,9 @@ const DataGereja = () => {
           getGereja={getGereja}
         />
       )}
+      <div style={{ display: "none" }}>
+        <GerejaPDF ref={ComponentToPDF} gereja={gereja} />
+      </div>
       <h1 className="judul">Data Gereja</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -118,6 +130,9 @@ const DataGereja = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -128,6 +143,9 @@ const DataGereja = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

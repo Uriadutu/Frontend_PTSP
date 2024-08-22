@@ -16,7 +16,7 @@ const Home = () => {
 
   useEffect(() => {
     if (isError) {
-      navigate("/");
+      navigate("/login");
     } 
   }, [isError, user, navigate]);
 

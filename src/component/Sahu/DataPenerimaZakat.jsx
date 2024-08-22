@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AddZakatModal from "../Modal/SahuModal/AddZakatModal";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
+import DataZakatPDF from "../../Export/SahuExport/ZakatPDF";
+import { useReactToPrint } from "react-to-print";
 
 const DataPenerimaZakat = () => {
   const [openModal, setOpenModal] = useState(false);
   const [zakats, setZakat] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(50);
   const [searchText, setSearchText] = useState("");
+  const ComponentToPDF = useRef();
+
 
   const navigate = useNavigate();
 
@@ -87,11 +91,21 @@ const DataPenerimaZakat = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+   const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `PenerimaDanPenyaluranZakat(sahu).pdf`,
+   });
+
+
   return (
     <div className="contain">
       {openModal && (
         <AddZakatModal setIsOpenModalAdd={setOpenModal} getZakat={getZakat} />
       )}
+      <div style={{ display: "none" }}>
+        <DataZakatPDF ref={ComponentToPDF} zakat={zakats} />
+      </div>
+
       <h1 className="judul">Data Penerima Dan Penyaluran Zakat</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -107,6 +121,9 @@ const DataPenerimaZakat = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn-add sm:hidden block"
@@ -117,6 +134,9 @@ const DataPenerimaZakat = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

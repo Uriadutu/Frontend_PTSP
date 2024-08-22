@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser, reset } from "../features/authSlice";
 import bgLogin from "../img/Background.jpg";
 import logoSasadu from "../img/LogoPTSP.png";
@@ -48,7 +48,7 @@ const Login = () => {
             <img src={LogoKemenag} className="w-32" alt="" />
           </div>
           <div className="flex items-center mb-6 space-y-2">
-            <img src={logoSasadu} alt="logo" className="w-32 h-auto" />
+            <img src={logoSasadu} alt="logo" className="w-32 h-auto cursor-pointer" onClick={()=> navigate("/")} />
             <h1 className="text-white text-[13px]">
               Aplikasi Layanan Terpadu Satu Pintu
               <br /> Kementerian Agama Kabupaten Halmahera Barat
@@ -78,6 +78,9 @@ const Login = () => {
           >
             {isLoading ? "Loading..." : "Masuk"}
           </button>
+          <Link className="text-white hover:text-green-500" to={"/"}>
+          Kelmbali
+          </Link>
         </form>
       </div>
     </section>

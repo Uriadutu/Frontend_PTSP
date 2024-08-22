@@ -111,7 +111,7 @@ const DataHaji = () => {
       </div>
 
       <h1 className="judul">Data Haji</h1>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setOpenModal(true)}
@@ -144,7 +144,7 @@ const DataHaji = () => {
             <IoDocument color="white" />
           </button>
         </div>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center">
           <input
             type="text"
             className="input"

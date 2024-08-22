@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";import { IoAdd, IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import * as XLSX from "xlsx";
 import AddPelayanGerejaModal from "../Modal/PaludiModal/AddPelayanGerejaModal";
 import { useNavigate } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+import PelayanGerejaPDF from "../../Export/PaludiExport/PelayanGerejaPDF";
 
 const PelayanGereja = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [gereja, setPelayanGereja] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [gerejaPerPage] = useState(10);
+  const [gerejaPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
+
 
   const navigate = useNavigate()
   // Fetch data from server
@@ -79,15 +84,23 @@ const PelayanGereja = () => {
     XLSX.writeFile(workbook, "DataPelayanGereja.xlsx");
   };
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `PelayanGereja(paludi).pdf`,
+  });
+
+
   return (
     <div className="contain">
       {openModalAdd && (
         <AddPelayanGerejaModal
           setIsOpenModalAdd={setOpenModalAdd}
           getPelayanGereja={getPelayan}
-          
         />
       )}
+      <div style={{ display: "none" }}>
+        <PelayanGerejaPDF ref={ComponentToPDF} pelayan={gereja} />
+      </div>
       <h1 className="judul">Data Pelayan Gereja</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -103,6 +116,9 @@ const PelayanGereja = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -113,6 +129,9 @@ const PelayanGereja = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -161,7 +180,11 @@ const PelayanGereja = () => {
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <button
                     className="detail"
-                    onClick={() => navigate(`/paludi/data-pelayan-gereja/detail/${item && item.id}`)}
+                    onClick={() =>
+                      navigate(
+                        `/paludi/data-pelayan-gereja/detail/${item && item.id}`
+                      )
+                    }
                     title="Detail"
                   >
                     <IoEyeSharp color="white" />

@@ -13,7 +13,7 @@ const HakAkses = () => {
   const [openModalInfo, setOpenModalInfo] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pegawaiPerPage] = useState(10);
+  const [pegawaiPerPage] = useState(50);
 
   useEffect(() => {
     fetchPegawai();

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const DetailGuru = () => {
-  const [guruData, setGuruData] = useState(null);
+  const [guruData, setGuruData] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
 

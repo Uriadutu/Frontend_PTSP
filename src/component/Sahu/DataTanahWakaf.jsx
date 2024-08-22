@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AddTanahWakafModal from "../Modal/SahuModal/AddTanahWakafModal";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import WakafPDF from "../../Export/SahuExport/WakafPDF";
 
 const DataTanahWakaf = () => {
   const [openModal, setOpenModal] = useState(false);
   const [dataTanah, setDataTanah] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage] = useState(10);
+  const [dataPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
 
   const getTanah = async () => {
     try {
@@ -63,6 +67,11 @@ const DataTanahWakaf = () => {
     XLSX.writeFile(workbook, "DataTanahWakaf.xlsx");
   };
 
+    const printPDF = useReactToPrint({
+     content: () => ComponentToPDF.current,
+     documentTitle: `DataTanahWakaf(sahu).pdf`,
+   });
+
   return (
     <div className="container mx-auto p-4">
       {openModal && (
@@ -71,6 +80,9 @@ const DataTanahWakaf = () => {
           getTanahWakaf={getTanah}
         />
       )}
+      <div style={{ display: "none" }}>
+        <WakafPDF ref={ComponentToPDF} wakaf={dataTanah} />
+      </div>
       <h1 className="text-2xl font-semibold mb-4">Data Tanah Wakaf</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -86,6 +98,9 @@ const DataTanahWakaf = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn-add sm:hidden block"
@@ -98,8 +113,10 @@ const DataTanahWakaf = () => {
           >
             <IoDocument color="white" />
           </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
+            <IoDocument color="white" />
+          </button>
         </div>
-       
       </div>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">

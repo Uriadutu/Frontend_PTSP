@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { IoAdd, IoDocument } from "react-icons/io5";
 import AddSekolahMingguModal from "../Modal/PaludiModal/AddSekolahMingguModal";
 import * as XLSX from "xlsx";
+import { useReactToPrint } from "react-to-print";
+import DataSekolahMingguPDF from "../../Export/PaludiExport/DataSekolahMingguPDF";
 
 const DataSekolahMinggu = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [sekolahMinggu, setSekolahMinggu] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sekolahMingguPerPage] = useState(10);
+  const [sekolahMingguPerPage] = useState(50);
+  const ComponentToPDF = useRef();
+
 
   const getSekolahMinggu = async () => {
     try {
@@ -35,7 +39,7 @@ const DataSekolahMinggu = () => {
   }, []);
 
   const filteredSekolahMinggu = sekolahMinggu.filter((item) =>(
-    item.nama_gereja.toLowerCase().includes(searchText.toLowerCase()),
+    item.nama_gereja.toLowerCase().includes(searchText.toLowerCase()) ||
     item.nama_pengasuh.toLowerCase().includes(searchText.toLowerCase()))
   );
 
@@ -79,6 +83,10 @@ const DataSekolahMinggu = () => {
     setCurrentPage(1); // Reset to first page on search
   };
 
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataSekolahMinggu(paludi).pdf`,
+  });
   return (
     <div className="contain">
       {openModalAdd && (
@@ -87,6 +95,9 @@ const DataSekolahMinggu = () => {
           getSekolahMinggu={getSekolahMinggu}
         />
       )}
+      <div style={{ display: "none" }}>
+        <DataSekolahMingguPDF ref={ComponentToPDF} minggu={sekolahMinggu} />
+      </div>
       <h1 className="judul mb-4">Data Sekolah Minggu</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -102,16 +113,23 @@ const DataSekolahMinggu = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
           >
             <IoAdd color="white" />
           </button>
+
           <button
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>
@@ -143,7 +161,9 @@ const DataSekolahMinggu = () => {
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
-                <td className="py-3 px-6 text-left">{item && item.Gereja && item.Gereja.nama_gereja}</td>
+                <td className="py-3 px-6 text-left">
+                  {item && item.Gereja && item.Gereja.nama_gereja}
+                </td>
                 <td className="py-3 px-6 text-left">{item.jumlah_anak}</td>
                 <td className="py-3 px-6 text-left">{item.nama_pengasuh}</td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">

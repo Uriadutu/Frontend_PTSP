@@ -167,6 +167,10 @@ const DetailSekolahKristen = () => {
           <p>{sekolahData.status_bangunan}</p>
         </div>
         <div>
+          <strong>SK Ijin:</strong>
+          <p>{sekolahData.sk_ijin}</p>
+        </div>
+        <div>
           <strong>No Her Registrasi Pendirian:</strong>
           <p>{sekolahData.no_reqPendirian}</p>
         </div>

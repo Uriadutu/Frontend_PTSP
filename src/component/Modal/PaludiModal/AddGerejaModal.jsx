@@ -115,7 +115,7 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="nomorIbm" className="label-input">
-                  Nomor IBM
+                  Nomor IMB
                 </label>
                 <input
                   id="nomorIbm"

@@ -103,7 +103,7 @@ const AddSekolahMingguModal = ({ setIsOpenModalAdd, getSekolahMinggu }) => {
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label
                   htmlFor="nama_pengajar"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="label-input"
                 >
                   Nama Pengajar
                 </label>
@@ -118,7 +118,7 @@ const AddSekolahMingguModal = ({ setIsOpenModalAdd, getSekolahMinggu }) => {
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="name" className="label-input">
-                  Jumlah Siswa
+                  Jumlah Anak
                 </label>
                 <input
                   type="number"

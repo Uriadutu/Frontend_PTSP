@@ -61,6 +61,8 @@ import DataTpqPage from "./pages/SariaPage/DataTpqPage.jsx";
 import DataPenghuluPage from "./pages/SariaPage/DataPenghuluPage.jsx";
 import AkademikPage from "./pages/SidikaPage/AkademikPage.jsx";
 import MenejerialPage from "./pages/SidikaPage/MenejerialPage.jsx";
+import DetailMenejerialPage from "./pages/SidikaPage/DetailMenejerialPage.jsx";
+import SplashScreenPage from "./User/Pages-user/SplashScreenPage.jsx";
 
 
 function App() {
@@ -68,7 +70,10 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* User */}
+          <Route path="/" element={<SplashScreenPage />} />
+          <Route path="/login" element={<LoginPage />} />
+
           <Route path="/dashboard" element={<Home />} />
           <Route path="/manajemen-akun" element={<HakAksesPage />} />
           {/* Lapasi */}
@@ -257,6 +262,10 @@ function App() {
           <Route
             path="/sidika/data-pendampingan-menejerial"
             element={<MenejerialPage />}
+          />
+          <Route
+            path="/sidika/data-menejerial/detail/:id"
+            element={<DetailMenejerialPage />}
           />
 
 

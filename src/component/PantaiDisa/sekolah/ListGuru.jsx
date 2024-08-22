@@ -4,12 +4,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
+import EditGuruModal from "../../Modal/PantaiDisaModal/EditGuruModal";
 
 const ListGuru = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [gurus, setGuru] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [selectedGuru, setSelectGuru] = useState([]);
   const { idsekolah } = useParams();
+
+   const handleEdit = (item) => {
+     setSelectGuru(item);
+     setOpenModalEdit(true);
+   };
 
   useEffect(() => {
     getGuruBySekolah(idsekolah);
@@ -37,6 +45,13 @@ const ListGuru = () => {
       {openModalAdd && (
         <AddGuruModal
           setIsOpenModalAdd={setOpenModalAdd}
+          getGuru={getGuruBySekolah}
+        />
+      )}
+      {openModalEdit && (
+        <EditGuruModal
+          setIsOpenModalEdit={setOpenModalEdit}
+          selectedGuru={selectedGuru}
           getGuru={getGuruBySekolah}
         />
       )}
@@ -93,7 +108,7 @@ const ListGuru = () => {
                   >
                     <IoEyeSharp color="white" width={100} />
                   </button>
-                  <button className="edit" title="Edit">
+                  <button className="edit" title="Edit" onClick={()=> handleEdit(item)}>
                     <MdModeEdit color="white" />
                   </button>
                   <button

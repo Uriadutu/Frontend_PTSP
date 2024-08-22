@@ -16,7 +16,7 @@ const HakAksesPage = () => {
 
   useEffect(() => {
     if (isError) {
-      navigate("/");
+      navigate("/login");
     }
     if (user) {
       if (user.role !== "Admin") {

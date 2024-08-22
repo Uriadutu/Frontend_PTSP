@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import AddDataUmatKristenModal from "../Modal/PaludiModal/AddDataUmatKristenModal";
@@ -6,14 +6,17 @@ import { Link } from "react-router-dom";
 import { IoEyeSharp } from "react-icons/io5";
 import * as XLSX from "xlsx";
 import { IoAdd, IoDocument } from "react-icons/io5";
+import { useReactToPrint } from "react-to-print";
+import DataUmatPaludiPDF from "../../Export/PaludiExport/DataUmatPaludiPDF";
 
 const DataUmatKristen = () => {
   const [umatKristen, setUmatKristen] = useState([]);
   const [filteredDataUmatKristen, setFilteredDataUmatKristen] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [umatPerPage] = useState(10);
+  const [umatPerPage] = useState(50);
   const [openModalAdd, setOpenModalAdd] = useState(false);
+  const ComponentToPDF = useRef();
 
   const getDataUmatKristen = async () => {
     try {
@@ -96,7 +99,12 @@ const DataUmatKristen = () => {
       console.log(error);
     }
   };
-  
+
+  const printPDF = useReactToPrint({
+    content: () => ComponentToPDF.current,
+    documentTitle: `DataUmat(paludi).pdf`,
+  });
+
   return (
     <div className="contain">
       {openModalAdd && (
@@ -105,6 +113,9 @@ const DataUmatKristen = () => {
           getDataUmatKristen={getDataUmatKristen}
         />
       )}
+      <div style={{ display: "none" }}>
+        <DataUmatPaludiPDF ref={ComponentToPDF} umat={umatKristen} />
+      </div>
       <h1 className="judul">Data Umat Kristen</h1>
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -120,6 +131,9 @@ const DataUmatKristen = () => {
           >
             Export ke Excel
           </button>
+          <button onClick={printPDF} className="btn-pdf hidden sm:block">
+            Print PDF
+          </button>
           <button
             onClick={() => setOpenModalAdd(true)}
             className="btn-add sm:hidden block"
@@ -130,6 +144,9 @@ const DataUmatKristen = () => {
             onClick={downloadExcel}
             className="btn-download sm:hidden block"
           >
+            <IoDocument color="white" />
+          </button>
+          <button onClick={printPDF} className="btn-pdf sm:hidden block">
             <IoDocument color="white" />
           </button>
         </div>

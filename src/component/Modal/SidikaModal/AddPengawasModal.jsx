@@ -9,6 +9,19 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
   const [pegawai, setPegawai] = useState([]);
   const [msg, setMsg] = useState("");
 
+  const [swastaRA, setSwastaRA] = useState([]);
+  const [swastaSD, setSwastaSD] = useState([]);
+  const [swastaSMP, setSwastaSMP] = useState([]);
+  const [swastaSMA, setSwastaSMA] = useState([]);
+  const [negeriRA, setNegeriRA] = useState([]);
+  const [negeriSD, setNegeriSD] = useState([]);
+  const [negeriSMP, setNegeriSMP] = useState([]);
+  const [negeriSMA, setNegeriSMA] = useState([]);
+  const [pesantrenRA, setPesantrenRA] = useState([]);
+  const [pesantrenSD, setPesantrenSD] = useState([]);
+  const [pesantrenSMP, setPesantrenSMP] = useState([]);
+  const [pesantrenSMA, setPesantrenSMA] = useState([]);
+  const [madrasahRA, setMadrasaRA] = useState([]);
   const [madrasahSD, setMadrasaSD] = useState([]);
   const [madrasahSMP, setMadrasaSMP] = useState([]);
   const [madrasahSMA, setMadrasaSMA] = useState([]);
@@ -30,6 +43,39 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
     }
   };
 
+  const getSwastaI = async (jenjang, set) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/sekolah/status/${jenjang}swasta`
+      );
+      set(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getNegeriI = async (jenjang, set) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/sekolah/status/${jenjang}negeri`
+      );
+      set(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getPondokPesantrenI = async (jenjang, set) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/sekolah/status/${jenjang}pondok-pesantren`
+      );
+      set(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getMadrasa = async (jenjang, set) => {
     try {
       const response = await axios.get(
@@ -40,6 +86,7 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
       console.log(error);
     }
   };
+
   const getPakSwasta = async (jenjang, set) => {
     try {
       const response = await axios.get(
@@ -50,6 +97,7 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
       console.log(error);
     }
   };
+
   const getPakNegeri = async (jenjang, set) => {
     try {
       const response = await axios.get(
@@ -62,10 +110,26 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
   };
 
   useEffect(() => {
+    //negeri
+    getNegeriI("raudhatul-athfal", setNegeriRA);
+    getNegeriI("madrasah-ibtidaiyah", setNegeriSD);
+    getNegeriI("madrasah-tsanawiyah", setNegeriSMP);
+    getNegeriI("madrasah-aliyah", setNegeriSMA);
+    //swasta
+    getSwastaI("raudhatul-athfal", setSwastaRA);
+    getSwastaI("madrasah-ibtidaiyah", setSwastaSD);
+    getSwastaI("madrasah-tsanawiyah", setSwastaSMP);
+    getSwastaI("madrasah-aliyah", setSwastaSMA);
+    //pesantren
+    getPondokPesantrenI("raudhatul-athfal", setPesantrenRA);
+    getPondokPesantrenI("madrasah-ibtidaiyah", setPesantrenSD);
+    getPondokPesantrenI("madrasah-tsanawiyah", setPesantrenSMP);
+    getPondokPesantrenI("madrasah-aliyah", setPesantrenSMA);
     //madrasa
-    getMadrasa("sekolah-dasar", setMadrasaSD);
-    getMadrasa("sekolah-menengah-pertama", setMadrasaSMP);
-    getMadrasa("sekolah-menengah-atas", setMadrasaSMA);
+    getMadrasa("raudhatul-athfal", setMadrasaRA);
+    getMadrasa("madrasah-ibtidaiyah", setMadrasaSD);
+    getMadrasa("madrasah-tsanawiyah", setMadrasaSMP);
+    getMadrasa("madrasah-aliyah", setMadrasaSMA);
 
     //swastapak
     getPakSwasta("sekolah-dasar", setPakSDS);
@@ -136,11 +200,11 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
     >
       <form
         onSubmit={handleSubmit}
-        className=" bg-white rounded-lg shadow-lg overflow-y-scroll w-[90%] h-full xl:h-[90%] xl:w-[50%] inline"
+        className=" relative bg-white rounded-lg shadow-lg overflow-y-scroll w-[90%] h-full xl:h-[90%] xl:w-[50%] inline-block"
       >
         <div className="">
-          <div className="w-full h-full  ">
-            <div className="flex items-center justify-between p-4 border-b  rounded-t">
+          <div className=" w-full h-full ">
+            <div className=" flex items-center justify-between p-4 border-b  rounded-t">
               <h3 className="text-xl font-semibold text-gray-900">
                 Tambah Pengawas
               </h3>
@@ -170,7 +234,9 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
             </div>
             <div className="p-4 inline-block w-full">
               <div className="flex grid mb-1 grid-cols-2 gap-4 items-center">
-                <label className="text-gray-700 font-medium">NIP Pegawai:</label>
+                <label className="text-gray-700 font-medium">
+                  NIP Pegawai:
+                </label>
                 <div className="relative w-full">
                   <input
                     type="text"
@@ -213,7 +279,632 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
                     Wilayah Pengawas:
                   </label>
                   <div className="overflow-x-auto mt-2">
-                    <h1>Sekolah Dasar</h1>
+                    <h1>Raudhatul Athfal (Negeri)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {negeriRA.length > 0 ? (
+                          negeriRA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1>Madrasah Ibtidaiyah (Negeri)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {negeriSD.length > 0 ? (
+                          negeriSD.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1 className="mt-3">Madrasah Tsanawiyah(Negeri)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {negeriSMP.length > 0 ? (
+                          negeriSMP.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  id={`smpm-${item.id}`}
+                                  //   checked={item && item.nama_sekolah}
+                                  value={item && item.nama_sekolah}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />{" "}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1 className="mt-3">Madrasah Aliyah (Negeri)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {negeriSMA.length > 0 ? (
+                          negeriSMA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  id={`smam-${item.id}`}
+                                  //   checked={item && item.nama_sekolah}
+                                  value={item && item.nama_sekolah}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="overflow-x-auto mt-2">
+                    <h1>Raudhatul Athfal (Swasta)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {swastaRA.length > 0 ? (
+                          swastaRA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1>Madrasah Ibtidaiyah (Swasta)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {swastaSD.length > 0 ? (
+                          swastaSD.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1 className="mt-3">Madrasah Tsanawiyah(Swasta)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {swastaSMP.length > 0 ? (
+                          swastaSMP.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  id={`smpm-${item.id}`}
+                                  //   checked={item && item.nama_sekolah}
+                                  value={item && item.nama_sekolah}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />{" "}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1 className="mt-3">Madrasah Aliyah (Swasta)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {swastaSMA.length > 0 ? (
+                          swastaSMA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  id={`smam-${item.id}`}
+                                  //   checked={item && item.nama_sekolah}
+                                  value={item && item.nama_sekolah}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="overflow-x-auto mt-2">
+                    <h1>Raudhatul Athfal (Pondok Pesantren)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {pesantrenRA.length > 0 ? (
+                          pesantrenRA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1>Madrasah Ibtidaiyah (Pondok Pesantren)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {pesantrenSD.length > 0 ? (
+                          pesantrenSD.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1 className="mt-3">
+                      Madrasah Tsanawiyah(Pondok Pesantren)
+                    </h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {pesantrenSMP.length > 0 ? (
+                          pesantrenSMP.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  id={`smpm-${item.id}`}
+                                  //   checked={item && item.nama_sekolah}
+                                  value={item && item.nama_sekolah}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />{" "}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1 className="mt-3">Madrasah Aliyah (Pondok Pesantren)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {pesantrenSMA.length > 0 ? (
+                          pesantrenSMA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  id={`smam-${item.id}`}
+                                  //   checked={item && item.nama_sekolah}
+                                  value={item && item.nama_sekolah}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="overflow-x-auto mt-2">
+                    <h1>Raudhatul Athfal (Madrasah Diniyah)</h1>
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">No</th>
+                          <th className="py-3 px-6 text-left">Nama Sekolah</th>
+                          <th className="py-3 px-6 text-left">Status</th>
+                          <th className="py-3 px-6 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-600 text-sm font-light">
+                        {madrasahRA.length > 0 ? (
+                          madrasahRA.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-200 hover:bg-gray-100"
+                            >
+                              <td className="py-3 px-6 text-left">
+                                {index + 1}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.nama_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-left">
+                                {item && item.s_sekolah}
+                              </td>
+                              <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
+                                <input
+                                  type="checkbox"
+                                  value={item && item.nama_sekolah}
+                                  id={`sdm-${index + 1}`}
+                                  onChange={handleCheckboxChange}
+                                  checked={wilayahPengawas.includes(
+                                    item.nama_sekolah
+                                  )}
+                                  className="form-checkbox"
+                                />
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <td colSpan={4} className="py-3 px-6 text-center">
+                            Tidak ada data
+                          </td>
+                        )}
+                      </tbody>
+                    </table>
+                    <h1>Madrasah Ibtidaiyah (Madrasah Diniyah)</h1>
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                       <thead>
                         <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -260,7 +951,9 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
                         )}
                       </tbody>
                     </table>
-                    <h1 className="mt-3">Sekolah Menengah Pertama</h1>
+                    <h1 className="mt-3">
+                      Madrasah Tsanawiyah (Madrasah Diniyah)
+                    </h1>
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                       <thead>
                         <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -308,7 +1001,7 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
                         )}
                       </tbody>
                     </table>
-                    <h1 className="mt-3">Sekolah Menengah Atas</h1>
+                    <h1 className="mt-3">Madrasah Aliyah (Madrasah Diniyah)</h1>
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                       <thead>
                         <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -633,24 +1326,24 @@ const AddPengawasModal = ({ setIsOpenModalAdd, getDataPengawas }) => {
                   </div>
                 </div>
               )}
-              <div className="flex items-center justify-between p-4 space-x-3 border-t border-gray-200 rounded-b">
-                <h1>{msg}</h1>
-                <div className="flex gap-3">
-                  <button type="submit" className="btn btn-simpan">
-                    Simpan
-                  </button>
-                  <button
-                    onClick={() => setIsOpenModalAdd(false)}
-                    type="button"
-                    className="btn-batal"
-                  >
-                    Batal
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
+          <div className="flex sticky bg-white w-full bottom-0 items-center justify-between p-4 space-x-3 border-t border-gray-200 rounded-b">
+            <h1>{msg}</h1>
+            <div className="flex gap-3">
+              <button type="submit" className="btn btn-simpan">
+                Simpan
+              </button>
+              <button
+                onClick={() => setIsOpenModalAdd(false)}
+                type="button"
+                className="btn-batal"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
       </form>
     </div>
   );
