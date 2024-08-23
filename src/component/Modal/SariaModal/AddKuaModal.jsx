@@ -141,7 +141,7 @@ const AddKuaModal = ({ setIsOpenModalAdd, getKua }) => {
                   className="w-full input"
                   value={jumlahPegawai}
                   onChange={(e) => setJumlahPegawai(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
             </div>

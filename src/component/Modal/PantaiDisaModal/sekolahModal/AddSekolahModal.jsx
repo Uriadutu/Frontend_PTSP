@@ -5,6 +5,7 @@ import axios from "axios";
 const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
   const [NamaSekolah, setNamaSekolah] = useState("");
   const [NSS, setNSS] = useState("");
+  const [Npsn, setNpsn] = useState("");
   const [Alamat, setAlamat] = useState("");
   const [NomorTelepon, setNomorTelepon] = useState("");
   const [TahunBerdiri, setTahunBerdiri] = useState("");
@@ -29,6 +30,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
         jenjang_sekolah: jenjang,
         status_sekolah: status,
         nss: NSS,
+        npsn: Npsn,
         alamat: Alamat,
         no_telp: NomorTelepon,
         tahun_berdiri: TahunBerdiri,
@@ -101,13 +103,25 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="nss" className="label-input">
-                  NSS / NPSN
+                  NSS 
                 </label>
                 <input
                   value={NSS}
                   onChange={(e) => setNSS(e.target.value)}
                   type="text"
                   id="nss"
+                  className="w-full input"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="nss" className="label-input">
+                  NPSN
+                </label>
+                <input
+                  value={Npsn}
+                  onChange={(e) => setNpsn(e.target.value)}
+                  type="text"
+                  id="npsn"
                   className="w-full input"
                 />
               </div>
@@ -130,7 +144,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
                 <input
                   value={NomorTelepon}
                   onChange={(e) => setNomorTelepon(e.target.value)}
-                  type="text"
+                  type="number"
                   id="nomorTelepon"
                   className="w-full input"
                 />
@@ -142,7 +156,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
                 <input
                   value={TahunBerdiri}
                   onChange={(e) => setTahunBerdiri(e.target.value)}
-                  type="text"
+                  type="number"
                   id="tahunBerdiri"
                   className="w-full input"
                 />
@@ -219,7 +233,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
                 <input
                   value={JumlahRombel}
                   onChange={(e) => setJumlahRombel(e.target.value)}
-                  type="text"
+                  type="number"
                   id="jumlahRombel"
                   className="w-full input"
                 />
@@ -243,7 +257,7 @@ const AddSekolahModal = ({ setIsOpenModalAdd, getSekolah }) => {
                 <input
                   value={NIP}
                   onChange={(e) => setNIP(e.target.value)}
-                  type="text"
+                  type="number"
                   id="NIP"
                   className="w-full input"
                 />

@@ -176,7 +176,7 @@ const AddTanahWakafModal = ({ setIsOpenModalAdd, getTanahWakaf }) => {
                   className="w-full input"
                   value={jumlahWakaf}
                   onChange={(e) => setJumlahWakaf(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
             </div>

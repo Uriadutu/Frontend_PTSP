@@ -79,7 +79,7 @@ const AddPeriodeModal = ({ setIsOpenModalAdd, getPeriode }) => {
                 <input
                   value={JumlahJamaah}
                   onChange={(e) => setJumlahJamaah(e.target.value)}
-                  type="text"
+                  type="number"
                   id="JumlahJamaah"
                   className="w-full input"
                 />

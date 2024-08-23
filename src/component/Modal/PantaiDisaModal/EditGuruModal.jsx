@@ -198,7 +198,7 @@ const EditGuruModal = ({ setIsOpenModalEdit, getGuru, selectedGuru }) => {
                       className="w-full input"
                       value={nip}
                       onChange={(e) => setNip(e.target.value)}
-                      type="text"
+                      type="number"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-5 mb-2">
@@ -379,7 +379,7 @@ const EditGuruModal = ({ setIsOpenModalEdit, getGuru, selectedGuru }) => {
                   className="w-full input"
                   value={nomorTelepon}
                   onChange={(e) => setNomorTelepon(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">

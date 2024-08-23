@@ -191,7 +191,7 @@ const AddGerejaModal = ({ setIsOpenModalAdd, getGereja }) => {
                   className="w-full input"
                   value={tahunBerdiri}
                   onChange={(e) => setTahunBerdiri(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
             </div>

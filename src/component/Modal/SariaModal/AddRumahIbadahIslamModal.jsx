@@ -83,7 +83,7 @@ const AddRumahIbadahIslamModal = ({ setIsOpenModalAdd, getRumahIbadah }) => {
                   className="w-full input"
                   value={idMesjid}
                   onChange={(e) => setIdMesjid(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -179,7 +179,7 @@ const AddRumahIbadahIslamModal = ({ setIsOpenModalAdd, getRumahIbadah }) => {
                   className="w-full input"
                   value={tahunBerdiri}
                   onChange={(e) => setTahunBerdiri(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
             </div>

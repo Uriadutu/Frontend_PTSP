@@ -18,43 +18,50 @@ const DetailPegawai = () => {
     }
   };
 
- const hitungMasaKerja = (tmt_pengangkatan) => {
-    if (!tmt_pengangkatan) return "";
+const hitungMasaKerja = (tmt_pengangkatan, tmt_pensiun) => {
+  if (!tmt_pengangkatan) return "";
 
-    const today = new Date();
-    const tmtDate = new Date(tmt_pengangkatan);
+  const today = new Date();
+  const tmtDate = new Date(tmt_pengangkatan);
+  const pensiunDate = new Date(tmt_pensiun);
 
-    let years = today.getFullYear() - tmtDate.getFullYear();
-    let months = today.getMonth() - tmtDate.getMonth();
-    let days = today.getDate() - tmtDate.getDate();
+  // Jika sudah pensiun
+  if (today > pensiunDate) {
+    return "Sudah Pensiun";
+  }
 
-    if (months < 0) {
-      years--;
-      months += 12;
-    }
+  let years = today.getFullYear() - tmtDate.getFullYear();
+  let months = today.getMonth() - tmtDate.getMonth();
+  let days = today.getDate() - tmtDate.getDate();
 
-    if (days < 0) {
-      months--;
-      let prevMonth = today.getMonth() === 0 ? 11 : today.getMonth() - 1;
-      let prevMonthDays = new Date(
-        today.getFullYear(),
-        prevMonth + 1,
-        0
-      ).getDate();
-      days += prevMonthDays;
-    }
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
 
-    let weeks = Math.floor(days / 7);
-    days = days % 7;
+  if (days < 0) {
+    months--;
+    let prevMonth = today.getMonth() === 0 ? 11 : today.getMonth() - 1;
+    let prevMonthDays = new Date(
+      today.getFullYear(),
+      prevMonth + 1,
+      0
+    ).getDate();
+    days += prevMonthDays;
+  }
 
-    let masaKerjaArray = [];
-    if (years > 0) masaKerjaArray.push(`${years} tahun`);
-    if (months > 0) masaKerjaArray.push(`${months} bulan`);
-    if (weeks > 0) masaKerjaArray.push(`${weeks} minggu`);
-    if (days > 0) masaKerjaArray.push(`${days} hari`);
+  let weeks = Math.floor(days / 7);
+  days = days % 7;
 
-    return masaKerjaArray.join(" ");
-  };
+  let masaKerjaArray = [];
+  if (years > 0) masaKerjaArray.push(`${years} tahun`);
+  if (months > 0) masaKerjaArray.push(`${months} bulan`);
+  if (weeks > 0) masaKerjaArray.push(`${weeks} minggu`);
+  if (days > 0) masaKerjaArray.push(`${days} hari`);
+
+  return masaKerjaArray.join(" ");
+};
+
 
   useEffect(() => {
     getPegawaiById(id);
@@ -101,7 +108,12 @@ const DetailPegawai = () => {
         </div>
         <div>
           <strong>Masa Kerja:</strong>
-          <p>{hitungMasaKerja(pegawaiData.tmt_pengangkatan)}</p>
+          <p>
+            {hitungMasaKerja(
+              pegawaiData.tmt_pengangkatan,
+              pegawaiData.tmt_pensiun
+            )}
+          </p>
         </div>
         <div>
           <strong>TMT Pensiun:</strong>

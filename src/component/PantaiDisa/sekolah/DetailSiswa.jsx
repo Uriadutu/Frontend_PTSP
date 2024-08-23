@@ -55,6 +55,10 @@ const DetailSiswa = () => {
           <p>{siswaData.NISN}</p>
         </div>
         <div>
+          <strong>Kelas:</strong>
+          <p>{siswaData.kelas}</p>
+        </div>
+        <div>
           <strong>Nama Siswa:</strong>
           <p>{siswaData.nama_siswa}</p>
         </div>
@@ -77,14 +81,6 @@ const DetailSiswa = () => {
         <div>
           <strong>Nama Ayah:</strong>
           <p>{siswaData.nama_ayah}</p>
-        </div>
-        <div>
-          <strong>Pendidikan Ayah:</strong>
-          <p>{siswaData.pendidikan_ayah}</p>
-        </div>
-        <div>
-          <strong>Pekerjaan Ayah:</strong>
-          <p>{siswaData.pekerjaan_ayah}</p>
         </div>
         <div>
           <strong>Nama Ibu:</strong>

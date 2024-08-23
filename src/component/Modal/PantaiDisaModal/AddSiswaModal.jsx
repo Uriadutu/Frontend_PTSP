@@ -11,12 +11,11 @@ const AddSiswaModal = ({ setIsOpenModalAdd, getSiswa }) => {
   const [tempatLahir, setTempatLahir] = useState("");
   const [tanggalLahir, setTanggalLahir] = useState("");
   const [agama, setAgama] = useState("");
+  const [kelas, setKelas] = useState("")
   const [namaAyah, setNamaAyah] = useState("");
-  const [pendidikanAyah, setPendidikanAyah] = useState("");
-  const [pekerjaanAyah, setPekerjaanAyah] = useState("");
+ 
   const [namaIbu, setNamaIbu] = useState("");
-  const [pendidikanIbu, setPendidikanIbu] = useState("");
-  const [pekerjaanIbu, setPekerjaanIbu] = useState("");
+ 
   const [alamat, setAlamat] = useState("");
   const [nomorTeleponOrtu, setNomorTeleponOrtu] = useState("");
   const { idsekolah, jenjang } = useParams();
@@ -36,12 +35,11 @@ const AddSiswaModal = ({ setIsOpenModalAdd, getSiswa }) => {
         tempat_lahir: tempatLahir,
         tanggal_lahir: tanggalLahir,
         agama: agama,
+        kelas : kelas,
         nama_ayah: namaAyah,
-        pendidikan_ayah: pendidikanAyah,
-        pekerjaan_ayah: pekerjaanAyah,
+      
         nama_ibu: namaIbu,
-        pendidikan_ibu: pendidikanIbu,
-        pekerjaan_ibu: pekerjaanIbu,
+       
         alamat: alamat,
         nomor_telepon_ortu: nomorTeleponOrtu,
       });
@@ -204,6 +202,18 @@ const AddSiswaModal = ({ setIsOpenModalAdd, getSiswa }) => {
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="namaAyah" className="label-input">
+                  Kelas
+                </label>
+                <input
+                  id="namaAyah"
+                  className="w-full input"
+                  value={kelas}
+                  onChange={(e) => setKelas(e.target.value)}
+                  type="text"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="namaAyah" className="label-input">
                   Nama Ayah
                 </label>
                 <input
@@ -213,49 +223,6 @@ const AddSiswaModal = ({ setIsOpenModalAdd, getSiswa }) => {
                   onChange={(e) => setNamaAyah(e.target.value)}
                   type="text"
                 />
-              </div>
-              <div className="grid grid-cols-2 gap-5 mb-2">
-                <label htmlFor="pendidikanAyah" className="label-input">
-                  Pendidikan Ayah
-                </label>
-                <select
-                  id="pendidikanAyah"
-                  className="input py-0"
-                  value={pendidikanAyah}
-                  onChange={(e) => setPendidikanAyah(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Pendidikan Ayah
-                  </option>
-                  <option value="SD">SD</option>
-                  <option value="SMP">SMP</option>
-                  <option value="SMA">SMA</option>
-                  <option value="Diploma">Diploma</option>
-                  <option value="Sarjana">Sarjana</option>
-                  <option value="Magister">Magister</option>
-                  <option value="Doktor">Doktor</option>
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-5 mb-2">
-                <label htmlFor="pekerjaanAyah" className="label-input">
-                  Pekerjaan Ayah
-                </label>
-                <select
-                  id="pekerjaanAyah"
-                  className="input py-0"
-                  value={pekerjaanAyah}
-                  onChange={(e) => setPekerjaanAyah(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Pekerjaan Ayah
-                  </option>
-                  <option value="PNS">PNS</option>
-                  <option value="Swasta">Swasta</option>
-                  <option value="Petani">Petani</option>
-                  <option value="Buruh">Buruh</option>
-                  <option value="Wiraswasta">Wiraswasta</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="namaIbu" className="label-input">
@@ -268,50 +235,6 @@ const AddSiswaModal = ({ setIsOpenModalAdd, getSiswa }) => {
                   onChange={(e) => setNamaIbu(e.target.value)}
                   type="text"
                 />
-              </div>
-              <div className="grid grid-cols-2 gap-5 mb-2">
-                <label htmlFor="pendidikanIbu" className="label-input">
-                  Pendidikan Ibu
-                </label>
-                <select
-                  id="pendidikanIbu"
-                  className="input py-0"
-                  value={pendidikanIbu}
-                  onChange={(e) => setPendidikanIbu(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Pendidikan Ibu
-                  </option>
-                  <option value="SD">SD</option>
-                  <option value="SMP">SMP</option>
-                  <option value="SMA">SMA</option>
-                  <option value="Diploma">Diploma</option>
-                  <option value="Sarjana">Sarjana</option>
-                  <option value="Magister">Magister</option>
-                  <option value="Doktor">Doktor</option>
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-5 mb-2">
-                <label htmlFor="pekerjaanIbu" className="label-input">
-                  Pekerjaan Ibu
-                </label>
-                <select
-                  id="pekerjaanIbu"
-                  className="input py-0"
-                  value={pekerjaanIbu}
-                  onChange={(e) => setPekerjaanIbu(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Pekerjaan Ibu
-                  </option>
-                  <option value="PNS">PNS</option>
-                  <option value="Swasta">Swasta</option>
-                  <option value="Petani">Petani</option>
-                  <option value="Buruh">Buruh</option>
-                  <option value="Wiraswasta">Wiraswasta</option>
-                  <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="alamat" className="label-input">

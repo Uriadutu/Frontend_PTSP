@@ -181,7 +181,7 @@ const AddZakatModal = ({ setIsOpenModalAdd, getZakat }) => {
                   className="w-full input"
                   value={jumlahSumberZakat}
                   onChange={(e) => setJumlahSumberZakat(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -269,7 +269,7 @@ const AddZakatModal = ({ setIsOpenModalAdd, getZakat }) => {
                   className="w-full input"
                   value={jumlahZakat}
                   onChange={(e) => setJumlahZakat(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">

@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
+const AddTenagaKependidikanPaludiModal = ({ setIsOpenModalAdd, getTenaga }) => {
   const [statusPegawai, setStatusPegawai] = useState("");
-  const [kategoriGuru, setKategoriGuru] = useState("");
-  const [jenisGuru, setJenisGuru] = useState("");
   const [namaGuru, setNamaGuru] = useState("");
   const [nip, setNip] = useState("");
   const [pangkatGolongan, setPangkatGolongan] = useState("");
@@ -14,14 +12,16 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
   const [tempatLahir, setTempatLahir] = useState("");
   const [tanggalLahir, setTanggalLahir] = useState("");
   const [jenisKelamin, setJenisKelamin] = useState("");
+  const [agama, setAgama] = useState("");
   const [pendidikanTerakhir, setPendidikanTerakhir] = useState("");
   const [jurusan, setJurusan] = useState("");
   const [tahunLulus, setTahunLulus] = useState("");
   const [nomorTelepon, setNomorTelepon] = useState("");
   const [email, setEmail] = useState("");
-  const { idsekolah, jenjang } = useParams();
+  const { idsekolah } = useParams();
 
-
+  
+  
   const handleStatusPegawaiChange = (e) => {
     setStatusPegawai(e.target.value);
     if (e.target.value === "PNS" || e.target.value === "PPPK") {
@@ -36,29 +36,28 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/gurupak", {
-        id_sekolah: idsekolah,
-        jenjang: jenjang,
+      await axios.post("http://localhost:5000/tenagakristen", {
+
+          id_sekolah: idsekolah,
+          NIP: nip,
+          nama_tenaga: namaGuru,
         status_pegawai: statusPegawai,
-        kategori_guru: kategoriGuru,
-        jenis_guru: jenisGuru,
-        nama_guru: namaGuru,
-        nip_guru: nip,
-        pangkat_gol: pangkatGolongan,
+        pangkat: pangkatGolongan,
         jabatan: jabatan,
-        tgl_mulai_kerja: tanggalMulaiKerja,
+        tgl_mulai: tanggalMulaiKerja,
         tempat_lahir: tempatLahir,
         tanggal_lahir: tanggalLahir,
         jenis_kelamin: jenisKelamin,
+        agama: agama,
         pendidikan_terakhir: pendidikanTerakhir,
-        jurusan: jurusan,
+        juruan: jurusan,
         tahun_lulus: tahunLulus,
         no_telp: nomorTelepon,
         email: email,
       });
 
       setIsOpenModalAdd(false);
-      getGuru(idsekolah);
+      getTenaga(idsekolah);
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +74,7 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
         <div className="w-full bg-white rounded-lg shadow-lg h-full inline-block">
           <div className="flex items-center justify-between p-4 border-b rounded-t">
             <h3 className="text-xl font-semibold text-gray-900">
-              Tambah Data Guru PAK
+              Tambah Data Tenaga Kependidikan
             </h3>
             <button
               onClick={() => setIsOpenModalAdd(false)}
@@ -122,40 +121,6 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
-                <label htmlFor="kategoriGuru" className="label-input">
-                  Kategori Guru
-                </label>
-                <select
-                  id="kategoriGuru"
-                  className="input py-0"
-                  value={kategoriGuru}
-                  onChange={(e) => setKategoriGuru(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Kategori
-                  </option>
-                  <option value="Guru Pemda">Guru Pemda</option>
-                  <option value="Guru Kemenag">Guru Kemenag</option>
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-5 mb-2">
-                <label htmlFor="jenisGuru" className="label-input">
-                  Jenis Guru
-                </label>
-                <select
-                  id="jenisGuru"
-                  className="input py-0"
-                  value={jenisGuru}
-                  onChange={(e) => setJenisGuru(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih Jenis
-                  </option>
-                  <option value="Sertifikasi">Sertifikasi</option>
-                  <option value="Non Sertifikasi">Non Sertifikasi</option>
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="namaGuru" className="label-input">
                   Nama Guru
                 </label>
@@ -194,7 +159,6 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
                       <option value="" disabled>
                         Pilih Pangkat/Golongan
                       </option>
-                      <option value="Penata Muda, IX">Penata Muda, IX</option>
                       <option value="Penata Muda, III/a">
                         Penata Muda, III/a
                       </option>
@@ -283,22 +247,48 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
                   <option value="" disabled>
                     Pilih Jenis Kelamin
                   </option>
-                  <option value="Laki-Laki">Laki-Laki</option>
+                  <option value="Laki-laki">Laki-laki</option>
                   <option value="Perempuan">Perempuan</option>
                 </select>
               </div>
-
+              <div className="grid grid-cols-2 gap-5 mb-2">
+                <label htmlFor="agama" className="label-input">
+                  Agama
+                </label>
+                <select
+                  id="agama"
+                  className="input py-0"
+                  value={agama}
+                  onChange={(e) => setAgama(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Pilih Agama
+                  </option>
+                  <option value="Islam">Islam</option>
+                  <option value="Kristen">Kristen</option>
+                  <option value="Katolik">Katolik</option>
+                  <option value="Hindu">Hindu</option>
+                  <option value="Budha">Budha</option>
+                  <option value="Kong Hu Cu">Kong Hu Cu</option>
+                </select>
+              </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="pendidikanTerakhir" className="label-input">
                   Pendidikan Terakhir
                 </label>
-                <input
+                <select
                   id="pendidikanTerakhir"
-                  className="w-full input"
+                  className="input py-0"
                   value={pendidikanTerakhir}
                   onChange={(e) => setPendidikanTerakhir(e.target.value)}
-                  type="text"
-                />
+                >
+                  <option value="" disabled>
+                    Pilih Pendidikan
+                  </option>
+                  <option value="DIII">DIII</option>
+                  <option value="S1/DIV">S1/DIV</option>
+                  <option value="S2">S2</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="jurusan" className="label-input">
@@ -326,7 +316,7 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="nomorTelepon" className="label-input">
-                  Nomor Telepon
+                  Nomor Telepon/WA
                 </label>
                 <input
                   id="nomorTelepon"
@@ -368,4 +358,4 @@ const AddGuruPakModal = ({ setIsOpenModalAdd, getGuru }) => {
   );
 };
 
-export default AddGuruPakModal;
+export default AddTenagaKependidikanPaludiModal;

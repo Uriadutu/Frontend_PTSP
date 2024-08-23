@@ -5,10 +5,10 @@ import { IoDocument, IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import * as XLSX from "xlsx";
 import { useReactToPrint } from "react-to-print";
-import GuruDisaPDF from "../../Export/PantaiDisaExport/GuruDisaPDF";
-import EditGuruModal from "../Modal/PantaiDisaModal/EditGuruModal";
+import TenagaKependidikanPaludiPDF from "../../Export/PaludiExport/TenagaKependidikanPaludiPDF";
+import EditTenagaKependidikanPaludiModal from "../Modal/PaludiModal/EditTenagaKependidikanPaludiModal";
 
-const DataGuru = () => {
+const DataTenagaKependidikanPaludi = () => {
   const [gurus, setGurus] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +24,7 @@ const DataGuru = () => {
 
   const getGurus = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/guru");
+      const response = await axios.get("http://localhost:5000/tenagakristen");
       setGurus(response.data);
     } catch (error) {
       console.log(error);
@@ -41,7 +41,7 @@ const DataGuru = () => {
   const deleteGuru = async (guruId) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus guru ini?")) {
       try {
-        await axios.delete(`http://localhost:5000/guru/${guruId}`);
+        await axios.delete(`http://localhost:5000/tenagakristen/${guruId}`);
         getGurus();
       } catch (error) {
         console.error("Error:", error);
@@ -56,12 +56,10 @@ const DataGuru = () => {
   const downloadExcel = () => {
     const dataToExport = gurus.map((guru, index) => ({
       No: index + 1,
-      "Tempat Tugas": guru.Sekolah && guru.Sekolah.nama_sekolah,
+      "Tempat Tugas": guru.SekolahKristen && guru.SekolahKristen.nama_sekolah,
       NIP: guru.NIP,
-      "Nama Guru": guru.nama_guru,
+      "Nama Tenaga Kependidikan": guru.nama_tenaga,
       "Status Pegawai": guru.status_pegawai,
-      "Kategori Guru": guru.kategori_guru,
-      "Jenis Guru": guru.jenis_guru,
       Pangkat: guru.pangkat,
       Jabatan: guru.jabatan,
       "Tanggal Mulai": guru.tgl_mulai,
@@ -78,14 +76,14 @@ const DataGuru = () => {
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "DataGuru");
-    XLSX.writeFile(workbook, "DataGuru(pantaidisa).xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DataTenagaKependidikan");
+    XLSX.writeFile(workbook, "DataTenagaKependidikan(paludi).xlsx");
   };
 
   const filteredGurus = gurus.filter((guru) => {
     const lowerCaseSearchText = searchText.toLowerCase();
     return (
-      guru.nama_guru.toLowerCase().includes(lowerCaseSearchText) ||
+      guru.nama_tenaga.toLowerCase().includes(lowerCaseSearchText) ||
       (guru.NIP && guru.NIP.toLowerCase().includes(lowerCaseSearchText))
     );
   });
@@ -103,7 +101,7 @@ const DataGuru = () => {
 
   const printPDF = useReactToPrint({
     content: () => ComponentToPDF.current,
-    documentTitle: `DataGuru(PantaiDisa).pdf`,
+    documentTitle: `DataTenagaKependidikan(paludi).pdf`,
   });
 
 
@@ -111,10 +109,10 @@ const DataGuru = () => {
   return (
     <div className="contain">
       <div style={{ display: "none" }}>
-        <GuruDisaPDF ref={ComponentToPDF} guru={gurus} />
+        <TenagaKependidikanPaludiPDF ref={ComponentToPDF} guru={gurus} />
       </div>
       {openModalEdit && (
-        <EditGuruModal
+        <EditTenagaKependidikanPaludiModal
           setIsOpenModalEdit={setOpenModalEdit}
           selectedGuru={selectedGuru}
           getGuru={getGurus}
@@ -170,11 +168,10 @@ const DataGuru = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
-              <th className="py-3 px-6 text-left">Nama Guru</th>
+              <th className="py-3 px-6 text-left">Nama Tenaga Kependidikan</th>
               <th className="py-3 px-6 text-left">NIP</th>
               <th className="py-3 px-6 text-left">Status Pegawai</th>
               <th className="py-3 px-6 text-left">Tempat Tugas</th>
-              <th className="py-3 px-6 text-left">Kategori Guru</th>
               <th className="py-3 px-6 text-center">Aksi</th>
             </tr>
           </thead>
@@ -186,21 +183,18 @@ const DataGuru = () => {
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
                 <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.nama_guru)}
+                  {capitalizeWords(guru.nama_tenaga)}
                 </td>
                 <td className="py-3 px-6 text-left">{guru.NIP}</td>
                 <td className="py-3 px-6 text-left">
                   {capitalizeWords(guru.status_pegawai)}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.Sekolah?.nama_sekolah || "")}
-                </td>
-                <td className="py-3 px-6 text-left">
-                  {capitalizeWords(guru.kategori_guru)}
+                  {capitalizeWords(guru.SekolahKristen?.nama_sekolah || "")}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/lapasi/data-guru/detail-guru/${guru.id}`}
+                    to={`/paludi/data-tenaga-kependidikan/detail-tenaga-kependidikan/${guru.id}`}
                     className="detail"
                     title="Lihat"
                   >
@@ -248,4 +242,4 @@ const DataGuru = () => {
   );
 };
 
-export default DataGuru;
+export default DataTenagaKependidikanPaludi;

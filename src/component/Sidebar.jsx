@@ -200,6 +200,12 @@ const Sidebar = ({ tutupSidebar }) => {
                     Data Sekolah
                   </NavLink>
                   <NavLink
+                    to="/pantai-disa/data-tenaga-kependidikan"
+                    className={getNavLinkClass}
+                  >
+                    Data Tenaga Kependidikan
+                  </NavLink>
+                  <NavLink
                     to="/pantai-disa/data-guru"
                     className={getNavLinkClass}
                   >
@@ -335,6 +341,12 @@ const Sidebar = ({ tutupSidebar }) => {
                   >
                     Data Penghulu
                   </NavLink>
+                  <NavLink to="/saria/data-nikah-rujuk" className={getNavLinkClass}>
+                    Data Nikah Rujuk
+                  </NavLink>
+                  <NavLink to="/saria/data-kua" className={getNavLinkClass}>
+                    Data KUA
+                  </NavLink>
                   <NavLink
                     to="/saria/data-organisasi-masyarakat"
                     className={getNavLinkClass}
@@ -346,9 +358,6 @@ const Sidebar = ({ tutupSidebar }) => {
                     className={getNavLinkClass}
                   >
                     Data Lembaga Keagamaan
-                  </NavLink>
-                  <NavLink to="/saria/data-kua" className={getNavLinkClass}>
-                    Data KUA
                   </NavLink>
                   <NavLink to="/saria/surat-masuk" className={getNavLinkClass}>
                     Data Surat Masuk
@@ -404,6 +413,12 @@ const Sidebar = ({ tutupSidebar }) => {
                     className={getNavLinkClass}
                   >
                     Data Sekolah
+                  </NavLink>
+                  <NavLink
+                    to="/paludi/data-tenaga-kependidikan"
+                    className={getNavLinkClass}
+                  >
+                    Data Tenaga Kependidikan
                   </NavLink>
                   <NavLink
                     to="/paludi/data-guru-pak"

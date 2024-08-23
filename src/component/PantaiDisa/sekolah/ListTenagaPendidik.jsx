@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from "react";
-import AddGuruModal from "../../Modal/PantaiDisaModal/AddGuruModal";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { IoEyeSharp } from "react-icons/io5";
 import { MdDelete, MdModeEdit } from "react-icons/md";
-import EditGuruModal from "../../Modal/PantaiDisaModal/EditGuruModal";
+import AddTenagaKependidikanModal from "../../Modal/PantaiDisaModal/sekolahModal/AddTenagaKependidikanModal";
+import EditTenagaKependidikanModal from "../../Modal/PantaiDisaModal/EditTenagaKependidikanModal";
 
-const ListGuru = () => {
+const ListTenagaPendidik = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [gurus, setGuru] = useState([]);
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedGuru, setSelectGuru] = useState([]);
   const { idsekolah } = useParams();
 
-   const handleEdit = (item) => {
-     setSelectGuru(item);
-     setOpenModalEdit(true);
-   };
+  const handleEdit = (item) => {
+    setSelectGuru(item);
+    setOpenModalEdit(true);
+  };
 
   useEffect(() => {
     getGuruBySekolah(idsekolah);
   }, [idsekolah]);
+  
   const getGuruBySekolah = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/guru/sekolah/${id}`
+        `http://localhost:5000/tenaga/sekolah/${id}`
       );
       setGuru(response.data);
     } catch (error) {
@@ -33,38 +34,37 @@ const ListGuru = () => {
     }
   };
 
-  const hapusGuru = async(id) => {
+  const hapusGuru = async (idTenaga) => {
     try {
-      await axios.delete(`http://localhost:5000/guru/${id}`);
+      await axios.delete(`http://localhost:5000/tenaga/${idTenaga}`);
       getGuruBySekolah(idsekolah)
     } catch (error) {
       console.log(error);
-      
     }
   };
   return (
     <div className="contain">
       {openModalAdd && (
-        <AddGuruModal
+        <AddTenagaKependidikanModal
           setIsOpenModalAdd={setOpenModalAdd}
-          getGuru={getGuruBySekolah}
+          getTenaga={getGuruBySekolah}
         />
       )}
       {openModalEdit && (
-        <EditGuruModal
+        <EditTenagaKependidikanModal
           setIsOpenModalEdit={setOpenModalEdit}
           selectedGuru={selectedGuru}
           getGuru={getGuruBySekolah}
         />
       )}
 
-      <h1 className="judul">Data Guru</h1>
+      <h1 className="judul">Data Tenaga Kependidikan</h1>
       <div className="flex gap-3 mt-3 items-center">
         <button onClick={() => navigate(-1)} className="btn-back">
           Kembali
         </button>
         <button onClick={() => setOpenModalAdd(true)} className="btn-add">
-          Tambah Guru
+          Tambah Tenaga Pendidik
         </button>
       </div>
       <div className="overflow-x-auto mt-2">
@@ -72,10 +72,10 @@ const ListGuru = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">No</th>
-              <th className="py-3 px-6 text-left">Nama Guru</th>
+              <th className="py-3 px-6 text-left">Nama Tenaga Kependidikan</th>
               <th className="py-3 px-6 text-left">Status Pegawai</th>
-              <th className="py-3 px-6 text-left">Kategori Guru</th>
-              <th className="py-3 px-6 text-left">Jenis Guru</th>
+              <th className="py-3 px-6 text-left">Jabatan</th>
+              <th className="py-3 px-6 text-left">Pangkat/Golongan</th>
               <th className="py-3 px-6 text-left">Aksi</th>
             </tr>
           </thead>
@@ -87,22 +87,22 @@ const ListGuru = () => {
               >
                 <td className="py-3 px-6 text-left">{index + 1}</td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.nama_guru}
+                  {item && item.nama_tenaga}
                 </td>
                 <td className="py-3 px-6 text-left">
                   {item && item.status_pegawai}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.kategori_guru}
+                  {item && item.jabatan}
                 </td>
                 <td className="py-3 px-6 text-left">
-                  {item && item.jenis_guru}
+                  {item && item.pangkat}
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <button
                     onClick={() =>
                       navigate(
-                        `/pantai-disa/data-guru/detail-guru/${item && item.id}`
+                        `/pantai-disa/data-tenaga-kependidikan/detail-tenaga-kependidikan/${item && item.id}`
                       )
                     }
                     className="detail"
@@ -110,7 +110,11 @@ const ListGuru = () => {
                   >
                     <IoEyeSharp color="white" width={100} />
                   </button>
-                  <button className="edit" title="Edit" onClick={()=> handleEdit(item)}>
+                  <button
+                    className="edit"
+                    title="Edit"
+                    onClick={() => handleEdit(item)}
+                  >
                     <MdModeEdit color="white" />
                   </button>
                   <button
@@ -130,4 +134,4 @@ const ListGuru = () => {
   );
 };
 
-export default ListGuru;
+export default ListTenagaPendidik;

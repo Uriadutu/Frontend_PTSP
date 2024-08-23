@@ -146,6 +146,10 @@ const DetailSekolah = () => {
           <p>{sekolahData.nss}</p>
         </div>
         <div>
+          <strong>NPSN:</strong>
+          <p>{sekolahData.npsn}</p>
+        </div>
+        <div>
           <strong>Alamat:</strong>
           <p>{sekolahData.alamat}</p>
         </div>

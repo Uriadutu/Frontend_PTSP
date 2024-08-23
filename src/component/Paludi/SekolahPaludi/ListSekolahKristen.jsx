@@ -105,7 +105,7 @@ const ListSekolahKristen = () => {
                 <tr
                   onClick={() => handleRowClick(index)}
                   key={index}
-                  className={`border-b border-gray-200 hover:bg-gray-100 ${
+                  className={`border-b cursor-pointer border-gray-200 hover:bg-gray-100 ${
                     selectedRow === index ? "bg-gray-100" : ""
                   }`}
                 >
@@ -148,6 +148,28 @@ const ListSekolahKristen = () => {
                 </tr>
                 {selectedRow === index && (
                   <>
+                    <tr
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(
+                          `/${sub}/sekolah/${item.nama_sekolah}/${
+                            item && item.jenjang_sekolah
+                          }/tenaga-kependidikan/${item.id}`
+                        );
+                      }}
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors"
+                    >
+                      <td className="py-3 px-6 text-left whitespace-nowrap"></td>
+
+                      <td className="py-3 px-6 text-left whitespace-nowrap cursor-pointer">
+                        Tenaga Kependidikan
+                      </td>
+
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                    </tr>
                     <tr className="bg-gray-100 hover:bg-gray-200 transition-colors">
                       <td className="py-3 px-6 text-left whitespace-nowrap"></td>
 
@@ -170,7 +192,6 @@ const ListSekolahKristen = () => {
                       <td className="py-3 px-6 text-center whitespace-nowrap"></td>
                       <td className="py-3 px-6 text-center whitespace-nowrap"></td>
                     </tr>
-                   
                   </>
                 )}
               </>

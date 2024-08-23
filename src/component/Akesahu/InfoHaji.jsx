@@ -130,7 +130,7 @@ const InfoHaji = () => {
       <div style={{ display: "none" }}>
         <PeriodeHajiPDF ref={PeriodePDF} periode={periodes} />
       </div>
-      <h1 className="judul mb-4">Data Haji</h1>
+      <h1 className="judul mb-4">Info Haji</h1>
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-3">
           {activeTab === "statusKeberangkatan" && (

@@ -158,7 +158,7 @@ const EditPegawaiModal = ({ setIsOpenModalEdit, getPegawai, selectedPegawai }) =
                 <input
                   value={NIP}
                   onChange={(e) => setNIP(e.target.value)}
-                  type="text"
+                  type="number"
                   id="nip"
                   className="w-full input"
                 />
@@ -314,7 +314,7 @@ const EditPegawaiModal = ({ setIsOpenModalEdit, getPegawai, selectedPegawai }) =
                 <input
                   value={TahunLulus}
                   onChange={(e) => setTahunLulus(e.target.value)}
-                  type="date"
+                  type="number"
                   id="tahunLulus"
                   className="w-full input"
                 />

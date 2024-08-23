@@ -36,7 +36,7 @@ const AddUmatIslamModal = ({ setIsOpenModalAdd, getUmatIslam }) => {
       aria-hidden="true"
       className="fixed inset-0 flex items-center justify-center bg-gray-500 z-top bg-opacity-30"
     >
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <div className="w-full bg-white rounded-lg shadow-lg h-full inline-block">
           <div className="flex items-center justify-between p-4 border-b rounded-t">
             <h3 className="text-xl font-semibold text-gray-900">
@@ -89,7 +89,7 @@ const AddUmatIslamModal = ({ setIsOpenModalAdd, getUmatIslam }) => {
                   className="w-full input"
                   value={jumlahAliran}
                   onChange={(e) => setJumlahAliran(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -101,7 +101,7 @@ const AddUmatIslamModal = ({ setIsOpenModalAdd, getUmatIslam }) => {
                   className="w-full input"
                   value={jumlahPenduduk}
                   onChange={(e) => setJumlahPenduduk(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -113,7 +113,7 @@ const AddUmatIslamModal = ({ setIsOpenModalAdd, getUmatIslam }) => {
                   className="w-full input"
                   value={jumlahPendudukIslam}
                   onChange={(e) => setJumlahPendudukIslam(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -125,10 +125,10 @@ const AddUmatIslamModal = ({ setIsOpenModalAdd, getUmatIslam }) => {
                   className="w-full input"
                   value={jumlahMesjid}
                   onChange={(e) => setJumlahMesjid(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="kecamatan" className="label-input">
                   Kecamatan

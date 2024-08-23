@@ -85,7 +85,7 @@ const AddHajiModal = ({ setIsOpenModalAdd, getHaji }) => {
                 <input
                   value={NomorPorsi}
                   onChange={(e) => setNomorPorsi(e.target.value)}
-                  type="text"
+                  type="number"
                   id="nomorPorsi"
                   className="w-full input"
                 />

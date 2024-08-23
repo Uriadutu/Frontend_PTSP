@@ -90,17 +90,16 @@ const DataSiswa = () => {
       "Jenjang Sekolah": siswa.jenjang_sekolah,
       "Nomor Induk": siswa.nomor_induk,
       NISN: siswa.NISN,
+      "Kelas": siswa.kelas,
       "Nama Siswa": siswa.nama_siswa,
       "Jenis Kelamin": siswa.jenis_kelamin,
       "Tempat Lahir": siswa.tempat_lahir,
       "Tanggal Lahir": siswa.tanggal_lahir,
       Agama: siswa.agama,
       "Nama Ayah": siswa.nama_ayah,
-      "Pendidikan Ayah": siswa.pendidikan_ayah,
-      "Pekerjaan Ayah": siswa.pekerjaan_ayah,
+      
       "Nama Ibu": siswa.nama_ibu,
-      "Pendidikan Ibu": siswa.pendidikan_ibu,
-      "Pekerjaan Ibu": siswa.pekerjaan_ibu,
+    
       Alamat: siswa.alamat,
     }));
 
@@ -180,7 +179,7 @@ const DataSiswa = () => {
                 </td>
                 <td className="py-3 px-6 text-center flex justify-around whitespace-nowrap">
                   <Link
-                    to={`/lapasi/data-siswa/detail-siswa/${siswa.id}`}
+                    to={`/pantai-disa/data-siswa/detail-siswa/${siswa.id}`}
                     className="detail"
                     title="Lihat"
                   >

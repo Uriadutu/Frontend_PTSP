@@ -306,7 +306,7 @@ const AddPegawaiModal = ({ setIsOpenModalAdd, getPegawai }) => {
                 <input
                   value={TahunLulus}
                   onChange={(e) => setTahunLulus(e.target.value)}
-                  type="date"
+                  type="number"
                   id="tahunLulus"
                   className="w-full input"
                 />

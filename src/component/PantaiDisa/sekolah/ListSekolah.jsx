@@ -104,7 +104,7 @@ const ListSekolah = () => {
                 <tr
                   onClick={() => handleRowClick(index)}
                   key={index}
-                  className={`border-b border-gray-200 hover:bg-gray-100 ${
+                  className={`border-b cursor-pointer border-gray-200 hover:bg-gray-100 ${
                     selectedRow === index ? "bg-gray-100" : ""
                   }`}
                 >
@@ -147,16 +147,42 @@ const ListSekolah = () => {
                 </tr>
                 {selectedRow === index && (
                   <>
-                    <tr className="bg-gray-100 hover:bg-gray-200 transition-colors">
+                    <tr
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(
+                          `/${sub}/sekolah/${item.nama_sekolah}/${
+                            item && item.jenjang_sekolah
+                          }/tenaga-kependidikan/${item.id}`
+                        );
+                      }}
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors"
+                    >
                       <td className="py-3 px-6 text-left whitespace-nowrap"></td>
 
-                      <td
-                        className="py-3 px-6 text-left whitespace-nowrap cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation(); 
-                          navigate(`/${sub}/sekolah/${item.nama_sekolah}/${item && item.jenjang_sekolah}/guru/${item.id}`);
-                        }}
-                      >
+                      <td className="py-3 px-6 text-left whitespace-nowrap cursor-pointer">
+                        Tenaga Kependidikan
+                      </td>
+
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                      <td className="py-3 px-6 text-center whitespace-nowrap"></td>
+                    </tr>
+                    <tr
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(
+                          `/${sub}/sekolah/${item.nama_sekolah}/${
+                            item && item.jenjang_sekolah
+                          }/guru/${item.id}`
+                        );
+                      }}
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors"
+                    >
+                      <td className="py-3 px-6 text-left whitespace-nowrap"></td>
+
+                      <td className="py-3 px-6 text-left whitespace-nowrap cursor-pointer">
                         Guru
                       </td>
 
@@ -165,18 +191,20 @@ const ListSekolah = () => {
                       <td className="py-3 px-6 text-center whitespace-nowrap"></td>
                       <td className="py-3 px-6 text-center whitespace-nowrap"></td>
                     </tr>
-                    <tr className="bg-gray-100 hover:bg-gray-200 transition-colors">
+                    <tr
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(
+                          `/${sub}/sekolah/${item.nama_sekolah}/${
+                            item && item.jenjang_sekolah
+                          }/siswa/${item.id}`
+                        );
+                      }}
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors"
+                    >
                       <td className="py-3 px-6 text-left whitespace-nowrap"></td>
 
-                      <td
-                        className="py-3 px-6 text-left whitespace-nowrap cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation(); 
-                          navigate(
-                            `/${sub}/sekolah/${item.nama_sekolah}/${item && item.jenjang_sekolah}/siswa/${item.id}`
-                          );
-                        }}
-                      >
+                      <td className="py-3 px-6 text-left whitespace-nowrap cursor-pointer">
                         Siswa
                       </td>
 

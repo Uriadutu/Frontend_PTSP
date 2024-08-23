@@ -130,7 +130,7 @@ const AddSekolahKristenModal = ({ setIsOpenModalAdd, getSekolahKristen }) => {
                 <input
                   value={NomorTelepon}
                   onChange={(e) => setNomorTelepon(e.target.value)}
-                  type="text"
+                  type="tel"
                   id="nomorTelepon"
                   className="w-full input"
                 />
@@ -142,7 +142,7 @@ const AddSekolahKristenModal = ({ setIsOpenModalAdd, getSekolahKristen }) => {
                 <input
                   value={TahunBerdiri}
                   onChange={(e) => setTahunBerdiri(e.target.value)}
-                  type="text"
+                  type="number"
                   id="tahunBerdiri"
                   className="w-full input"
                 />
@@ -216,7 +216,7 @@ const AddSekolahKristenModal = ({ setIsOpenModalAdd, getSekolahKristen }) => {
                 <input
                   value={JumlahRombel}
                   onChange={(e) => setJumlahRombel(e.target.value)}
-                  type="text"
+                  type="number"
                   id="jumlahRombel"
                   className="w-full input"
                 />
@@ -240,7 +240,7 @@ const AddSekolahKristenModal = ({ setIsOpenModalAdd, getSekolahKristen }) => {
                 <input
                   value={NIP}
                   onChange={(e) => setNIP(e.target.value)}
-                  type="text"
+                  type="number"
                   id="nip"
                   className="w-full input"
                 />

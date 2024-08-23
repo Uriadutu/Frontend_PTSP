@@ -34,7 +34,7 @@ const AddMajelisModal = ({ setIsOpenModalAdd, getMajelis }) => {
       aria-hidden="true"
       className="fixed inset-0 flex items-center justify-center bg-gray-500 z-top bg-opacity-30"
     >
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <div className="w-full bg-white rounded-lg shadow-lg h-full inline-block">
           <div className="flex items-center justify-between p-4 border-b rounded-t">
             <h3 className="text-xl font-semibold text-gray-900">
@@ -99,7 +99,7 @@ const AddMajelisModal = ({ setIsOpenModalAdd, getMajelis }) => {
                   className="w-full input"
                   value={tahunBerdiri}
                   onChange={(e) => setTahunBerdiri(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
               <div className="grid grid-cols-2 gap-5 mb-2">
@@ -123,7 +123,7 @@ const AddMajelisModal = ({ setIsOpenModalAdd, getMajelis }) => {
                   className="w-full input"
                   value={jumlahJamaah}
                   onChange={(e) => setJumlahJamaah(e.target.value)}
-                  type="text"
+                  type="number"
                 />
               </div>
             </div>

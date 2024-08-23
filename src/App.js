@@ -63,6 +63,14 @@ import AkademikPage from "./pages/SidikaPage/AkademikPage.jsx";
 import MenejerialPage from "./pages/SidikaPage/MenejerialPage.jsx";
 import DetailMenejerialPage from "./pages/SidikaPage/DetailMenejerialPage.jsx";
 import SplashScreenPage from "./User/Pages-user/SplashScreenPage.jsx";
+import ListTenagaKependidikanPage from "./pages/PantaiDisaPage/sekolahPage/ListTenagaKependidikanPage.jsx";
+import DetailTenagaKependidikanPage from "./pages/PantaiDisaPage/sekolahPage/DetailTenagaKependidikanPage.jsx";
+import DataTenagaKependidikanPage from "./pages/PantaiDisaPage/DataTenagaKependidikanPage.jsx";
+import DataTenagaKependidikanPaludiPage from "./pages/PaludiPage/DataTenagaKependidikanPaludiPage.jsx";
+import DetailTenagaKependidikanPaludiPage from "./pages/PaludiPage/SekolahKristenPage/DetailTenagaKependidikanPaludiPage.jsx";
+import ListTenagaKependidikanPaludiPage from "./pages/PaludiPage/SekolahKristenPage/ListTenagaKependidikanPaludiPage.jsx";
+import DataNikahRujukPage from "./pages/SariaPage/DataNikahRujukPage.jsx";
+import ListNRBulananPage from "./pages/SariaPage/BulananPage/ListNRBulananPage.jsx";
 
 
 function App() {
@@ -93,8 +101,20 @@ function App() {
             element={<DataSekolahPage />}
           />
           <Route
+            path="/pantai-disa/data-tenaga-kependidikan"
+            element={<DataTenagaKependidikanPage />}
+          />
+          <Route
             path="/pantai-disa/sekolah/detail/:id"
             element={<DetailSekolahPage />}
+          />
+          <Route
+            path="/pantai-disa/sekolah/:namasekolah/:jenjang/tenaga-kependidikan/:idsekolah"
+            element={<ListTenagaKependidikanPage />}
+          />
+          <Route
+            path="/pantai-disa/data-tenaga-kependidikan/detail-tenaga-kependidikan/:id"
+            element={<DetailTenagaKependidikanPage />}
           />
           <Route
             path="/pantai-disa/sekolah/:namasekolah/:jenjang/guru/:idsekolah"
@@ -110,11 +130,11 @@ function App() {
           />
           <Route path="/:sub/data-guru" element={<DataGuruPage />} />
           <Route
-            path="/lapasi/data-guru/detail-guru/:id"
+            path="/pantai-disa/data-guru/detail-guru/:id"
             element={<DetailGuruPage />}
           />
           <Route
-            path="/lapasi/data-siswa/detail-siswa/:id"
+            path="/pantai-disa/data-siswa/detail-siswa/:id"
             element={<DetailSiswaPage />}
           />
           <Route path="/:sub/data-siswa" element={<DataSiswaPage />} />
@@ -140,18 +160,12 @@ function App() {
             path="/saria/data-taman-pendidikan-quran"
             element={<DataTpqPage />}
           />
-          <Route
-            path="/saria/data-penyuluh"
-            element={<PenyuluhIslamPage />}
-          />
+          <Route path="/saria/data-penyuluh" element={<PenyuluhIslamPage />} />
           <Route
             path="/saria/data-penyuluh/detail/:id"
             element={<DetailPenyuluhIslamPage />}
           />
-          <Route
-            path="/saria/data-penghulu"
-            element={<DataPenghuluPage />}
-          />
+          <Route path="/saria/data-penghulu" element={<DataPenghuluPage />} />
           <Route
             path="/:sub/data-organisasi-masyarakat"
             element={<OrganisasiMasyarakatPage />}
@@ -164,7 +178,19 @@ function App() {
             path="/:sub/lembaga-keagamaan/detail/:id"
             element={<DetailLembagaKeagamaanPage />}
           />
-          <Route path="/:sub/data-kua" element={<KuaPage />} />
+          <Route
+            path="/:sub/data-nikah-rujuk"
+            element={<DataNikahRujukPage />}
+          />
+          <Route
+            path="/saria/data-nikah-rujuk/bulanan/:namaBulan/:no"
+            element={<ListNRBulananPage />}
+          />
+          <Route
+            path="/saria/data-nikah-rujuk/:namaBulan/:no"
+            element={<DetailGerejaPage />}
+          />
+          <Route path="/saria/data-kua" element={<KuaPage />} />
 
           {/* Paludi*/}
           <Route
@@ -182,6 +208,18 @@ function App() {
           <Route
             path="/paludi/sekolah/:namasekolah/:jenjang/guru/:idsekolah"
             element={<DataGuruPakPage />}
+          />
+          <Route
+            path="/paludi/data-tenaga-kependidikan"
+            element={<DataTenagaKependidikanPaludiPage />}
+          />
+          <Route
+            path="/paludi/data-tenaga-kependidikan/detail-tenaga-kependidikan/:id"
+            element={<DetailTenagaKependidikanPaludiPage />}
+          />
+          <Route
+            path="/paludi/sekolah/:namasekolah/:jenjang/tenaga-kependidikan/:idsekolah"
+            element={<ListTenagaKependidikanPaludiPage />}
           />
           <Route
             path="/paludi/data-guru-pak/detail-guru-pak/:id"
@@ -267,7 +305,6 @@ function App() {
             path="/sidika/data-menejerial/detail/:id"
             element={<DetailMenejerialPage />}
           />
-
 
           {/* Surat-surat */}
           <Route path="/:sub/surat-masuk" element={<SuratMasukPage />} />
