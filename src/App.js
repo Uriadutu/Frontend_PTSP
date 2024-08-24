@@ -71,6 +71,7 @@ import DetailTenagaKependidikanPaludiPage from "./pages/PaludiPage/SekolahKriste
 import ListTenagaKependidikanPaludiPage from "./pages/PaludiPage/SekolahKristenPage/ListTenagaKependidikanPaludiPage.jsx";
 import DataNikahRujukPage from "./pages/SariaPage/DataNikahRujukPage.jsx";
 import ListNRBulananPage from "./pages/SariaPage/BulananPage/ListNRBulananPage.jsx";
+import DataNRPerTahunPage from "./pages/SariaPage/BulananPage/DataNRPerTahunPage.jsx";
 
 
 function App() {
@@ -188,7 +189,7 @@ function App() {
           />
           <Route
             path="/saria/data-nikah-rujuk/:namaBulan/:no"
-            element={<DetailGerejaPage />}
+            element={<DataNRPerTahunPage />}
           />
           <Route path="/saria/data-kua" element={<KuaPage />} />
 

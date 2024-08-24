@@ -46,6 +46,9 @@ const ListNRBulanan = () => {
       )}
       <h1 className="judul">List Tahun Pada Bulan {namaBulan}</h1>
       <div className="flex mb-3 items-center gap-2">
+        <button className="btn-back" onClick={() => navigate(-1)}>
+          Kembali
+        </button>
         <button
           onClick={() => setIsOpenModalAdd(true)}
           className="btn-add hidden sm:block"
@@ -92,7 +95,7 @@ const ListNRBulanan = () => {
                     <button
                       className="delete"
                       title="Hapus"
-                      onClick={()=> hapusData(dataTahun.id)}
+                      onClick={() => hapusData(dataTahun.id)}
                     >
                       <MdDelete color="white" />
                     </button>
