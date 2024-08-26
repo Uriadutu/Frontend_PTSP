@@ -190,7 +190,7 @@ const DataPegawai = () => {
             onClick={() => setOpenModalAdd(true)}
             className="btn-add hidden sm:block"
           >
-            Tambah Pegawau
+            Tambah Pegawai
           </button>
           <button
             onClick={downloadExcel}

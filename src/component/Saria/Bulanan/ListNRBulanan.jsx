@@ -86,7 +86,7 @@ const ListNRBulanan = () => {
                       title="Edit"
                       onClick={() =>
                         navigate(
-                          `/saria/data-nikah-rujuk/${namaBulan}/${dataTahun.nama_bulan}`
+                          `/saria/data-nikah-rujuk/bulanan/${namaBulan}/${dataTahun.nama_bulan}/${dataTahun.no}`
                         )
                       }
                     >

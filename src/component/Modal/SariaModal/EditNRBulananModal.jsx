@@ -480,8 +480,9 @@ const EditNRBulananModal = ({ setIsOpenModalEdit, getNRData, initialData }) => {
                   id="totalPNBP"
                   className="w-full input"
                   value={totalPNBP}
-                  onChange={(e) => setTotalPNBP(parseInt(e.target.value))}
-                  type="number"
+                  onChange={(e) => setTotalPNBP(e.target.value)}
+                  type="text"
+                  required
                 />
               </div>
             </div>

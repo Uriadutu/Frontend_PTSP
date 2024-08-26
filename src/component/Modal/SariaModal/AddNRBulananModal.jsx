@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const AddNRModal = ({ setIsOpenModalAdd, getNRData }) => {
-    const {namaBulan, no} = useParams()
+  const { namaBulan, no, nobulan } = useParams();
   const [namaKecamatan, setNamaKecamatan] = useState([]);
   const [jumlahNikah, setJumlahNikah] = useState(0);
   const [isbatNikah, setIsbatNikah] = useState(0);
@@ -31,26 +31,32 @@ const AddNRModal = ({ setIsOpenModalAdd, getNRData }) => {
   const [suamiS1Plus, setSuamiS1Plus] = useState(0);
   const [istriS1Plus, setIstriS1Plus] = useState(0);
   const [totalPNBP, setTotalPNBP] = useState(0);
-  const [kecamatanOption, setKecamatanOption] = useState([])
+  const [kecamatanOption, setKecamatanOption] = useState([]);
+  const [kodekec, setKodeKec] = useState("");
+  const [msg, setMsg] = useState("");
 
-  const getKecamatan = async()=> {
+  const getKecamatan = async () => {
     try {
-        const response = await axios.get("http://localhost:5000/kecamatan")
-        setKecamatanOption(response.data)
+      const response = await axios.get("http://localhost:5000/kecamatan");
+      setKecamatanOption(response.data);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-  }
+  };
 
-  useEffect(()=> {
-    getKecamatan()
-  },[])
+  useEffect(() => {
+    getKecamatan();
+  }, []);
+
+  // console.log(kodekec, "KODE");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/nikahrujuk", {
-        namaBulan : namaBulan + no,
+        id: `${no}${nobulan}${kodekec}`,
+        id_bulantahun: `${no}${nobulan}`,
+        namaBulan: namaBulan + no,
         nama_kecamatan: namaKecamatan,
         jumlahNikah,
         isbatNikah,
@@ -84,6 +90,20 @@ const AddNRModal = ({ setIsOpenModalAdd, getNRData }) => {
       getNRData(namaBulan + no);
     } catch (error) {
       console.log(error);
+      setMsg(error.response.data.msg);
+    }
+  };
+
+  const handleKecamatanChange = (e) => {
+    const selectedValue = e.target.value;
+    setNamaKecamatan(selectedValue);
+
+    const selectedKecamatan = kecamatanOption.find(
+      (kecamatan) => kecamatan.nama_kecamatan === selectedValue
+    );
+
+    if (selectedKecamatan) {
+      setKodeKec(selectedKecamatan.id);
     }
   };
 
@@ -127,13 +147,11 @@ const AddNRModal = ({ setIsOpenModalAdd, getNRData }) => {
           <div className="p-4 space-y-4 inline-block h-[75%] overflow-y-scroll">
             <div className="mb-6">
               <div className="grid grid-cols-2 gap-5 mb-2">
-                <label className="label-input">
-                  Kecamatana
-                </label>
+                <label className="label-input">Kecamatan</label>
                 <select
                   className="input py-0"
                   value={namaKecamatan}
-                  onChange={(e) => setNamaKecamatan(e.target.value)}
+                  onChange={handleKecamatanChange}
                 >
                   <option disabled value="">
                     Pilih Kecamatan
@@ -347,7 +365,9 @@ const AddNRModal = ({ setIsOpenModalAdd, getNRData }) => {
                 />
               </div>
               {/* Field untuk Suami SD */}
-              <label className="label-input mt-4">Pendidikan Suami / Istri :</label>
+              <label className="label-input mt-4">
+                Pendidikan Suami / Istri :
+              </label>
 
               <div className="grid grid-cols-2 gap-5 mb-2">
                 <label htmlFor="suamiSD" className="label-input">
@@ -487,23 +507,27 @@ const AddNRModal = ({ setIsOpenModalAdd, getNRData }) => {
                   id="totalPNBP"
                   className="w-full input"
                   value={totalPNBP}
-                  onChange={(e) => setTotalPNBP(parseInt(e.target.value))}
-                  type="number"
+                  onChange={(e) => setTotalPNBP(e.target.value)}
+                  type="text"
+                  required
                 />
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-end p-4 space-x-3 border-t border-gray-200 rounded-b">
-            <button type="submit" className="btn btn-simpan">
-              Simpan
-            </button>
-            <button
-              onClick={() => setIsOpenModalAdd(false)}
-              type="button"
-              className="btn-batal"
-            >
-              Batal
-            </button>
+          <div className="flex justify-between p-4 items-center border-t border-gray-200 rounded-b">
+            <h1>{msg}</h1>
+            <div className="flex items-center justify-end space-x-3 ">
+              <button type="submit" className="btn btn-simpan">
+                Simpan
+              </button>
+              <button
+                onClick={() => setIsOpenModalAdd(false)}
+                type="button"
+                className="btn-batal"
+              >
+                Batal
+              </button>
+            </div>
           </div>
         </div>
       </form>
