@@ -15,7 +15,7 @@ const LayoutUser = ({ children }) => {
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundAttachment: "fixed",
-            opacity: 0.5,
+            opacity: 0.3,
           }}
         />
         {/* Main content */}

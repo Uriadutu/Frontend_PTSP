@@ -10,6 +10,10 @@ export const formatDate = (timestamp) => {
   return formattedDate;
 };
 
+export function formatRupiah(rupiah) {
+  return `Rp${rupiah.toLocaleString("id-ID")}`;
+}
+
 export const tanggalPDF = (tanggal) => {
   const bulan = [
     "Januari", "Februari", "Maret", "April", "Mei", "Juni",

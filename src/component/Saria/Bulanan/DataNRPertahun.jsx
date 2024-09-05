@@ -8,6 +8,7 @@ import EditNRBulananModal from "../../Modal/SariaModal/EditNRBulananModal";
 import NRBulananPDF from "../../../Export/SariaExport/NRBulananPDF";
 import { useReactToPrint } from "react-to-print";
 import * as XLSX from "xlsx";
+import { formatRupiah } from "../../../utils/helper";
 
 
 const DataNRPertahun = () => {
@@ -88,7 +89,7 @@ const DataNRPertahun = () => {
        "Istri S1": item.istriS1,
        "Suami S1+": item.suamiS1Plus,
        "Istri S1+": item.istriS1Plus,
-       "Total PNBP": item.totalPNBP,
+       "Total PNBP": parseFloat(item.totalPNBP), // Pastikan tipe data adalah number
      }));
 
      // Menghitung total dari setiap kolom numerik
@@ -196,6 +197,7 @@ const DataNRPertahun = () => {
      XLSX.utils.book_append_sheet(workbook, worksheet, `${bulanParams}`);
      XLSX.writeFile(workbook, `NR${bulanParams}(saria).xlsx`);
    };
+
 
 
   return (
@@ -555,7 +557,7 @@ const DataNRPertahun = () => {
                   {bulandata.istriS1Plus}
                 </td>
                 <td className="py-3 px-6 text-center border">
-                  {bulandata.totalPNBP}
+                  {formatRupiah(bulandata.totalPNBP)}
                 </td>
                 <td className="py-3 px-6 text-center border">
                   <div className="flex item-center justify-center gap-2">

@@ -8,6 +8,7 @@ import { useReactToPrint } from "react-to-print";
 import NRTahunanPDF from "../../../Export/SariaExport/NRTahunanPDF";
 import * as XLSX from "xlsx";
 import EditNRTahunanModal from "../../Modal/SariaModal/EditNRTahunnModal";
+import { formatRupiah } from "../../../utils/helper";
 
 const DataNRTahunan = () => {
   const { tahun } = useParams();
@@ -32,7 +33,7 @@ const DataNRTahunan = () => {
       "Isbat Nikah": tahunandata.isbat_nikah,
       Cerai: tahunandata.cerai,
       "Total NR": tahunandata.total_nr,
-      "Total PNBP": tahunandata.total_pnbp,
+      "Total PNBP": parseFloat(tahunandata.total_pnbp),
     }));
 
     // Menghitung total dari setiap kolom numerik
@@ -231,7 +232,7 @@ const DataNRTahunan = () => {
                   {item?.total_nr}
                 </td>
                 <td className="py-1 px-6 text-center border">
-                  {item?.total_pnbp}
+                  {formatRupiah(item?.total_pnbp)}
                 </td>
 
                 <td className="py-1 px-6 text-center border">

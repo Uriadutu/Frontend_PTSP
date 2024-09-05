@@ -1,4 +1,5 @@
 import React from "react";
+import { formatRupiah } from "../../utils/helper";
 
 const NRBulananPDF = React.forwardRef(({ nrbulanan, tahun, bulan }, ref) => {
   let totalJumlahNikah = 0;
@@ -361,7 +362,7 @@ const NRBulananPDF = React.forwardRef(({ nrbulanan, tahun, bulan }, ref) => {
                   {bulandata.istriS1Plus}
                 </td>
                 <td className="px-1 text-center border border-black text-black">
-                  {bulandata.totalPNBP}
+                  {formatRupiah(bulandata.totalPNBP)}
                 </td>
               </tr>
             );
@@ -455,7 +456,7 @@ const NRBulananPDF = React.forwardRef(({ nrbulanan, tahun, bulan }, ref) => {
               {totalIstriS1Plus}
             </td>
             <td className="px-1 text-center border border-black text-black">
-              {totalPNBP}
+              {formatRupiah(totalPNBP)}
             </td>
           </tr>
         </tbody>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { formatRupiah } from "../../utils/helper";
 
 const NRTahunanPDF = React.forwardRef(({ tahunan }, ref) => {
   const {tahun} = useParams();
@@ -102,7 +103,7 @@ const NRTahunanPDF = React.forwardRef(({ tahunan }, ref) => {
                   {bulandata?.total_nr}
                 </td>
                 <td className="py-1 px-6 text-center border border-black">
-                  {bulandata?.total_pnbp}
+                  {formatRupiah(bulandata?.total_pnbp)}
                 </td>
               </tr>
             );
@@ -130,7 +131,7 @@ const NRTahunanPDF = React.forwardRef(({ tahunan }, ref) => {
               {TotalTotalNR}
             </td>
             <td className="px-1 text-center border border-black text-black">
-              {TotalTotalPNBP}
+              {formatRupiah(TotalTotalPNBP)}
             </td>
           </tr>
         </tbody>
