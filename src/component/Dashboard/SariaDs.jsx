@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
-const SariaDs = () => {
+const SariaDs = () => { 
   const [kua, setKua] = useState([]);
   const [lembaga, setLembaga] = useState([]);
   const [organisasi, setOrganisasi] = useState([]);
