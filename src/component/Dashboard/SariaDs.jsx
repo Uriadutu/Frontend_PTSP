@@ -10,7 +10,7 @@ const SariaDs = () => {
   const [masjid, setMasjid] = useState([]);
   const [umat, setUmat] = useState([]);
 
-  const getSaria = async (end, set) => {
+  const getSaria = async (end, set) => { 
     try {
       const response = await axios.get(`http://localhost:5000/${end}`);
       const total = response.data;
