@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 const SariaDs = () => { 
-  const [kua, setKua] = useState([]);
+  const [kua, setKua] = useState([]); 
   const [lembaga, setLembaga] = useState([]);
   const [organisasi, setOrganisasi] = useState([]);
   const [majelis, setMajelis] = useState([]);
